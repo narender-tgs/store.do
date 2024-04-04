@@ -1,10 +1,12 @@
 export function getCartTotal ( items ) {
     let total = 0;
     if ( items ) {
+        console.log("items for cart-->", items);
         for ( let i = 0; i < items.length; i++ ) {
-            total += parseInt( items[ i ].price * items[ i ].qty, 10 );
+            total += parseInt( items[ i ].price[0], 10 );
         }
     }
+    console.log("total cart total-->", total);
 
     return total;
 }

@@ -10,9 +10,36 @@ import ALink from '../ALink';
 
 // Import Utils
 import { getCartTotal } from '../../../utils';
+import cycle1 from '../../../assets/images/cycle1.jpg'
+import cycle2 from '../../../assets/images/cycle2.jpg'
+import { Link } from 'react-router-dom';
 
-function CartMenu ( props ) {
-    const { cartItems } = props;
+
+function CartMenu ( props  ) {
+    const cartItems = [
+        {
+          srcs: cycle1,
+          name: "Ultra HD Smart TV",
+          categories: ["Electronics", "Home Entertainment"],
+          price: [6786],
+          slug: "ultra-hd-smart-tv",
+          ratings: 4.8,
+          is_hot: true,
+          variants:['Blue','Black']
+        },
+        {
+          srcs: cycle2,
+          name: "Eco-Friendly Yoga Mat",
+          categories: ["Fitness", "Yoga"],
+          price: [34],
+          slug: "eco-friendly-yoga-mat",
+          ratings: 4.6,
+          is_hot: false,
+          variants:[]
+        },
+       
+      ];
+    // const { cartItems } = props;
     // const router = useRouter();
 
     // useEffect( () => {
@@ -45,6 +72,9 @@ function CartMenu ( props ) {
     function removeFromCart ( e, cart ) {
         e.preventDefault();
         props.removeFromCart( cart );
+    }
+    const onclickCheckout=()=>{
+        cartClose()
     }
 
     return (
@@ -86,13 +116,13 @@ function CartMenu ( props ) {
                                                     </h2>
 
                                                     <span className="cart-product-info">
-                                                        <span className="cart-product-qty">{ cart.qty }</span> × ${ cart.price.toFixed( 2 ) }
+                                                        <span className="cart-product-qty">{ cart.qty }</span> × ${ cart.price }
                                                     </span>
                                                 </div>
 
                                                 <figure className="product-image-container">
                                                     <ALink href={ `/product/default/${cart.slug}` } className="product-image">
-                                                        <img src={ process.env.NEXT_PUBLIC_ASSET_URI + cart.small_pictures[ 0 ].url } width="78" height="78" alt="product" />
+                                                        <img src={cycle1} width="78" height="78" alt="product" />
                                                     </ALink>
                                                     <a href="#" className="btn-remove icon-cancel" title="Remove Product" onClick={ e => { removeFromCart( e, cart ); } }></a>
                                                 </figure>
@@ -104,12 +134,12 @@ function CartMenu ( props ) {
                                 <div className="dropdown-cart-total">
                                     <span>SUBTOTAL:</span>
 
-                                    <span className="cart-total-price float-right">${ getCartTotal( cartItems ).toFixed( 2 ) }</span>
+                                    <span className="cart-total-price float-right">${ getCartTotal( cartItems ) }</span>
                                 </div>
 
                                 <div className="dropdown-cart-action">
-                                    <ALink href="/pages/cart" className="btn btn-gray btn-block view-cart">View Cart</ALink>
-                                    <ALink href="/pages/checkout" className="btn btn-dark btn-block text-white">Checkout</ALink>
+                                    {/* <ALink href="/pages/cart" className="btn btn-gray btn-block view-cart">View Cart</ALink> */}
+                                    <Link to="/checkout" onClick={e=>{onclickCheckout()}}  className="btn btn-dark btn-block text-white">Checkout</Link>
                                 </div>
                             </>
                             :
