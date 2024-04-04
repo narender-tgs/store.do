@@ -8,6 +8,7 @@ const routes = [
   { path: '/', exact: true, component: <Home/> },
   { path: '/product', component: <Product/> },
   { path: '/about', component: <About/> }
+  // { path: '/contact', component: <About/> }
 ];
 
 export {routes};

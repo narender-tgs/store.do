@@ -11,7 +11,7 @@ function Footer () {
     return (
         <footer className="footer font2">
             <div className="footer-top">
-                <div className="instagram-box bg-dark">
+                {/* <div className="instagram-box bg-dark">
                     <div className="row m-0 align-items-center">
                         <div className="instagram-follow col-md-4 col-lg-3 d-flex align-items-center">
                             <div className="info-box">
@@ -105,7 +105,7 @@ function Footer () {
                             </OwlCarousel>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="container">
                     <div className="widget-newsletter d-lg-flex align-items-center justify-content-between flex-wrap">

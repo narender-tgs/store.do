@@ -4,16 +4,16 @@ import { connect } from 'react-redux';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 // Import Actions
-import { actions as WishlistAction } from "../../../store/wishlist";
-import { actions as CartAction } from "../../../store/cart";
-import { actions as ModalAction } from "../../../store/modal";
+// import { actions as WishlistAction } from "../../../store/wishlist";
+// import { actions as CartAction } from "../../../store/cart";
+// import { actions as ModalAction } from "../../../store/modal";
 
 // Import Custom Component
 import ALink from '../../common/ALink';
 import ProductCountdown from '../product-countdown';
 
 function ProductOne ( props ) {
-    const router = useRouter();
+    // const router = useRouter();
     const { adClass = "", link = "default", product } = props;
 
     function isSale () {
@@ -24,7 +24,7 @@ function ProductOne ( props ) {
     }
 
     function isInWishlist () {
-        return product && props.wishlist.findIndex( item => item.slug === product.slug ) > -1;
+        // return product && props.wishlist.findIndex( item => item.slug === product.slug ) > -1;
     }
 
     function onWishlistClick ( e ) {
@@ -40,7 +40,7 @@ function ProductOne ( props ) {
                 props.addToWishList( product );
             }, 1000 );
         } else {
-            router.push( '/pages/wishlist' );
+            // router.push( '/pages/wishlist' );
         }
     }
 
@@ -158,4 +158,4 @@ const mapStateToProps = ( state ) => {
     }
 }
 
-export default connect( mapStateToProps, { ...WishlistAction, ...CartAction, ...ModalAction } )( ProductOne );
+export default ProductOne ;

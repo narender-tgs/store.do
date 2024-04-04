@@ -1,26 +1,33 @@
-import { withRouter } from 'next/router';
-
 // Import Custom Component
 import ALink from "../ALink";
 
 // Import Utils
 import { mainMenu } from "../../../utils/data/menu";
+import { useLocation } from 'react-router-dom';
 
 function MainMenu ( { router } ) {
-    const pathname = router?.pathname;
-
+    const location = useLocation();
     function isOtherPage () {
-        return mainMenu.other.find( variation => variation.url === pathname );
+        return mainMenu.other.find( variation => variation.url === location.pathname );
     }
 
     return (
         <>
             <nav className="main-nav w-100">
                 <ul className="menu sf-js-enabled sf-arrows">
-                    <li className={ pathname === '/' ? 'active' : '' }>
+                    <li className={ location.pathname === '/' ? 'active' : '' }>
                         <ALink href="/">Home</ALink>
                     </li>
-                    <li className={ pathname?.startsWith( '/shop' ) ? 'active' : '' }>
+                    <li className={ location.pathname === '/product' ? 'active' : '' }>
+                        <ALink href="/product">Products</ALink>
+                    </li>
+                    <li className={ location.pathname === '/about' ? 'active' : '' }>
+                        <ALink href="/about">About</ALink>
+                    </li>
+                    <li className={ location.pathname === '/contact' ? 'active' : '' }>
+                        <ALink href="/contact">Contact Us</ALink>
+                    </li>
+                    {/* <li className={ pathname?.startsWith( '/shop' ) ? 'active' : '' }>
                         <ALink href="/shop" className="sf-with-ul">Shop</ALink>
                         <div className="megamenu megamenu-fixed-width megamenu-3cols">
                             <div className="row">
@@ -123,8 +130,8 @@ function MainMenu ( { router } ) {
                     </li>
                     <li className={ pathname === '/pages/blog' ? 'active' : '' }>
                         <ALink href="/pages/blog">Blog</ALink>
-                    </li>
-                    <li className={ isOtherPage() ? 'active' : '' }>
+                    </li> */}
+                    {/* <li className={ isOtherPage() ? 'active' : '' }>
                         <ALink href="#" className="sf-with-ul">Pages</ALink>
                         <ul>
                             {
@@ -135,14 +142,14 @@ function MainMenu ( { router } ) {
                                 ) )
                             }
                         </ul>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <a href="https://1.envato.market/DdLk5" target="_blank">Buy Porto!</a>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </>
     );
 }
 
-export default withRouter( MainMenu );
+export default MainMenu ;

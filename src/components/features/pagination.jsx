@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import React from 'react';
 
 import ALink from '../common/ALink';
 
 function Pagination ( { totalPage } ) {
-    const query = useRouter().query;
-    const page = query.page ? parseInt( query.page ) : 1;
+    // const query = useRouter().query;
+    const page =  1;
     let indexsToShow = [];
 
     for ( let i = 0; i < Math.min( totalPage, 3 ); i++ ) {
@@ -29,14 +29,14 @@ function Pagination ( { totalPage } ) {
                     {
                         page > 1 &&
                         <li className="page-item">
-                            <ALink className="page-link page-link-btn" href={ { query: { ...query, page: page - 1 } } } scroll={ false }><i className="icon-angle-left"></i></ALink>
+                            <ALink className="page-link page-link-btn" href={''} scroll={ false }><i className="icon-angle-left"></i></ALink>
                         </li>
                     }
 
                     {
                         indexsToShow.map( item => (
                             <li className={ `page-item ${ page === item ? 'active' : '' }` } key={ `page-${ item }` }>
-                                <ALink className="page-link" href={ { query: { ...query, page: item } } } scroll={ false }>
+                                <ALink className="page-link" href={''} scroll={ false }>
                                     { item }{ page === item && <span className="sr-only">(current)</span> }
                                 </ALink>
                             </li>
@@ -47,7 +47,7 @@ function Pagination ( { totalPage } ) {
                     {
                         page < totalPage &&
                         <li className="page-item">
-                            <ALink className="page-link page-link-btn" href={ { query: { ...query, page: page + 1 } } } scroll={ false }><i className="icon-angle-right"></i></ALink>
+                            <ALink className="page-link page-link-btn" href={ '' } scroll={ false }><i className="icon-angle-right"></i></ALink>
                         </li>
                     }
                 </ul>

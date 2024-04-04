@@ -1,20 +1,19 @@
 import SlideToggle from 'react-slide-toggle';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import 'react-input-range/lib/css/index.css';
 
 import ALink from '../../../common/ALink';
 
-import withApollo from '../../../../server/apollo';
-import { GET_SHOP_SIDEBAR_DATA } from '../../../../server/queries';
+// import withApollo from '../../../../server/apollo';
+// import { GET_SHOP_SIDEBAR_DATA } from '../../../../server/queries';
 
 import { shopColors, shopSizes } from '../../../../utils/data/shop';
 
 function ShopSidebarTwo ( props ) {
     const router = useRouter();
-    const query = router.query;
-    const { error } = useQuery( GET_SHOP_SIDEBAR_DATA, { variables: { featured: true } } );
+    // const query = router.query;
+    // const { error } = useQuery( GET_SHOP_SIDEBAR_DATA, { variables: { featured: true } } );
     const [ priceRange, setRange ] = useState( { min: 0, max: 1000 } );
 
     useEffect( () => {
@@ -26,17 +25,17 @@ function ShopSidebarTwo ( props ) {
     }, [] )
 
     function containsAttrInUrl ( type, value ) {
-        const currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
-        return currentQueries && currentQueries.includes( value );
+        // const currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
+        // return currentQueries && currentQueries.includes( value );
     }
 
     function filterByPrice(e) {
         e.preventDefault();
 
-        router.push({
-            pathname: router.pathname,
-            query: { ...query, min_price: priceRange.min, max_price: priceRange.max }
-        });
+        // router.push({
+        //     pathname: router.pathname,
+        //     query: { ...query, min_price: priceRange.min, max_price: priceRange.max }
+        // });
     }
 
     function openList ( e ) {
@@ -44,9 +43,9 @@ function ShopSidebarTwo ( props ) {
     }
 
     function getUrlForAttrs ( type, value ) {
-        let currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
-        currentQueries = containsAttrInUrl( type, value ) ? currentQueries.filter( item => item !== value ) : [ ...currentQueries, value ];
-        return currentQueries.join( ',' );
+        // let currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
+        // currentQueries = containsAttrInUrl( type, value ) ? currentQueries.filter( item => item !== value ) : [ ...currentQueries, value ];
+        // return currentQueries.join( ',' );
     }
 
     function closeSidebar () {
@@ -65,9 +64,9 @@ function ShopSidebarTwo ( props ) {
         setRange( { ...priceRange, max: parseInt( e.target.value ) } );
     }
 
-    if ( error ) {
-        return <div>{ error.message }</div>
-    }
+    // if ( error ) {
+    //     return <div>{ error.message }</div>
+    // }
 
     return (
         <>
@@ -79,10 +78,10 @@ function ShopSidebarTwo ( props ) {
                         {
                             shopSizes.map( ( item, index ) => (
                                 <li className={ containsAttrInUrl( 'sizes', item.size ) ? 'active' : '' } key={ `size-${ index }` }>
-                                    <ALink
+                                    {/* <ALink
                                         href={ { query: { ...query, page: 1, sizes: getUrlForAttrs( 'sizes', item.size ) } } }
                                         scroll={ false }
-                                    >{ item.name }</ALink>
+                                    >{ item.name }</ALink> */}
                                 </li>
                             ) )
                         }
@@ -95,10 +94,10 @@ function ShopSidebarTwo ( props ) {
                         {
                             shopColors.map( ( item, index ) => (
                                 <li className={ containsAttrInUrl( 'colors', item.name ) ? 'active' : '' } key={ `color-${ index }` }>
-                                    <ALink
+                                    {/* <ALink
                                         href={ { query: { ...query, page: 1, colors: getUrlForAttrs( 'colors', item.name ) } } }
                                         scroll={ false }
-                                    >{ item.name }</ALink>
+                                    >{ item.name }</ALink> */}
                                 </li>
                             ) )
                         }
@@ -120,4 +119,4 @@ function ShopSidebarTwo ( props ) {
     )
 }
 
-export default withApollo( { ssr: typeof window === 'undefined' } )( ShopSidebarTwo );
+export default ShopSidebarTwo ;

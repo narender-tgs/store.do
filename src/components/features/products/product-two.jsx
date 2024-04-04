@@ -13,7 +13,7 @@ import ALink from '../../common/ALink';
 import ProductCountdown from '../product-countdown';
 
 function ProductTwo ( props ) {
-    const router = useRouter();
+    // const router = useRouter();
     const { adClass = "", link = "default", product } = props;
 
     function isSale () {
@@ -24,7 +24,7 @@ function ProductTwo ( props ) {
     }
 
     function isInWishlist () {
-        return product && props.wishlist.findIndex( item => item.slug === product.slug ) > -1;
+        // return product && props.wishlist.findIndex( item => item.slug === product.slug ) > -1;
     }
 
     function onWishlistClick ( e ) {
@@ -40,7 +40,7 @@ function ProductTwo ( props ) {
                 props.addToWishList( product );
             }, 1000 );
         } else {
-            router.push( '/pages/wishlist' );
+            // router.push( '/pages/wishlist' );
         }
     }
 
@@ -160,4 +160,4 @@ const mapStateToProps = ( state ) => {
     }
 }
 
-export default connect( mapStateToProps, { ...WishlistAction, ...CartAction, ...ModalAction } )( ProductTwo );
+export default ProductTwo ;

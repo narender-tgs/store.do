@@ -21,7 +21,7 @@ export default function Header ( { adClass = '' } ) {
             <div className="header-top">
                 <div className="container">
                     <div className="header-left">
-                        <div className="header-dropdown">
+                        {/* <div className="header-dropdown">
                             <ALink href="#">USD</ALink>
                             <div className="header-menu">
                                 <ul>
@@ -40,7 +40,7 @@ export default function Header ( { adClass = '' } ) {
                                     <li><ALink href="#"><i className="flag-fr flag mr-2"></i>FRA</ALink></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="header-right d-none d-lg-flex">
@@ -70,7 +70,7 @@ export default function Header ( { adClass = '' } ) {
                         </button>
 
                         <ALink href="/" className="logo">
-                            <img src="images/logo-black.png" className="w-100" width="101" height="44" alt="Porto Logo" />
+                            <img src="images/logo-black.png" className="w-100 mt-1" width="101" height="44" alt="Porto Logo" />
                         </ALink>
 
                         <MainMenu />
@@ -79,7 +79,7 @@ export default function Header ( { adClass = '' } ) {
                     <div className="header-right">
                         <SearchForm />
 
-                        <ALink href="/pages/wishlist" className="header-icon" title="wishlist"><i className="icon-wishlist-2 line-height-1"></i></ALink>
+                        <ALink href="/pages/wishlist" className="header-icon" title="wishlist"><i className="icon-wishlist-2 line-height-1 mr-3"></i></ALink>
 
                         <CartMenu />
                     </div>

@@ -4,10 +4,10 @@ import StickyBox from 'react-sticky-box';
 import Tree from 'rc-tree';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useMemo } from 'react';
-import { useQuery } from '@apollo/react-hooks';
-// Import Apollo Server and Query
-import withApollo from '../../../../server/apollo';
-import { GET_SHOP_SIDEBAR_DATA } from '../../../../server/queries';
+// import { useQuery } from '@apollo/react-hooks';
+// // Import Apollo Server and Query
+// import withApollo from '../../../../server/apollo';
+// import { GET_SHOP_SIDEBAR_DATA } from '../../../../server/queries';
 
 // Import Custom Component
 import ALink from '../../../common/ALink';
@@ -28,13 +28,16 @@ const TreeNode = ( props ) => {
 }
 
 function ShopSidebarOne ( props ) {
-    const router = useRouter();
-    const query = router.query;
+    // const router = useRouter();
+    // const query = router.query;
     const { adClass } = props;
-    const { data, loading, error } = useQuery( GET_SHOP_SIDEBAR_DATA, { variables: { featured: true } } );
+    // const { data, loading, error } = useQuery( GET_SHOP_SIDEBAR_DATA, { variables: { featured: true } } );
+    const [productsState, setProductsState] = useState({ data: null, loading: false, error: null });
+    const { data, loading, error } = productsState;
     const [ priceRange, setRange ] = useState( { min: 0, max: 1000 } );
     const categories = useMemo( () => {
-        let cats = data ? data.shopSidebarData.categories : [];
+        // let cats = data ? data.shopSidebarData.categories : [];
+        let cats =  [];
         let stack = [],
             result = [];
         result = cats.reduce( ( acc, cur ) => {
@@ -82,16 +85,16 @@ function ShopSidebarOne ( props ) {
         }
     }, [] )
 
-    useEffect( () => {
-        if ( query.min_price && query.max_price ) {
-            setRange( { min: parseInt( query.min_price ), max: parseInt( query.max_price ) } );
-        } else {
-            setRange( { min: 0, max: 1000 } );
-        }
-    }, [ query ] )
+    // useEffect( () => {
+    //     if ( query.min_price && query.max_price ) {
+    //         setRange( { min: parseInt( query.min_price ), max: parseInt( query.max_price ) } );
+    //     } else {
+    //         setRange( { min: 0, max: 1000 } );
+    //     }
+    // }, [ query ] )
 
     function filterByCategory ( selected ) {
-        router.push( router.pathname.replace( '[grid]', query.grid ) + '?category=' + ( selected.length ? selected[ 0 ] : '' ) );
+        // router.push( router.pathname.replace( '[grid]', query.grid ) + '?category=' + ( selected.length ? selected[ 0 ] : '' ) );
     }
 
     function onChangePriceRange ( value ) {
@@ -99,25 +102,25 @@ function ShopSidebarOne ( props ) {
     }
 
     function containsAttrInUrl ( type, value ) {
-        const currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
-        return currentQueries && currentQueries.includes( value );
+        // const currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
+        // return currentQueries && currentQueries.includes( value );
     }
 
     function getUrlForAttrs ( type, value ) {
-        let currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
-        currentQueries = containsAttrInUrl( type, value ) ? currentQueries.filter( item => item !== value ) : [ ...currentQueries, value ];
-        return currentQueries.join( ',' );
+        // let currentQueries = query[ type ] ? query[ type ].split( ',' ) : [];
+        // currentQueries = containsAttrInUrl( type, value ) ? currentQueries.filter( item => item !== value ) : [ ...currentQueries, value ];
+        // return currentQueries.join( ',' );
     }
 
     function filterByPrice ( e ) {
         e.preventDefault();
-        let url = router.pathname.replace( '[grid]', query.grid );
-        let arr = [ `min_price=${ priceRange.min }`, `max_price=${ priceRange.max }`, 'page=1' ];
-        for ( let key in query ) {
-            if ( key !== 'min_price' && key !== 'max_price' && key !== 'page' && key !== 'grid' ) arr.push( key + '=' + query[ key ] );
-        }
-        url = url + '?' + arr.join( '&' );
-        router.push( url );
+        // let url = router.pathname.replace( '[grid]', query.grid );
+        // let arr = [ `min_price=${ priceRange.min }`, `max_price=${ priceRange.max }`, 'page=1' ];
+        // for ( let key in query ) {
+        //     if ( key !== 'min_price' && key !== 'max_price' && key !== 'page' && key !== 'grid' ) arr.push( key + '=' + query[ key ] );
+        // }
+        // url = url + '?' + arr.join( '&' );
+        // router.push( url );
     }
 
     function closeSidebar () {
@@ -141,23 +144,23 @@ function ShopSidebarOne ( props ) {
                                 <SlideToggle>
                                     { ( { onToggle, setCollapsibleElement, toggleState } ) => (
                                         <>
-                                            <h3 className="widget-title">
+                                            {/* <h3 className="widget-title">
                                                 <a href="#" onClick={ ( e ) => { e.preventDefault(), onToggle() } } className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' }>Categories</a>
-                                            </h3>
+                                            </h3> */}
                                             <div className="overflow-hidden" ref={ setCollapsibleElement }>
                                                 <div className="widget-body">
                                                     <Tree
                                                         className="no-icon cat-list border-0"
                                                         selectable={ true }
                                                         showIcon={ false }
-                                                        defaultExpandedKeys={ query.category ? [ query.category ] : [] }
+                                                        defaultExpandedKeys={ [] }
                                                         switcherIcon={ ( props ) => {
                                                             return ( !props.isLeaf ?
                                                                 <span className="toggle"></span>
                                                                 : ''
                                                             )
                                                         } }
-                                                        selectedKeys={ query.category ? [ query.category ] : [] }
+                                                        selectedKeys={ [] }
                                                         treeData={ categories }
                                                         onSelect={ filterByCategory }
                                                     />
@@ -169,11 +172,11 @@ function ShopSidebarOne ( props ) {
                         }
                     </div>
 
-                    {
+                    {/* {
                         ( query.category || query.sizes || query.colors || query.min_price || query.max_price ) && <div className="widget">
                             <ALink href={ { query: { grid: query.grid } } } scroll={ false } className="btn btn-primary reset-filter">Reset All Filters</ALink>
                         </div>
-                    }
+                    } */}
 
                     <div className="widget widget-price overflow-hidden">
                         {
@@ -186,7 +189,7 @@ function ShopSidebarOne ( props ) {
                                         (
                                             <>
                                                 <h3 className="widget-title">
-                                                    <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#" role="button" onClick={ ( e ) => { e.preventDefault(), onToggle() } }>Price</a>
+                                                    <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#" role="button">Price</a>
                                                 </h3>
 
                                                 <div ref={ setCollapsibleElement }>
@@ -227,7 +230,8 @@ function ShopSidebarOne ( props ) {
                                     { ( { onToggle, setCollapsibleElement, toggleState } ) => (
                                         <>
                                             <h3 className="widget-title">
-                                                <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#" onClick={ ( e ) => { e.preventDefault(), onToggle() } }>Color</a>
+                                                {/* <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#" onClick={ ( e ) => { e.preventDefault(), onToggle() } }>Color</a> */}
+                                                <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#">Color</a>
                                             </h3>
                                             <div className="overflow-hidden" ref={ setCollapsibleElement }>
                                                 <div className="widget-body pb-0">
@@ -236,7 +240,7 @@ function ShopSidebarOne ( props ) {
                                                             shopColors.map( ( item, index ) => (
                                                                 <li className={ containsAttrInUrl( 'colors', item.name ) ? 'active' : '' } key={ `color-${ index }` }>
                                                                     <ALink
-                                                                        href={ { query: { ...query, page: 1, colors: getUrlForAttrs( 'colors', item.name ) } } }
+                                                                        href={ { query: { page: 1, colors: getUrlForAttrs( 'colors', item.name ) } } }
                                                                         style={ { backgroundColor: item.color } }
                                                                         scroll={ false }
                                                                     >{ item.name }</ALink>
@@ -261,7 +265,7 @@ function ShopSidebarOne ( props ) {
                                     { ( { onToggle, setCollapsibleElement, toggleState } ) => (
                                         <>
                                             <h3 className="widget-title">
-                                                <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#" onClick={ ( e ) => { e.preventDefault(), onToggle() } }>Sizes</a>
+                                                <a className={ toggleState === 'COLLAPSED' ? 'collapsed' : '' } href="#">Sizes</a>
                                             </h3>
                                             <div className="overflow-hidden" ref={ setCollapsibleElement }>
                                                 <div className="widget-body">
@@ -270,7 +274,7 @@ function ShopSidebarOne ( props ) {
                                                             shopSizes.map( ( item, index ) => (
                                                                 <li className={ containsAttrInUrl( 'sizes', item.size ) ? 'active' : '' } key={ `size-${ index }` }>
                                                                     <ALink
-                                                                        href={ { query: { ...query, page: 1, sizes: getUrlForAttrs( 'sizes', item.size ) } } }
+                                                                        href={ { query: { page: 1, sizes: getUrlForAttrs( 'sizes', item.size ) } } }
                                                                         scroll={ false }
                                                                     >{ item.name }</ALink>
                                                                 </li>
@@ -288,7 +292,7 @@ function ShopSidebarOne ( props ) {
                     <div className="widget widget-featured pb-0">
                         <h3 className="widget-title">Featured Products</h3>
 
-                        <div className="widget-body">
+                        {/* <div className="widget-body">
                             <div className="featured-col">
                                 {
                                     loading ?
@@ -304,7 +308,7 @@ function ShopSidebarOne ( props ) {
                                         ) )
                                 }
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </StickyBox>
             </aside>
@@ -312,4 +316,4 @@ function ShopSidebarOne ( props ) {
     )
 }
 
-export default withApollo( { ssr: typeof window === 'undefined' } )( ShopSidebarOne );
+export default ShopSidebarOne ;
