@@ -29,7 +29,8 @@ export default function FeaturedCollection ( props ) {
           slug: "ultra-hd-smart-tv",
           ratings: 4.8,
           is_hot: true,
-          variants:['Blue','Black']
+          variants:[],
+          qty:1
         },
         {
           srcs: cycle2,
@@ -39,7 +40,8 @@ export default function FeaturedCollection ( props ) {
           slug: "eco-friendly-yoga-mat",
           ratings: 4.6,
           is_hot: false,
-          variants:[]
+          variants:[],
+          qty:1
         },
         {
           srcs: cycle3,
@@ -49,7 +51,9 @@ export default function FeaturedCollection ( props ) {
           slug: "bluetooth-wireless-headphones",
           ratings: 4.7,
           is_hot: true,
-          variants:['Magenta','violet']
+          variants:[],
+          qty:1
+
         },
         {
           srcs: cycle4,
@@ -59,7 +63,8 @@ export default function FeaturedCollection ( props ) {
           slug: "organic-green-tea-leaves",
           ratings: 4.5,
           is_hot: false,
-          variants:['Pitch Black', 'Brown']
+          variants:['Pitch Black', 'Brown'],
+          qty:1
         },
         {
           srcs: glasses1,
@@ -69,7 +74,8 @@ export default function FeaturedCollection ( props ) {
           slug: "gourmet-kitchen-knife-set",
           ratings: 4.9,
           is_hot: false,
-          variants:['Red','Black']
+          variants:['Red','Black'],
+          qty:1
         },
         {
           srcs: cycle1,
@@ -79,7 +85,8 @@ export default function FeaturedCollection ( props ) {
           slug: "portable-camping-tent",
           ratings: 4.4,
           is_hot: true,
-          variants:['White','Grey']
+          variants:['White','Grey'],
+          qty:1
         }
       ];
       

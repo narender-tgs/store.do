@@ -11,6 +11,7 @@ import { HomeSlider } from '../../../utils/data/slider';
 import slide1 from '../../../assets/images/home/slider/slide-1.png'
 import slide2 from '../../../assets/images/home/slider/slide-2.png'
 import home_cycle from '../../../assets/images/home_cycle.png'
+import customBanner from '../../../assets/images/banners/superSale.jpg'
 // Import Keyframes
 import { fadeInUpShorter, fadeInLeftShorter, fadeInRightShorter } from '../../../utils/data/keyframes'
 
@@ -28,7 +29,7 @@ function HomeSection () {
                                 <h3 className="font5 m-b-5">Summer Sale</h3>
 
                                 <div>
-                                    <ALink href="/shop" className="btn btn-dark btn-lg">Shop all sale</ALink>
+                                    <ALink href="/pages/product/sale" className="btn btn-dark btn-lg">Shop all sale</ALink>
                                 </div>
                             </div>
                         </Reveal>
@@ -37,14 +38,15 @@ function HomeSection () {
                             <Reveal keyframes={ fadeInLeftShorter } delay={ 500 } duration={ 1000 }>
                                 <div className="media-with-lazy">
                                     <figure className="m-b-5">
-                                        <LazyLoadImage
+                                        {/* <LazyLoadImage
                                             alt="Home Slide"
-                                            src={home_cycle}
+                                            src={customBanner}
                                             threshold={ 500 }
                                             effect="black and white"
                                             width="100%"
                                             height="auto"
-                                        />
+                                        /> */}
+                                        <img src={customBanner} style={{width:'70%', height:'100%'}} alt='asdf'></img>
 
                                     </figure>
                                     {/* <img src={slide1} alt="Description"></img> */}
@@ -73,7 +75,7 @@ function HomeSection () {
                                     <h3 className="font5 p-b-4 m-b-5">Summer Sale</h3>
 
                                     <div>
-                                        <ALink href="/shop" className="btn btn-dark btn-lg">Shop all sale</ALink>
+                                        <ALink href="/pages/product/Sale" className="btn btn-dark btn-lg">Shop all sale</ALink>
                                     </div>
                                 </>
                             </Reveal>

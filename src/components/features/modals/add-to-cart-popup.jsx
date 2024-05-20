@@ -2,20 +2,23 @@ import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 // Import Custom Component
+import cycle1 from '../../../assets/images/cycle1.jpg'
+
 import ALink from '../../common/ALink';
 
 function CartPopup ( props ) {
-    const { product } = props;
+    const  product  = props.props;
 
     return (
         <div className="minipopup-area">
             <div className="minipopup-box" style={ { top: "0" } }>
                 <div className="product media-with-lazy">
                     <figure className="product-media w-100">
-                        <ALink href={ `/product/default/${product.slug}` } >
+                        <ALink>
                             <LazyLoadImage
                                 alt="product"
-                                src={ product.small_pictures ? `${process.env.NEXT_PUBLIC_ASSET_URI + product.small_pictures[ 0 ].url}` : '' }
+                                // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROGswtbi-CqtO_5ecgfl_aVaCERXPu1ESJjA&s"
+                                src={product?.imageUrls?.length > 0 &&product?.imageUrls[0]}
                                 threshold={ 500 }
                                 effect="black and white"
                                 width="100%"
@@ -24,18 +27,7 @@ function CartPopup ( props ) {
                         </ALink>
                     </figure>
                     <div className="product-detail">
-                        {
-                            product.index > -1 ?
-                                !product.variants[ product.index ].color ?
-                                    <ALink className="product-name" href={ `/product/default/${product.slug}` }>{ product.name + ' - ' + product.variants[ product.index ].size.name }</ALink>
-                                    :
-                                    !product.variants[ product.index ].size ?
-                                        <ALink className="product-name" href={ `/product/default/${product.slug}` }>{ product.name + ' - ' + product.variants[ product.index ].color.name }</ALink>
-                                        :
-                                        <ALink className="product-name" href={ `/product/default/${product.slug}` }>{ product.name + ' - ' + product.variants[ product.index ].color.name + ', ' + product.variants[ product.index ].size.name }</ALink>
-                                :
-                                <ALink className="product-name" href={ `/product/default/${product.slug}` }>{ product.name }</ALink>
-                        }
+                       <p>{product.name}</p>
 
                         <p>has been added to your cart.</p>
                     </div>

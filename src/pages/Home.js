@@ -6,6 +6,7 @@
 
 // Import Custom Component
 // import BannerSection from "../home/banner-section";
+import { Helmet } from "react-helmet";
 import HomeSection from "../components/common/home/home-section";
 import FeaturedCollection from "../components/common/home/popular-section";
 import TrendyCollection from "../components/common/home/product-collection";
@@ -25,6 +26,11 @@ const Home =() =>{
 
     return (
         <>
+        <Helmet>
+        <title>Home Page - Store.Do</title>
+        <meta name="description" content="Welcome to our website where we offer the best products and services." />
+        <meta name="keywords" content="best products, top services, quality, home" />
+      </Helmet>
             {/* <main className={ `home skeleton-body skel-shop-products ${loading ? '' : 'loaded'}` } > */}
                 <HomeSection />
                 <FeaturedCollection/>

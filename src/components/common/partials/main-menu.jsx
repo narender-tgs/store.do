@@ -25,7 +25,7 @@ function MainMenu ( { router } ) {
                         <ALink href="/about">About</ALink>
                     </li>
                     <li className={ location.pathname === '/contact' ? 'active' : '' }>
-                        <ALink href="/contact">Contact Us</ALink>
+                        <ALink href="/contact_us">Contact Us</ALink>
                     </li>
                     {/* <li className={ pathname?.startsWith( '/shop' ) ? 'active' : '' }>
                         <ALink href="/shop" className="sf-with-ul">Shop</ALink>

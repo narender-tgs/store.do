@@ -4,11 +4,14 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 // Import Custom Component
 import ALink from '../ALink';
+import axios from 'axios';
+import lappy from '../../../assets/images/products/Laptops/macbook Pro max.jpg'
 
 function SearchForm ( props ) {
     // const router = useRouter();
     const [ cat, setCat ] = useState( "" );
     const [ search, setSearch ] = useState( "" );
+    const [products , setProducts] = useState();
     // const [ searchProducts, { data } ] = {data:[]};
     const  data  = [];
     const [ timer, setTimer ] = useState( null );
@@ -37,6 +40,22 @@ function SearchForm ( props ) {
             setTimer( timerId );
         }
     }, [ search, cat ] )
+    
+     useEffect(() => {
+        axios.get(`http://localhost:3000/v1/product?search=${search}` , { headers: { 'service_ref': '8xuf4dev'}})
+            .then(response => {
+                // Access the response data
+                const responseData = response.data;
+               // console.log("response Data for products-->", responseData);
+                setProducts(responseData.data.products)
+                // Process the response data here
+            })
+            .catch(error => {
+                // Handle any errors
+            });
+        
+    }, [search])
+    
 
     // useEffect( () => {
     //     document.querySelector( '.header-search.show-results' ) && document.querySelector( '.header-search.show-results' ).classList.remove( 'show-results' );
@@ -83,8 +102,9 @@ function SearchForm ( props ) {
         setCat( e.target.value );
     }
 
-    function onSearchChange ( e ) {
+    function onSearchChange( e ) {
         setSearch( e.target.value );
+       // console.log("searched item->", e.target.value);
     }
 
     function onSubmitSearchForm ( e ) {
@@ -105,8 +125,8 @@ function SearchForm ( props ) {
             <form action="#" method="get" onSubmit={ ( e ) => onSubmitSearchForm( e ) }>
                 <div className="header-search-wrapper">
                     <input type="search" className="form-control" name="q" id={ `${props.type === 1 ? 'q' : 'qqq'}` } placeholder="I'm searching for..." value={ search }
-                        required onChange={ ( e ) => onSearchChange( e ) } />
-                    <div className="select-custom font2">
+                        required onChange={ ( e ) =>  onSearchChange( e ) } />
+                    {/* <div className="select-custom font2">
                         <select id={ `${props.type === 1 ? 'cat1' : 'cat'}` } name="cat" value={ cat } onChange={ ( e ) => onCatSelect( e ) }>
                             <option value="">All Categories</option>
                             <option value="fashion">Fashion</option>
@@ -126,25 +146,26 @@ function SearchForm ( props ) {
                             <option value="boats">- Boats</option>
                             <option value="auto-tools-supplies">- Auto Tools &amp; Supplies</option>
                         </select>
-                    </div>
+                    </div> */}
 
                     <button className="btn icon-magnifier" title="search" type="submit"></button>
 
                     <div className="live-search-list bg-white">
-                        { search.length > 2 && data && data?.products?.data?.map( ( product, index ) => (
-                            <ALink href={ `/product/default/${product.slug}` } className="autocomplete-suggestion" key={ `search-result-${index}` }>
-                                <LazyLoadImage src={ process.env.NEXT_PUBLIC_ASSET_URI + product.small_pictures[ 0 ].url } width={ 40 } height={ 40 } alt="product" />
+                        { products && products.length > 0 && products.map( ( product, index ) => (
+                            <ALink href='/product_detail' state={product} className="autocomplete-suggestion" key={ `search-result-${index}` }>
+                                <LazyLoadImage src={product && product?.imageUrls?.length > 0 && product?.imageUrls[0]} width={ 40 } height={ 40 } alt="product" />
                                 <div className="search-name" dangerouslySetInnerHTML={ removeXSSAttacks( matchEmphasize( product.name ) ) }></div>
                                 <span className="search-price">
                                     {
-                                        product.price[ 0 ] == product.price[ 1 ] ?
-                                            <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) }</span>
-                                            : product.variants.length > 0 ?
-                                                <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) } &ndash; { '$' + product.price[ 1 ].toFixed( 2 ) }</span>
-                                                : <>
-                                                    <span className="old-price">{ '$' + product.price[ 1 ].toFixed( 2 ) }</span>
-                                                    <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) }</span>
-                                                </>
+                                        <span className="product-price">{ products.price }</span>
+                                        // product.price[ 0 ] == product.price[ 1 ] ?
+                                        //     <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) }</span>
+                                        //     : product.variants.length > 0 ?
+                                        //         <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) } &ndash; { '$' + product.price[ 1 ].toFixed( 2 ) }</span>
+                                        //         : <>
+                                        //             <span className="old-price">{ '$' + product.price[ 1 ].toFixed( 2 ) }</span>
+                                        //             <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) }</span>
+                                        //         </>
                                     }
                                 </span>
                             </ALink>

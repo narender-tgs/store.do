@@ -6,8 +6,14 @@ import ShopBanner from '../components/partials/shop/shop-banner';
 import ShopSidebarOne from '../components/partials/shop/sidebar/shop-sidebar-one';
 import Pagination from '../components/features/pagination';
 import ProductsGrid from '../components/partials/products-collection/product-grid';
-
-function Product() {
+import axios from 'axios';
+import { Helmet } from 'react-helmet';
+import { useSelector } from 'react-redux';
+import { getStoreDetails } from '../store/cart/storeData/storeDetailsSlice';
+const Product = ()=> {
+    const storeDatas = useSelector(getStoreDetails)
+    console.log("props for the sale-->", storeDatas);
+    // const {saleData} = props;
     // const history = useHistory();
     const location = useLocation();
     const grid = new URLSearchParams(location.search).get('grid');
@@ -18,700 +24,98 @@ function Product() {
     const { data, loading, error } = productsState;
     const [perPage, setPerPage] = useState(12);
     const [sortBy, setSortBy] = useState('default');
+    const [products , setProducts] = useState([]);
+    const [selectedPriceRange, setSelectedPriceRange] = useState({min:"", max:""});
+    const [categoryGuids, setCategoryGuids] = useState([]);
+    const [subCategoryGuids, setSubCategoryGuids] = useState([]);
+    const [categoryObj , setCategoryObj] = useState();
     // const query = new URLSearchParams(location.search);
-    const products = [
-                  {
-                      "name": "Bicycle One",
-                      "slug": "bicycle-one",
-                      "price": [
-                          259,
-                          299
-                      ],
-                      "ratings": 0,
-                      "reviews": 0,
-                      "is_hot": true,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_8_1_61f1cebc9c.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_8_3_07954045b5.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_8_1_61f1cebc9c.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_8_3_07954045b5.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bike Frames",
-                              "slug": "bike-frames",
-                              "__typename": "ProductCategory"
-                          },
-                          {
-                              "name": "Bikes",
-                              "slug": "bikes",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Two",
-                      "slug": "bicycle-two",
-                      "price": [
-                          129,
-                          199
-                      ],
-                      "ratings": 0,
-                      "reviews": 0,
-                      "is_hot": null,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_9_1_8bf65c5054.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_9_3_85159d5445.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_9_1_8bf65c5054.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_9_3_85159d5445.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bikes",
-                              "slug": "bikes",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [
-                          {
-                              "price": 199,
-                              "sale_price": 149,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": 199,
-                              "sale_price": 129,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": 199,
-                              "sale_price": 148,
-                              "__typename": "Variant"
-                          }
-                      ],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Three",
-                      "slug": "bicycle-three",
-                      "price": [
-                          299,
-                          299
-                      ],
-                      "ratings": 4,
-                      "reviews": 1,
-                      "is_hot": true,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_10_1_cf67579f18.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_10_3_ef85d87a92.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_10_1_cf67579f18.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_10_3_ef85d87a92.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bikes",
-                              "slug": "bikes",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Four",
-                      "slug": "bicycle-four",
-                      "price": [
-                          59,
-                          99
-                      ],
-                      "ratings": 0,
-                      "reviews": 0,
-                      "is_hot": null,
-                      "is_new": true,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_11_1_3ee094bbf4.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_11_3_cab1b4fe71.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_11_1_3ee094bbf4.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_11_3_cab1b4fe71.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bikes",
-                              "slug": "bikes",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Part One",
-                      "slug": "bicycle-part-one",
-                      "price": [
-                          49,
-                          59
-                      ],
-                      "ratings": 4,
-                      "reviews": 1,
-                      "is_hot": null,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_1_1_25be18a02a.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_1_3_5fd99dd620.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_1_1_25be18a02a.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_1_3_5fd99dd620.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Accessories",
-                              "slug": "accessories-1",
-                              "__typename": "ProductCategory"
-                          },
-                          {
-                              "name": "Bike Tools",
-                              "slug": "bike-tools",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Part Two",
-                      "slug": "bicycle-part-two",
-                      "price": [
-                          599,
-                          599
-                      ],
-                      "ratings": 3,
-                      "reviews": 1,
-                      "is_hot": true,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_2_1_de6d275161.jpg",
-                              "width": 900,
-                              "height": 900,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_2_3_dc8d67a907.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_2_1_de6d275161.jpg",
-                              "width": 900,
-                              "height": 900,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_2_3_dc8d67a907.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bike Chains",
-                              "slug": "bike-chains",
-                              "__typename": "ProductCategory"
-                          },
-                          {
-                              "name": "Bike Tools",
-                              "slug": "bike-tools",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          }
-                      ],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Five",
-                      "slug": "bicycle-five",
-                      "price": [
-                          129,
-                          199
-                      ],
-                      "ratings": 0,
-                      "reviews": 0,
-                      "is_hot": null,
-                      "is_new": true,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_6_1_07f766840c.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_6_3_1c9004c8cb.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_6_1_07f766840c.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_6_3_1c9004c8cb.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bikes",
-                              "slug": "bikes",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Part Three",
-                      "slug": "bicycle-part-three",
-                      "price": [
-                          299,
-                          299
-                      ],
-                      "ratings": 0,
-                      "reviews": 0,
-                      "is_hot": true,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_3_1_c41ff5a8ed.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_3_3_94bc0662ec.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_3_1_c41ff5a8ed.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_3_3_94bc0662ec.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bike Frames",
-                              "slug": "bike-frames",
-                              "__typename": "ProductCategory"
-                          },
-                          {
-                              "name": "Bike Tools",
-                              "slug": "bike-tools",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Part Four",
-                      "slug": "bicycle-part-four",
-                      "price": [
-                          55,
-                          55
-                      ],
-                      "ratings": 4,
-                      "reviews": 1,
-                      "is_hot": true,
-                      "is_new": true,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_4_1_56097a17ae.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_4_3_5feca1ddd6.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_4_1_56097a17ae.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_4_3_5feca1ddd6.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bike Pedals",
-                              "slug": "bike-pedals",
-                              "__typename": "ProductCategory"
-                          },
-                          {
-                              "name": "Bike Frames",
-                              "slug": "bike-frames",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Part Five",
-                      "slug": "bicycle-part-five",
-                      "price": [
-                          39,
-                          39
-                      ],
-                      "ratings": 4,
-                      "reviews": 2,
-                      "is_hot": true,
-                      "is_new": null,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_5_1_d028406ed1.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_5_3_bcd57102ab.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_5_1_d028406ed1.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_5_3_bcd57102ab.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bike Saddles",
-                              "slug": "bike-saddles",
-                              "__typename": "ProductCategory"
-                          },
-                          {
-                              "name": "Bike Pedals",
-                              "slug": "bike-pedals",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": null,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          }
-                      ],
-                      "__typename": "Product"
-                  },
-                  {
-                      "name": "Bicycle Six",
-                      "slug": "bicycle-six",
-                      "price": [
-                          101,
-                          108
-                      ],
-                      "ratings": 0,
-                      "reviews": 0,
-                      "is_hot": null,
-                      "is_new": true,
-                      "is_out_of_stock": null,
-                      "until": null,
-                      "stock": 90,
-                      "pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_7_1_b13fbe2d08.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_7_3_e800e24e9c.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "small_pictures": [
-                          {
-                              "url": "/uploads/shop27_Product_7_1_b13fbe2d08.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          },
-                          {
-                              "url": "/uploads/shop27_Product_7_3_e800e24e9c.jpg",
-                              "width": 800,
-                              "height": 800,
-                              "__typename": "Media"
-                          }
-                      ],
-                      "categories": [
-                          {
-                              "name": "Bikes",
-                              "slug": "bikes",
-                              "__typename": "ProductCategory"
-                          }
-                      ],
-                      "variants": [
-                          {
-                              "price": 101,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": 108,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          },
-                          {
-                              "price": 105,
-                              "sale_price": null,
-                              "__typename": "Variant"
-                          }
-                      ],
-                      "__typename": "Product"
-                  }
-              ]
+    // useEffect(() => {
+    //     axios.get('http://localhost:3003/v1/product' , { headers: { 'service_ref': '8xuf4dev'}})
+    //         .then(response => {
+    //             // Access the response data
+    //             const responseData = response.data;
+    //             console.log("response Data for products-->", responseData);
+    //             setProducts(responseData.data.products)
+    //             // Process the response data here
+    //         })
+    //         .catch(error => {
+    //             // Handle any errors
+    //         });
+        
+    // }, [])
+    useEffect(() => {
+
+        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}` , { headers: { 'service_ref': '8xuf4dev'}}).then((response)=>{
+        
+        console.log("response for store do" , response);
+        
+      })
+    }, [])
+    
+    useEffect(() => {
+        // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}` , { headers: { 'service_ref': '8xuf4dev'}})
+        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}` , { headers: { 'service_ref': '8xuf4dev'}})
+
+            .then(response => {
+
+                // Access the response data
+                const responseData = response.data;
+                if(sortBy === "price_asc"){
+                    const priceLowToHigh = responseData.data.products.sort((a,b)=>{
+                        return a.price - b.price;
+                    })
+                   // console.log("price low to high", priceLowToHigh);
+                    setProducts(priceLowToHigh)
+                }else if(sortBy === "price_desc"){
+                    const priceHighToLow = responseData.data.products.sort((a,b)=>{
+                        return b.price - a.price;
+                    })
+                   // console.log("priceHigh to low", priceHighToLow);
+                    setProducts(priceHighToLow)
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+            });
+        
+    }, [selectedPriceRange , sortBy])
+
+    // useEffect(() => {
+    //     axios.get(`http://localhost:3003/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}` , { headers: { 'service_ref': '8xuf4dev'}})
+    //         .then(response => {
+    //             // Access the response data
+    //             const responseData = response.data;
+    //             setProducts(responseData.data.products)
+    //             // Process the response data here
+    //         })
+    //         .catch(error => {
+    //             // Handle any errors
+    //         });
+        
+    // }, [selectedPriceRange])
+    useEffect(() => {
+        //arrayCat([%22cat-6279f0b4-cd9e-42db-8b2d-e5cbb5f34fc4%22])
+        //arraySubCat[%22sub-cat-a01df79e-4d5f-4160-bf7c-b8be855a446d%22%2C%22sub-cat-a01df79e-4d5f-4160-bf7c-b8be855a446d%22]
+        //search(Apple%20Ma)
+        const categoryGuidsParam = JSON.stringify(categoryGuids); // Convert to JSON string
+        const subCategoryGuidsParam = JSON.stringify(subCategoryGuids); // Convert to JSON string
+        // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+
+            .then(response => {
+                // Access the response data
+                const responseData = response.data;
+                setProducts(responseData.data.products)
+                // Process the response data here
+            })
+            .catch(error => {
+                // Handle any errors
+            });
+        
+    }, [selectedPriceRange ,categoryGuids , subCategoryGuids])
+    
+   
     const totalPage = data ? parseInt(data.products.total / perPage) + (data.products.total % perPage ? 1 : 0) : 1;
     const gridClass = {
         '3cols': 'col-6 col-sm-4',
@@ -746,18 +150,43 @@ function Product() {
         // });
     }, [ perPage, sortBy]);
 
-    function onPerPageChange(e) {
-        // let url = history.location.pathname.replace('[grid]', grid);
-        // let arr = ['page=1'];
-        // query.forEach((value, key) => {
-        //     if (key !== 'page' && key !== 'grid') arr.push(`${key}=${value}`);
-        // });
-        // url = `${url}?${arr.join('&')}`;
-        // history.push(url);
-        setPerPage(e.target.value);
+    function getProductPriceRange(data){
+
+        setSelectedPriceRange(data );
+    }
+    function getCategoryProducts(category){
+        console.log("category that are selected", category);
+        setCategoryObj(category)
+        if (category.catGuid) {
+            // It's a main category
+            if (!categoryGuids.includes(category.catGuid)) {
+                setCategoryGuids([ category.catGuid]);
+            }
+            setSubCategoryGuids([]); // Reset subcategory because we're at top level
+        } else if (category.subCategory && category.subCategory.parentCatGuid) {
+            // It's a subcategory
+            if (!categoryGuids.includes(category.subCategory.parentCatGuid)) {
+                setCategoryGuids([category.subCategory.parentCatGuid]);
+            }
+            if (!subCategoryGuids.includes(category.subCategory.subCatGuid)) {
+                setSubCategoryGuids([category.subCategory.subCatGuid]);
+            }
+        }
     }
 
+    // function console(e) {
+    //     // let url = history.location.pathname.replace('[grid]', grid);
+    //     // let arr = ['page=1'];
+    //     // query.forEach((value, key) => {
+    //     //     if (key !== 'page' && key !== 'grid') arr.push(`${key}=${value}`);
+    //     // });
+    //     // url = `${url}?${arr.join('&')}`;
+    //     // history.push(url);
+    //     setPerPage(e.target.value);
+    // }
+
     function onSortByChange(e) {
+        console.log("e target value -->", e.target.value);
         // let url = history.location.pathname.replace('[grid]', grid);
         // let arr = [`sortBy=${e.target.value}`, 'page=1'];
         // query.forEach((value, key) => {
@@ -766,6 +195,7 @@ function Product() {
         // url = `${url}?${arr.join('&')}`;
         // history.push(url);
         setSortBy(e.target.value);
+
     }
 
     function sidebarToggle(e) {
@@ -784,6 +214,11 @@ function Product() {
 
     return (
         <main className="main">
+             <Helmet>
+        <title>Products - Store.Do</title>
+        <meta name="description" content="Explore our wide range of products tailored to suit your needs." />
+        <meta name="keywords" content="electronics, apparel, gadgets, books, online shopping" />
+      </Helmet>
             <ShopBanner />
 
             <nav aria-label="breadcrumb" className="breadcrumb-nav">
@@ -791,35 +226,41 @@ function Product() {
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><ALink href="/"><i className="icon-home"></i></ALink></li>
                         {
-                            // query.get('category') ?
+                            <>
+                            <li className="breadcrumb-item">
+                                <ALink href={`/shop/${grid}`} scroll={false}>Home</ALink>
+                            </li>
+                            <li className="breadcrumb-item">
+                                <ALink href={`/shop/${grid}`} scroll={false}>Products</ALink>
+                            </li>
+                        
+                            {categoryObj?.subCategory && categoryObj?.subCategory?.parentCatName ? (
                                 <>
-                                    <li className="breadcrumb-item"><ALink href={`/shop/${grid}`} scroll={false}>shop</ALink></li>
-                                    {
-                                        data && data.products.categoryFamily.map((item, index) => (
-                                            <li className="breadcrumb-item" key={`category-family-${index}`}><ALink href={`/shop/${grid}?category=${item.slug}`} scroll={false}>{item.name}</ALink></li>
-                                        ))
-                                    }
+                                    {/* Parent Category */}
+                                    <li className="breadcrumb-item">
+                                        <ALink href={`/shop/${grid}?category=${categoryObj.subCategory.parentCatGuid}`} scroll={false}>
+                                            {categoryObj?.subCategory?.parentCatName}
+                                        </ALink>
+                                    </li>
+                                    {/* Subcategory */}
                                     <li className="breadcrumb-item active">
-                                        {
-                                            // query.get('search') ?
-                                                <>
-                                                    Search - <ALink href={`/shop/${grid}?category=category')}`} scroll={false}>Test</ALink>
-                                                </>
-                                                // : query.get('category')
-                                        }
+                                        <ALink href={`/shop/${grid}?category=${categoryObj.subCategory.subCatGuid}`} scroll={false}>
+                                            {categoryObj?.catName}
+                                        </ALink>
                                     </li>
                                 </>
-                                // : query.get('search') ?
-                                //     <>
-                                //         <li className="breadcrumb-item"><ALink href={`/shop/${grid}`} scroll={false}>Shop</ALink></li>
-                                //         <li className="breadcrumb-item active" aria-current="page">{`Search - ${query.get('search')}`}</li>
-                                //     </>
-                                //     : query.get('tag') ?
-                                //         <>
-                                //             <li className="breadcrumb-item"><ALink href={`/shop/${grid}`} scroll={false}>Shop</ALink></li>
-                                //             <li className="breadcrumb-item active" aria-current="page">{`Product Tag - ${query.get('tag')}`}</li>
-                                //         </>
-                                //         : <li className="breadcrumb-item active" aria-current="page">Shop</li>
+                            ) : (
+                                <>
+                                    {/* Main Category (no subcategory) */}
+                                    <li className="breadcrumb-item active">
+                                        <ALink href={`/shop/${grid}?category=${categoryObj?.catGuid}`} scroll={false}>
+                                            {categoryObj?.catName}
+                                        </ALink>
+                                    </li>
+                                </>
+                            )}
+                        </>
+                        
                         }
                     </ol>
                 </div>
@@ -828,7 +269,7 @@ function Product() {
             <div className="container">
                 <div className="row main-content">
                     {
-                        showsidebar ? <ShopSidebarOne /> : <ShopSidebarOne style={{ display: 'none' }} />
+                        showsidebar ? <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts}/> : <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts} style={{ display: 'none' }} />
                     }
                     {/* <div className={`${showsidebar ? 'col-lg-9' : 'col-12'}`}> */}
                     <div className={'col-lg-9'}>
@@ -861,11 +302,11 @@ function Product() {
                                     <div className="select-custom">
                                         <select name="orderby" className="form-control" value={sortBy} onChange={e => onSortByChange(e)}>
                                             <option value="default">Default sorting</option>
-                                            <option value="popularity">Sort by popularity</option>
-                                            <option value="rating">Sort by average rating</option>
-                                            <option value="date">Sort by newness</option>
-                                            <option value="price">Sort by price: low to high</option>
-                                            <option value="price-desc">Sort by price: high to low</option>
+                                            {/* <option value="popularity">Sort by popularity</option> */}
+                                            {/* <option value="rating">Sort by average rating</option> */}
+                                            {/* <option value="date">Sort by newness</option> */}
+                                            <option value="price_asc">Sort by price: low to high</option>
+                                            <option value="price_desc">Sort by price: high to low</option>
                                         </select>
                                     </div>
                                 </div>
@@ -875,20 +316,20 @@ function Product() {
                                 <div className="toolbox-item toolbox-show">
                                     <label>Show:</label>
 
-                                    <div className="select-custom">
+                                    {/* <div className="select-custom">
                                         <select name="count" className="form-control" value={perPage} onChange={(e) => onPerPageChange(e)}>
                                             <option value="12">12</option>
                                             <option value="24">24</option>
                                             <option value="36">36</option>
                                         </select>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className="toolbox-item layout-modes">
                                     <ALink href={{ pathname: location.pathname }} className="layout-btn btn-grid active mr-2" title="Grid">
                                         <i className="icon-mode-grid"></i>
                                     </ALink>
-                                    <ALink href={{ pathname: '/shop/list' }} className="layout-btn btn-list" title="List">
+                                    <ALink href={{ pathname: '/pages/product/list' }} className="layout-btn btn-list" title="List">
                                         <i className="icon-mode-list"></i>
                                     </ALink>
                                 </div>
@@ -903,7 +344,7 @@ function Product() {
                                     <label>Show:</label>
 
                                     <div className="select-custom">
-                                        <select name="count" className="form-control" value={perPage} onChange={e => onPerPageChange(e)}>
+                                        <select name="count" className="form-control" value={perPage} onChange={e => console(e)}>
                                             <option value="12">12</option>
                                             <option value="24">24</option>
                                             <option value="36">36</option>

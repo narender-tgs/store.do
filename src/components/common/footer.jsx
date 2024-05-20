@@ -6,6 +6,7 @@ import ALink from "./ALink";
 import OwlCarousel from '../features/owl-carousel';
 
 import { instagramSlider } from "../../utils/data/slider";
+import storeDo_logo_white from "../../assets/images/storeDo_logo_white.png"
 
 function Footer () {
     return (
@@ -147,7 +148,7 @@ function Footer () {
                     <div className="row">
                         <div className="col-lg-3">
                             <ALink href="/" className="logo">
-                                <img src="images/logo-white.png" width="113" height="48" alt="Logo" className="logo" />
+                                <img src={storeDo_logo_white} style={{height:'50px'}} alt="Logo" className="logo" />
                             </ALink>
 
                             <p className="footer-desc">Lorem ipsum dolor sit amet, consectetur adipis.</p>

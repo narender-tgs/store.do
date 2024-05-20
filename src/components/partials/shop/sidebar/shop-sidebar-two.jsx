@@ -14,7 +14,7 @@ function ShopSidebarTwo ( props ) {
     const router = useRouter();
     // const query = router.query;
     // const { error } = useQuery( GET_SHOP_SIDEBAR_DATA, { variables: { featured: true } } );
-    const [ priceRange, setRange ] = useState( { min: 0, max: 1000 } );
+    const [ priceRange, setRange ] = useState( { min: 0, max: 100000 } );
 
     useEffect( () => {
         document.querySelector( "body" ).addEventListener( "click", onBodyClick );

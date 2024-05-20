@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const cartDetailsSlice = createSlice({
+  name:"cartDetails",
+  initialState: {
+    // Your initial state here
+   cartData:''
+  },
 
   reducers: {
     setCartDetails: (state, action) => {
@@ -8,7 +13,7 @@ const cartDetailsSlice = createSlice({
      
 
       // Update the state with data from the login response
-      state.CartData = action.payload;
+      state.cartData = action.payload;
      
     },
   },

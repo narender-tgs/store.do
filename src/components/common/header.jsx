@@ -5,11 +5,16 @@ import MainMenu from "./partials/main-menu";
 import SearchForm from "./partials/search-form";
 import OwlCarousel from '../features/owl-carousel';
 import LoginModal from "../features/modals/login-modal";
+import store_logo from '../../assets/images/storeDo_logo.png'
 
 // Import Settings
 import { infoBoxSlider } from "../../utils/data/slider";
-
+import { getStoreDetails } from "../../store/cart/storeData/storeDetailsSlice";
+import { useSelector } from "react-redux";
 export default function Header ( { adClass = '' } ) {
+    console.log("stores logo url",localStorage.getItem('storeLogoUrl'));
+    const logoUrl = useSelector(getStoreDetails);
+    console.log('logo url ' , logoUrl);
     function openMobileMenu ( e ) {
         e.preventDefault();
         document.querySelector( "body" ).classList.toggle( "mmenu-active" );
@@ -54,7 +59,7 @@ export default function Header ( { adClass = '' } ) {
                                     <li><ALink href="/pages/wishlist">My Wishlist</ALink></li>
                                     <li><ALink href="/pages/blog">Blog</ALink></li>
 
-                                    <LoginModal />
+                                    {/* <LoginModal /> */}
                                 </ul>
                             </div>
                         </div>
@@ -68,10 +73,13 @@ export default function Header ( { adClass = '' } ) {
                         <button className="mobile-menu-toggler mr-2" type="button" onClick={ openMobileMenu }>
                             <i className="fa fa-bars"></i>
                         </button>
-
+                
                         <ALink href="/" className="logo">
-                            <img src="images/logo-black.png" className="w-100 mt-1" width="101" height="44" alt="Porto Logo" />
+                            <img src={logoUrl?.storeDetails?.store_logo_url || localStorage.getItem('storeLogoUrl')} className="mt-1" height="50px" width="200px" alt="Porto Logo" />
+                            {/* <img src="https://techilaglobalservices5-dev-ed.develop.file.force.com/sfc/dist/version/download/?oid=00DGB000002GOwh&ids=068GB00000lwnUy&d=%2Fa%2FGB000000clev%2FvCm_4oUHB4KQ_0ZaoFGaNbMAZw1bIrlYJHQCq6LCGYM&asPdf=false" className="mt-1" height="50px" width="200px" alt="Porto Logo" /> */}
                         </ALink>
+                
+                       
 
                         <MainMenu />
                     </div>
@@ -79,7 +87,7 @@ export default function Header ( { adClass = '' } ) {
                     <div className="header-right">
                         <SearchForm />
 
-                        <ALink href="/pages/wishlist" className="header-icon" title="wishlist"><i className="icon-wishlist-2 line-height-1 mr-3"></i></ALink>
+                        {/* <ALink href="/pages/wishlist" className="header-icon" title="wishlist"><i className="icon-wishlist-2 line-height-1 mr-3"></i></ALink> */}
 
                         <CartMenu />
                     </div>

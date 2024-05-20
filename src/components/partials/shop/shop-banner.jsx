@@ -3,6 +3,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 // Import Custom Component
 import ALink from '../../common/ALink';
+import laptops_image from "../../../assets/images/banners/45-450952_transparent-laptop-png-hp-laptops.png"
 
 function ShopBanner ( { adClass } ) {
     return (
@@ -14,7 +15,7 @@ function ShopBanner ( { adClass } ) {
                             <div className="d-flex flex-column justify-content-center">
                                 <h3 className="text-left text-light text-uppercase m-0">extra</h3>
                                 <h2 className="text-uppercase m-b-1">20% off</h2>
-                                <h3 className="font-weight-bold text-uppercase heading-border ml-0 m-b-3">Bikes</h3>
+                                <h3 className="font-weight-bold text-uppercase heading-border ml-0 m-b-3">Laptops</h3>
                             </div>
                         </div>
 
@@ -22,7 +23,8 @@ function ShopBanner ( { adClass } ) {
                             <figure className="mb-0">
                                 <LazyLoadImage
                                     alt="Banner"
-                                    src="images/home/banners/shop-banner.png"
+                                    // src="images/home/banners/shop-banner.png"
+                                    src={laptops_image}
                                     threshold={ 500 }
                                     effect="black and white"
                                     width="auto"

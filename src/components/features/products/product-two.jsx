@@ -7,6 +7,21 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { actions as WishlistAction } from "../../../store/wishlist";
 import { actions as CartAction } from "../../../store/cart";
 import { actions as ModalAction } from "../../../store/modal";
+import macbook from '../../../assets/images/products/Laptops/macbook Pro max.jpg'
+import HP from '../../../assets/images/products/Laptops/HP Laptop 15 inch.jpg'
+import Apple from '../../../assets/images/products/Laptops/Apple Macbook Air M1.jpg'
+import Acer from '../../../assets/images/products/Laptops/Acer Veriton 14 Inch.jpg'
+import Bluetooth from '../../../assets/images/products/single/bluetooth headphones.jpg'
+import Gourment from '../../../assets/images/products/single/gourmet kichan knifeset.jpg'
+import Organic from '../../../assets/images/products/single/green tea.jpg'
+import Ultra from '../../../assets/images/products/single/ultra hd smart tv.jpg'
+import Eco from '../../../assets/images/products/single/yoga mats.jpg'
+import Asus from '../../../assets/images/products/mobiles/asusvivo.png'
+import Redme from '../../../assets/images/products/mobiles/redme.jpg'
+import Samsung from '../../../assets/images/products/mobiles/samsung.jpg'
+import Oppo from '../../../assets/images/products/mobiles/oppo.jpg'
+import Chair from '../../../assets/images/products/mobiles/chairs.jpg'
+
 
 // Import Custom Component
 import ALink from '../../common/ALink';
@@ -20,11 +35,41 @@ function ProductTwo ( props ) {
         return product.price[ 0 ] !== product.price[ 1 ] && product.variants.length === 0 ?
             '-' + ( 100 * ( product.price[ 1 ] - product.price[ 0 ] ) / product.price[ 1 ] ).toFixed( 0 ) + '%'
             :
-            product.variants.find( variant => variant.sale_price ) ? "Sale" : false;
+            product?.variants?.find( variant => variant.sale_price ) ? "Sale" : false;
     }
 
     function isInWishlist () {
         // return product && props.wishlist.findIndex( item => item.slug === product.slug ) > -1;
+    }
+
+    function getImageSource(productName) {
+        console.log("product name ->",productName.split(" ")[0]);
+        // Define a mapping of product names to imported image variables
+        const imageMap = {
+            "macbook": macbook,
+            "HP": HP,
+            "Apple": Apple,
+            "Acer": Acer,
+            "Bluetooth":Bluetooth,
+            "Gourmet":Gourment,
+            "Organic":Organic,
+            "Eco" : Eco,
+            "Ultra":Ultra,
+            "ASUS":Asus,
+            "Redmi" :Redme,
+            "OPPO":Oppo,
+            "Samsung":Samsung,
+            "Folding" :Chair
+            // Add more mappings as needed
+        };
+    
+        // Check if the product name exists in the image map
+        if (productName in imageMap) {
+            return imageMap[productName];
+        } else {
+            // Return a default image source or handle the case where the product name doesn't match any image
+            return "";
+        }
     }
 
     function onWishlistClick ( e ) {
@@ -62,16 +107,17 @@ function ProductTwo ( props ) {
 
                     <LazyLoadImage
                         alt="product"
-                        src={ process.env.NEXT_PUBLIC_ASSET_URI + product.pictures[ 0 ].url }
+                        // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROGswtbi-CqtO_5ecgfl_aVaCERXPu1ESJjA&s"
+                        src={(product && product.imageUrls && product.imageUrls[1]) || getImageSource(product.name.split(" ")[0]) || macbook}
                         threshold={ 500 }
                         effect="black and white"
                         width="100%"
                     />
                     {
-                        product.pictures.length >= 2 ?
+                        product?.imageUrls?.length >= 2 ?
                             <LazyLoadImage
                                 alt="product"
-                                src={ process.env.NEXT_PUBLIC_ASSET_URI + product.pictures[ 1 ].url }
+                                src={ product?.imageUrls }
                                 threshold={ 500 }
                                 effect="black and white"
                                 wrapperClassName="product-image-hover"
@@ -116,16 +162,16 @@ function ProductTwo ( props ) {
                 <div className="ratings-container">
                     <div className="product-ratings">
                         <span className="ratings" style={ { width: 20 * product.ratings + '%' } }></span>
-                        <span className="tooltiptext tooltip-top">{ product.ratings.toFixed( 2 ) }</span>
+                        {/* <span className="tooltiptext tooltip-top">{ product.ratings.toFixed( 2 ) }</span> */}
                     </div>
                 </div>
 
                 <p className="product-description">
-                    { product.short_description }
+                    { product.description }
                 </p>
 
                 <div className="price-box">
-                    {
+                <span className="product-price">&#x20B9;{ product.price}</span>                    {/* {
                         product.price[ 0 ] == product.price[ 1 ] ?
                             <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) }</span>
                             : product.variants.length > 0 ?
@@ -134,12 +180,12 @@ function ProductTwo ( props ) {
                                     <span className="old-price">{ '$' + product.price[ 1 ].toFixed( 2 ) }</span>
                                     <span className="product-price">{ '$' + product.price[ 0 ].toFixed( 2 ) }</span>
                                 </>
-                    }
+                    } */}
                 </div>
 
                 <div className="product-action">
                     {
-                        product.variants.length > 0 ?
+                        product?.variants?.length > 0 ?
                             <ALink href={ `/product/default/${ product.slug }` } className="btn-icon btn-add-cart"><i
                                 className="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></ALink>
                             : <a href="#" className="btn-icon btn-add-cart product-type-simple" title="Add To Cart" onClick={ onAddCartClick }><i

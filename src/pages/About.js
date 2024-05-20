@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-
+import { Helmet } from 'react-helmet';
 // import ALink from "../../components/common/ALink";
 // import OwlCarousel from "../../components/features/owl-carousel";
 import { countTo } from '../utils';
@@ -9,12 +9,18 @@ import OwlCarousel from '../components/features/owl-carousel';
 
 
 const About = () => {
+    console.log("about us");
   useEffect( () => {
     countTo();
 }, [] )
 
 return (
     <main className="main about">
+         <Helmet>
+        <title>About Us - Store.Do</title>
+        <meta name="description" content="Learn more about us and our mission to provide excellent services." />
+        <meta name="keywords" content="about us, company history, our mission" />
+      </Helmet>
         <div className="page-header page-header-bg text-left"
             style={ { background: `50%/cover #D4E1EA url(images/page-header-bg.jpg)` } }>
             <div className="container">
