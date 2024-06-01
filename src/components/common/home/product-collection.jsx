@@ -13,7 +13,22 @@ import gear1 from '../../../assets/images/gear1.jpg'
 import handle1 from '../../../assets/images/handle1.jpg'
 import part1 from '../../../assets/images/parts1.jpg'
 import cycle1 from '../../../assets/images/cycle1.jpg'
+import { useSelector } from 'react-redux';
+import { getStoreDetails } from '../../../store/cart/storeData/storeDetailsSlice';
 export default function TrendyCollection ( props ) {
+    const storeDetails = useSelector(getStoreDetails);
+    
+    const bannerMidTwo =storeDetails?.storeDetails?.banners && storeDetails?.storeDetails?.banners.filter((bann)=>(bann?.bannerPosition?.includes('Middle') && bann?.bannerPosition?.includes('Two')));
+    const bannerMidOne =storeDetails?.storeDetails?.banners && storeDetails?.storeDetails?.banners.filter((bann)=>(bann?.bannerPosition?.includes('Middle') && bann?.bannerPosition?.includes('One')));
+
+    const bannerTwoGuid = bannerMidTwo && bannerMidTwo[0]?.guid;
+    const bannerTwoUrl = bannerMidTwo && bannerMidTwo[0]?.url;
+    const bannerOneGuid = bannerMidOne && bannerMidOne[0]?.guid;
+    const bannerOneUrl = bannerMidOne && bannerMidOne[0]?.url;
+    // const allBanner = JSON.parse(localStorage.getItem('productBannerIds'));
+    // const secondBannerUrl =  allBanner && allBanner[1]?.url;
+    // const secondBannerGuid = allBanner && allBanner[1]?.guid;
+    // console.log("banner url for 2nd banner",allBanner);
     const { product } = props;
     const productList = [
         {
@@ -129,13 +144,14 @@ export default function TrendyCollection ( props ) {
                         <div className="banner banner3 d-flex flex-wrap align-items-center bg-gray h-100">
                             <div className="col-sm-4 text-center">
                                 <h3 className="font5 mb-0">Summer Sale</h3>
-                                <h2 className="text-uppercase mb-0">20% off</h2>
+                                <h2 className="text-uppercase mb-0">50% off</h2>
                             </div>
                             <div className="col-sm-4">
                                 <figure className="mb-0">
                                     <LazyLoadImage
                                         alt="Home Slide"
-                                        src="images/home/banners/banner-3.jpg"
+                                        // src="images/home/banners/banner-3.jpg"
+                                        src={bannerOneUrl}
                                         threshold={ 500 }
                                         effect="black and white"
                                         width="100%"
@@ -144,7 +160,9 @@ export default function TrendyCollection ( props ) {
                                 </figure>
                             </div>
                             <div className="col-sm-4 text-center">
-                                <ALink href="/shop" className="btn btn-dark">Shop All Sale</ALink>
+                                {/* <ALink href="/shop" className="btn btn-dark">Shop All Sale</ALink> */}
+                    <ALink href={`/product/Sale/${bannerOneGuid}`} state={bannerOneGuid} className="btn btn-dark btn-lg">Shop all sale</ALink>
+
                             </div>
                         </div>
                     </div>
@@ -158,7 +176,8 @@ export default function TrendyCollection ( props ) {
                                 <figure className="mb-0">
                                     <LazyLoadImage
                                         alt="Home Slide"
-                                        src="images/home/banners/banner-4.jpg"
+                                        // src="images/home/banners/banner-4.jpg"
+                                        src={bannerTwoUrl}
                                         threshold={ 500 }
                                         effect="black and white"
                                         width="100%"
@@ -167,7 +186,8 @@ export default function TrendyCollection ( props ) {
                                 </figure>
                             </div>
                             <div className="col-sm-4 text-center">
-                                <ALink href="/shop" className="btn btn-light">Shop All Sale</ALink>
+                                {/* <ALink href="/shop" className="btn btn-light">Shop All Sale</ALink> */}
+                                <ALink href={`/product/Sale/${bannerTwoGuid}`} state={bannerTwoGuid} className="btn btn-dark btn-lg">Shop all sale</ALink>
                             </div>
                         </div>
                     </div>

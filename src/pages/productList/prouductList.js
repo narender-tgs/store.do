@@ -8,97 +8,158 @@ import ShopBanner from '../../components/partials/shop/shop-banner';
 import ShopSidebarOne from '../../components/partials/shop/sidebar/shop-sidebar-one';
 import Pagination from '../../components/features/pagination';
 import ProductsRow from '../../components/partials/products-collection/product-row';
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getStoreDetails } from '../../store/cart/storeData/storeDetailsSlice';
 
 // import withApollo from '../../server/apollo';
 // import { GET_PRODUCTS } from '../../server/queries';
 
 const ProductList =() =>{
-    const [products , setProducts] = useState([]);  
+const location = useLocation();
+const storeDatas = useSelector(getStoreDetails)
 
-        // const query = new URLSearchParams(location.search);
+const grid = new URLSearchParams(location.search).get('grid');
+    const showsidebar = grid === '3cols' || grid === '4cols';
+    const addclass = grid === '7cols' || grid === '8cols';
+    const [products , setProducts] = useState([]);  
+    const pathParts = location.pathname.split('/'); // Split the pathname
+    const productObj = pathParts[pathParts.length -1];
+    const [render , setRe_Render] = useState();
+    const [categoryObj, setCategoryObj] = useState();
+
+    const [sortBy, setSortBy] = useState('default');
+    const [selectedPriceRange, setSelectedPriceRange] = useState({ min: "", max: "" });
+    const [categoryGuids, setCategoryGuids] = useState([]);
+    const [subCategoryGuids, setSubCategoryGuids] = useState([]);
+
+    const checkRender = location.state;
+    useEffect(()=>{
+          if(checkRender === 'renderAgain'){
+            setRe_Render(true);
+          }
+    },[checkRender])
+
+
+    const addVariants = (variantsOptions) => {
+        const newVariantsArr = variantsOptions.map((item) => {
+            return {
+                option_name: item.name,
+                option_value: item.options[0].name,
+                variant_sf_id: item.options[0].variant_sf_id
+            }
+        })
+        return newVariantsArr;
+    }
     useEffect(() => {
-        axios.get('http://localhost:3000/v1/product' , { headers: { 'service_ref': '8xuf4dev'}})
+        if(pathParts.length === 4 && pathParts[3].startsWith('ban-') ){
+            
+            axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}`, { headers: { 'service_ref': '8xuf4dev' } })
+            // axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products`, { headers: { 'service_ref': '8xuf4dev' } })
+
             .then(response => {
-                // Access the response datan 
-                const responseData = response.data;
-               // console.log("response Data for products-->", responseData);
-                setProducts(responseData.data.products)
-                // Process the response data here
+                const products_variant = response.data.data.products.map(element => {
+                    return {
+                        ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                    }
+                });
+    
+                // Access the response data
+                const responseData = products_variant;
+                if (sortBy === "price_asc") {
+                    const priceLowToHigh = responseData.sort((a, b) => {
+                        return a.price - b.price;
+                    })
+                    setProducts(priceLowToHigh)
+                } else if (sortBy === "price_desc") {
+                    const priceHighToLow = responseData.sort((a, b) => {
+                        return b.price - a.price;
+                    })
+                    setProducts(priceHighToLow)
+                }
             })
             .catch(error => {
                 // Handle any errors
             });
-        
-    }, [])
-    // const products = [
-    //     {
-    //       srcs: "",
-    //       name: "Ultra HD Smart TV",
-    //       categories: ["Electronics", "Home Entertainment"],
-    //       price: [6786,3453],
-    //       slug: "ultra-hd-smart-tv",
-    //       ratings: 4.8,
-    //       is_hot: true,
-    //       variants:[],
-    //       qty:1
-    //     },
-    //     {
-    //       srcs: "",
-    //       name: "Eco-Friendly Yoga Mat",
-    //       categories: ["Fitness", "Yoga"],
-    //       price: [34,98],
-    //       slug: "eco-friendly-yoga-mat",
-    //       ratings: 4.6,
-    //       is_hot: false,
-    //       variants:[],
-    //       qty:1
-    //     },
-    //     {
-    //       srcs: "",
-    //       name: "Bluetooth Wireless Headphones",
-    //       categories: ["Electronics", "Audio"],
-    //       price: [345,456],
-    //       slug: "bluetooth-wireless-headphones",
-    //       ratings: 4.7,
-    //       is_hot: true,
-    //       variants:[],
-    //       qty:1
+        }else if(pathParts.length === 3 && pathParts[1] === 'product'){
+            
+            axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}`, { headers: { 'service_ref': '8xuf4dev' } })
 
-    //     },
-    //     {
-    //       srcs: "",
-    //       name: "Organic Green Tea Leaves",
-    //       categories: ["Groceries", "Beverages"],
-    //       price: [56,343],
-    //       slug: "organic-green-tea-leaves",
-    //       ratings: 4.5,
-    //       is_hot: false,
-    //       variants:['Pitch Black', 'Brown'],
-    //       qty:1
-    //     },
-    //     {
-    //       srcs: "",
-    //       name: "Gourmet Kitchen Knife Set",
-    //       categories: ["Kitchen", "Tools"],
-    //       price: [678,234],
-    //       slug: "gourmet-kitchen-knife-set",
-    //       ratings: 4.9,
-    //       is_hot: false,
-    //       variants:['Red','Black'],
-    //       qty:1
-    //     },
-    //     {
-    //       srcs: "",
-    //       name: "Portable Camping Tent",
-    //       categories: ["Outdoor", "Camping"],
-    //       price: [789,343],
-    //       slug: "portable-camping-tent",
-    //       ratings: 4.4,
-    //       is_hot: true,
-    //       variants:['White','Grey'],
-    //       qty:1
-    //     }
-    //   ];
+            .then(response => {
+                const products_variant = response.data.data.products.map(element => {
+                    return {
+                        ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                    }
+                });
+                // Access the response data
+                const responseData = products_variant;
+                if (sortBy === "price_asc") {
+                    const priceLowToHigh = responseData.sort((a, b) => {
+                        return a.price - b.price;
+                    })
+                    setProducts(priceLowToHigh)
+                } else if (sortBy === "price_desc") {
+                    const priceHighToLow = responseData.sort((a, b) => {
+                        return b.price - a.price;
+                    })
+                    setProducts(priceHighToLow)
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+            });
+        }
+       
+    }, [selectedPriceRange, sortBy ,render])
+
+    useEffect(() => {
+        if(pathParts.length === 4 && pathParts[3].startsWith('ban-')){
+         const categoryGuidsParam = JSON.stringify(categoryGuids); // Convert to JSON string
+         const subCategoryGuidsParam = JSON.stringify(subCategoryGuids); // Convert to JSON string
+         // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+         axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}`, { headers: { 'service_ref': '8xuf4dev' } })
+         // axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products`, { headers: { 'service_ref': '8xuf4dev' } })
+ 
+             .then(response => {
+                const products_variant = response.data.data.products.map(element => {
+                    return {
+                        ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                    }
+                });
+                 // Access the response daeta
+                 const responseData = products_variant;
+                 setProducts(responseData)
+                 // Process the response data here
+             })
+             .catch(error => {
+                 // Handle any errors
+             });
+ 
+        }else if(pathParts.length === 3 && pathParts[1] === 'product'){
+         const categoryGuidsParam = JSON.stringify(categoryGuids); // Convert to JSON string
+         const subCategoryGuidsParam = JSON.stringify(subCategoryGuids); // Convert to JSON string
+         // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+         axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}`, { headers: { 'service_ref': '8xuf4dev' } })
+ 
+             .then(response => {
+                const products_variant = response.data.data.products.map(element => {
+                    return {
+                        ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                    }
+                });
+                 // Access the response daeta
+                 const responseData = products_variant;
+                 setProducts(responseData)
+                 // Process the response data here
+             })
+             .catch(error => {
+                 // Handle any errors
+             });
+        }
+        
+ 
+     }, [selectedPriceRange, categoryGuids, subCategoryGuids , render])
+    
     const router = useRouter();
     // const query = router.query;
     // const [ getProducts, { data, loading, error } ] = useLazyQuery(  );
@@ -107,30 +168,30 @@ const ProductList =() =>{
     // const products = data && data.products.data;
     // const totalPage = data ? parseInt( data.products.total / perPage ) + ( data.products.total % perPage ? 1 : 0 ) : 1;
 
-    // useEffect( () => {
-    //     let offset = document.querySelector( '.main-content' ).getBoundingClientRect().top + window.pageYOffset - 58;
-    //     setTimeout( () => {
-    //         window.scrollTo( { top: offset, behavior: 'smooth' } );
-    //     }, 200 );
+    useEffect( () => {
+        let offset = document.querySelector( '.main-content' ).getBoundingClientRect().top + window.pageYOffset - 58;
+        setTimeout( () => {
+            window.scrollTo( { top: offset, behavior: 'smooth' } );
+        }, 200 );
 
-    //     let page = query.page ? query.page : 1;
+        // let page = query.page ? query.page : 1;
 
-    //     getProducts( {
-    //         variables: {
-    //             list: true,
-    //             search: query.search,
-    //             colors: query.colors ? query.colors.split( ',' ) : [],
-    //             sizes: query.sizes ? query.sizes.split( ',' ) : [],
-    //             min_price: parseInt( query.min_price ),
-    //             max_price: parseInt( query.max_price ),
-    //             category: query.category,
-    //             tag: query.tag,
-    //             sortBy: sortBy,
-    //             from: perPage * ( page - 1 ),
-    //             to: perPage * page
-    //         }
-    //     } );
-    // }, [ query, perPage, sortBy ] )
+        // getProducts( {
+        //     variables: {
+        //         list: true,
+        //         search: query.search,
+        //         colors: query.colors ? query.colors.split( ',' ) : [],
+        //         sizes: query.sizes ? query.sizes.split( ',' ) : [],
+        //         min_price: parseInt( query.min_price ),
+        //         max_price: parseInt( query.max_price ),
+        //         category: query.category,
+        //         tag: query.tag,
+        //         sortBy: sortBy,
+        //         from: perPage * ( page - 1 ),
+        //         to: perPage * page
+        //     }
+        // } );
+    }, [  perPage, sortBy ] )
 
     // function onPerPageChange ( e ) {
     //     setPerPage( e.target.value );
@@ -143,17 +204,41 @@ const ProductList =() =>{
     //     } );
     // }
 
-    // function onSortByChange ( e ) {
-    //     router.push( {
-    //         pathname: router.pathname,
-    //         query: {
-    //             ...query,
-    //             sortBy: e.target.value,
-    //             page: 1
-    //         }
-    //     } )
-    //     setSortBy( e.target.value );
-    // }
+    function onSortByChange ( e ) {
+        // router.push( {
+        //     pathname: router.pathname,
+        //     query: {
+        //         ...query,
+        //         sortBy: e.target.value,
+        //         page: 1
+        //     }
+        // } )
+        setSortBy( e.target.value );
+        
+    }
+    
+    function getProductPriceRange(data) {
+
+        setSelectedPriceRange(data);
+    }
+    function getCategoryProducts(category) {
+        setCategoryObj(category)
+        if (category.catGuid) {
+            // It's a main category
+            if (!categoryGuids.includes(category.catGuid)) {
+                setCategoryGuids([category.catGuid]);
+            }
+            setSubCategoryGuids([]); // Reset subcategory because we're at top level
+        } else if (category.subCategory && category.subCategory.parentCatGuid) {
+            // It's a subcategory
+            if (!categoryGuids.includes(category.subCategory.parentCatGuid)) {
+                setCategoryGuids([category.subCategory.parentCatGuid]);
+            }
+            if (!subCategoryGuids.includes(category.subCategory.subCatGuid)) {
+                setSubCategoryGuids([category.subCategory.subCatGuid]);
+            }
+        }
+    }
 
     function sidebarToggle ( e ) {
         let body = document.querySelector( 'body' );
@@ -243,30 +328,30 @@ const ProductList =() =>{
                                     <label>Sort By:</label>
 
                                     <div className="select-custom">
-                                        {/* <select name="orderby" className="form-control" value={ sortBy } onChange={ e => onSortByChange( e ) }>
+                                        <select name="orderby" className="form-control" value={ sortBy } onChange={ e => onSortByChange( e ) }>
                                             <option value="default">Default sorting</option>
-                                            <option value="popularity">Sort by popularity</option>
-                                            <option value="rating">Sort by average rating</option>
-                                            <option value="date">Sort by newness</option>
+                                            {/* <option value="popularity">Sort by popularity</option> */}
+                                            {/* <option value="rating">Sort by average rating</option> */}
+                                            {/* <option value="date">Sort by newness</option> */}
                                             <option value="price">Sort by price: low to high</option>
                                             <option value="price-desc">Sort by price: high to low</option>
-                                        </select> */}
+                                        </select>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="toolbox-right">
-                                <div className="toolbox-item toolbox-show">
+                                {/* <div className="toolbox-item toolbox-show">
                                     <label>Show:</label>
 
                                     <div className="select-custom">
-                                        {/* <select name="count" className="form-control" value={ perPage } onChange={ ( e ) => onPerPageChange( e ) }>
+                                        <select name="count" className="form-control" value={ perPage } onChange={ ( e ) => onPerPageChange( e ) }>
                                             <option value="12">12</option>
                                             <option value="24">24</option>
                                             <option value="36">36</option>
-                                        </select> */}
+                                        </select>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div className="toolbox-item layout-modes">
                                     <ALink href={ { pathname: '/product' } } className="layout-btn btn-grid" title="Grid">
@@ -282,7 +367,7 @@ const ProductList =() =>{
                         {/* <ProductsRow products={ products } loading={ loading } perPage={ perPage } /> */}
                         <ProductsRow products={ products } perPage={ perPage } />
 
-                        {  ( products && products.length ) ?
+                        {/* {  ( products && products.length ) ?
                         // { loading || ( products && products.length ) ?
                             <nav className="toolbox toolbox-pagination">
                                 <div className="toolbox-item toolbox-show">
@@ -290,20 +375,23 @@ const ProductList =() =>{
 
                                     <div className="select-custom">
                                         <select name="count" className="form-control" value={ perPage }>
-                                        {/* <select name="count" className="form-control" value={ perPage } onChange={ e => onPerPageChange( e ) }> */}
+                                       </select> <select name="count" className="form-control" value={ perPage } onChange={ e => onPerPageChange( e ) }>
                                             <option value="12">12</option>
                                             <option value="24">24</option>
                                             <option value="36">36</option>
                                         </select>
                                     </div>
                                 </div>
-                                {/* <Pagination totalPage={ totalPage } /> */}
+                                 <Pagination totalPage={ totalPage } /> 
                             </nav>
                             : ''
-                        }
+                        } */}
                     </div>
 
-                    <ShopSidebarOne />
+                    {/* <ShopSidebarOne /> */}
+                    {
+                        showsidebar ? <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts} /> : <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts} style={{ display: 'none' }} />
+                    }
                 </div>
             </div>
         </main>

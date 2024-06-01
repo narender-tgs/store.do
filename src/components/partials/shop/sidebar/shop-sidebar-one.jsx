@@ -49,6 +49,7 @@ function ShopSidebarOne(props) {
         axios.get(`
         http://localhost:3000/v1/categoryAndSubcategory/product/count?store_guid=${storeId?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}`, { headers: { 'service_ref': '8xuf4dev' } })
             .then(response => {
+               
                 // Access the response data
                 const responseData = response.data;
                // console.log("response Data for category and sub-->", responseData.data);

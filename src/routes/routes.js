@@ -14,14 +14,17 @@ import NewSale from '../components/sale/NewSale';
 const routes = [
   { path: '/', exact: true, component: <Home/> },
   { path: '/product', component: <Product/> },
+  { path: '/product/Sale/:SaleId', component: <Product/> },
   { path: '/about', component: <About/> },
   {path: '/contact_us', component:<ContactUs/>},
   {path: 'pages/checkout', component:<Checkout/>},
   {path: '/product_detail/:productName/:productId', component:<ProductDetails/>},
   {path: '/thankyou', component:<Thankyou/>},
   {path: '/pages/cart', component:<Cart/>},
-  {path: '/pages/product/list', component:<ProductList/>},
+  {path: '/product/list', component:<ProductList/>},
   {path: '/pages/product/Sale', component:<NewSale/>},
+  
+
 
   
 

@@ -1,14 +1,18 @@
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import ALink from '../components/common/ALink';
+import { setCartDetails } from '../store/cart/cartDetailsSlice';
 
 // import { actions as WishlistAction } from "../../store/wishlist";
 // import { actions as CartAction } from "../../store/cart";
 // import { actions as ModalAction } from "../../store/modal";
 
 function Thankyou(props) {
+    const dispatch = useDispatch();
+    dispatch(setCartDetails({data:[]}));
+
     const { wishlist, addToCart, removeFromWishlist, showQuickView } = props;
     const [flag, setFlag] = useState(0);
 

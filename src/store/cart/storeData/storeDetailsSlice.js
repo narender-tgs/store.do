@@ -4,11 +4,11 @@ const storeDetailsSlice = createSlice({
   name:"storeDetails",
   initialState: {
     // Your initial state here
-   storeDetails:{
-    'store_guid':'',
-    'store_logo_url':'',
-    'variants':[]
-   }
+   storeDetails:{}
+    // 'store_guid':'',
+    // 'store_logo_url':'',
+    // 'variants':[]
+   
   },
 
   reducers: {

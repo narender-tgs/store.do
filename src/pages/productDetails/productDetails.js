@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 // import { getca , setCartDetails} from '../../../store/cart/cartDetailsSlice';
 import { getCartDetails , setCartDetails } from '../../store/cart/cartDetailsSlice';
 import {  ToastContainer , toast} from 'react-toastify';
-
+import ProductMediaOne from '../../components/partials/product/media/product-media-one';
 // Import Actions
 // import { actions as WishlistAction } from "../../../../store/wishlist";
 // import { actions as CartAction } from "../../../../store/cart";
@@ -30,7 +30,7 @@ const ProductDetails=() =>{
     const location = useLocation();
     const dataReceived = location;
     const productObj = dataReceived?.state;
-    console.log("product Obj -->", productObj);
+    console.log("product obj " , productObj);
     // {
     // //   srcs: cycle1,
     //   name: "Apple Macbook Pro 15",
@@ -136,40 +136,41 @@ const ProductDetails=() =>{
     // }
 
     const onAddCartClick=(productDetails) =>{
-        const products_variant =  myArray.map((pro)=>{
-            return {
-                option_name: pro.itemName,
-                option_value: pro.name,
-                variant_sf_id: pro._id,
+        productDetails.qty = 1;
+        if(myArray && myArray.length > 0){
+            const products_variant =  myArray.map((pro)=>{
+                return {
+                    option_name: pro.itemName,
+                    option_value: pro.name,
+                    variant_sf_id: pro._id,
+                
+                   // variation:[ {RAM , guid} , {Storage , guid}]
+    
+                }
+            })
+            //  e.preventDefault();
+            const productWithVariants = {
+                ...productDetails,
+                variants: products_variant
+            };
+            showToastWithImage()
+           
             
-               // variation:[ {RAM , guid} , {Storage , guid}]
-
+            if(updatedCartItems && updatedCartItems.length > 0){
+                let productArray=[...updatedCartItems , productWithVariants]
+                dispatch(setCartDetails({data:productArray}))
+            }else{
+                let productArray=[ productWithVariants]
+                dispatch(setCartDetails({data:productArray}))
             }
-        })
-        //  e.preventDefault();
-        const productWithVariants = {
-            ...productDetails,
-            variants: products_variant
-        };
-        // productDetails.qty = 1;
-        showToastWithImage()
-       
-        
-        if(updatedCartItems && updatedCartItems.length > 0){
-            let productArray=[...updatedCartItems , productWithVariants]
-            dispatch(setCartDetails({data:productArray}))
+    
         }else{
-            let productArray=[ productWithVariants]
+            let productArray=[...updatedCartItems , productDetails]
             dispatch(setCartDetails({data:productArray}))
+            showToastWithImage()
         }
-
-        // if (product.stock > 0 && !e.currentTarget.classList.contains('disabled')) {
-        //     if (product.variants.length === 0) {
-        //         props.addToCart(product, qty, -1);
-        //     } else {
-        //         props.addToCart(product, qty, variant.id);
-        //     }
-        // }
+       
+   
     }
     function detectColor(color){
          if(color.includes('Color' || 'COLOR')){
@@ -206,13 +207,11 @@ const ProductDetails=() =>{
                 return [...prevArray, { itemName, name, itemIndex: itemIndex ,_id }];
             }
         });
-        // console.log("size is selected", myArray);
         e.preventDefault();
         setSize(myArray);
     }
-    console.log('my array r-->',  myArray);
+
     const selectVariation = (itemName, name, e, itemIndex ,_id) => {
-        // console.log("array parameters --->", itemName, name , itemIndex);
         setMyArray(prevArray => {
             const existingItem = prevArray.find(item => item.itemIndex === itemIndex);
             if (existingItem) {
@@ -225,7 +224,6 @@ const ProductDetails=() =>{
                 return [...prevArray, { itemName, name, itemIndex: itemIndex ,_id }];
             }
         });
-        // console.log("size is selected", myArray);
         e.preventDefault();
         setSize(myArray);
     }
@@ -243,7 +241,7 @@ const ProductDetails=() =>{
     }
 
     function findVariation(itemName){
-
+        console.log("item");
         if( myArray.some(obj => obj.name === itemName)){
             
             return true;
@@ -286,9 +284,11 @@ const ProductDetails=() =>{
             </nav>
             {
                 <div className='row'>
-                    <div>
+                    <div style={{marginLeft:'20px'}}>
                         <img src={(productObj && productObj?.imageUrls && productObj?.imageUrls[0]) || macbook_img} alt='Ranger cycle' height="400" width="400"></img>
                     </div>
+                    
+                    {/* <ProductMediaOne product={productObj} /> */}
                     {/* <div style={{ marginLeft: '20px' }} className={`product-single-details ${adClass}`}> */}
                     <div style={{ marginLeft: '20px' }}>
                         {/* <h1 className="product-title">{productObj?.name}</h1> */}
@@ -330,7 +330,7 @@ const ProductDetails=() =>{
                             // <ProductCountdown type="1" />
                         }
 
-                        <div className="product-desc">
+                        <div className="product-desc" style={{width:'700px'}}>
                             <p>{productObj?.description}</p>
                         </div>
 
@@ -430,7 +430,7 @@ const ProductDetails=() =>{
                                                                 // <li key={`filter-size-${index1}`} className={`${myArray.some(obj => obj.itemName === item1.name) ? 'active' : ''} ${isDisabled(item, item1.name , index) ? 'disabled' : ''}`}>
                                                                 <li key={`filter-size-${index1}`} className={findVariation(item1.name) ? 'active' : ''}>
 
-                                                                    {
+                                                                    {   
                                                                         <a href="#" className="d-flex align-items-center justify-content-center" onClick={(e) => selectVariation(item.name ,item1.name, e ,index ,item1.variant_sf_id)}>
                                                                             {item1.name}
                                                                         </a>
@@ -506,7 +506,7 @@ const ProductDetails=() =>{
 
                         {/* <hr className="divider mb-0 mt-0" /> */}
 
-                        <div className="product-single-share mb-3">
+                        {/* <div className="product-single-share mb-3">
                             <label className="sr-only">Share:</label>
 
                             <div className="social-icons mr-2">
@@ -520,9 +520,9 @@ const ProductDetails=() =>{
                                     title="Mail"></ALink>
                             </div>
 
-                            {/* <a href="#" className={ `btn-icon-wish add-wishlist ${ isInWishlist() ? 'added-wishlist' : '' }` } onClick={ onWishlistClick } title={ `${ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }` }><i
-                            className="icon-wishlist-2"></i><span>{ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }</span></a> */}
-                        </div>
+                         <a href="#" className={ `btn-icon-wish add-wishlist ${ isInWishlist() ? 'added-wishlist' : '' }` } onClick={ onWishlistClick } title={ `${ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }` }><i
+                            className="icon-wishlist-2"></i><span>{ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }</span></a>
+                        </div> */}
                     </div>
                 </div>
 

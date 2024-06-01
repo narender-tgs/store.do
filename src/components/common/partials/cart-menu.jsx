@@ -147,7 +147,7 @@ function CartMenu(props) {
                                                     <ALink href={`/product/default/${cart.slug}`} className="product-image">
                                                         <img src={cart && cart?.imageUrls && cart?.imageUrls.length > 0 && cart?.imageUrls[0]} width="78" height="78" alt="product" />
                                                     </ALink>
-                                                    <a href="#" className="btn-remove icon-cancel" title="Remove Product" onClick={e => { removeFromCart(e, cart, index); }}></a>
+                                                    {/* <a href="#" className="btn-remove icon-cancel" title="Remove Product" onClick={e => { removeFromCart(e, cart, index); }}></a> */}
                                                 </figure>
                                             </div>
                                         ))

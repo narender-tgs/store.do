@@ -11,6 +11,8 @@ import validator from 'validator';
 import Payment from '../Payment';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { useState } from 'react';
+import { getStoreDetails } from '../../store/cart/storeData/storeDetailsSlice';
+import { ClipLoader, MoonLoader } from 'react-spinners';
 function CheckOut() {
     const cartDetails = useSelector(getCartDetails);
     const [subtotal , setSubTotal ] = useState();
@@ -21,11 +23,18 @@ function CheckOut() {
    const [orderCurrency , setOrderCurrency]= useState();
    const [orderId ,setOrderId] = useState();
    const [orderGuid , setOrderGuid] = useState();
-    const cartList = cartDetails.cartData.data
+   const [storeGuid , setStoreGuid] = useState();
+   const [isOrderCreated , setIsOrderCreated] = useState(false);
+    const cartList = cartDetails.cartData.data;
+
+    const storeDetails = useSelector(getStoreDetails);
+    const paymentMethods = storeDetails?.storeDetails?.paymentMethods;
+    
 
     useEffect(() => {
         let totalPrice=0
         if(cartList && cartList.length > 0){
+            setStoreGuid(cartList[0]?.store_guid)
             cartList.forEach(element => {
                 totalPrice = totalPrice + (element.price * element.qty);
             });
@@ -65,6 +74,7 @@ function CheckOut() {
     };
 
     const handleSubmit = (e) => {
+        setIsOrderCreated(true);
         let errors = {};
         for (const key in formData) {
           if (formData.hasOwnProperty(key)) {
@@ -160,12 +170,13 @@ function CheckOut() {
             });
         //   return;
         }else{
-            showSuccessToast()
+            // showSuccessToast()
         }
         
 
      
             const products_list =  cartList.map((pro)=>{
+                
                 return {
                     product_guid: pro.guid,
                     quantity: pro.qty,
@@ -180,6 +191,7 @@ function CheckOut() {
              
             let orderData = {
                 order: {
+                    store_guid : storeGuid,
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     email: formData.email,
@@ -210,19 +222,19 @@ function CheckOut() {
                     paymentMethod: paymentMethod,
                 }
             }
-            console.log("order request", orderData);
+            
     
             axios.post(apiUrl, orderData, { headers: { 'service_ref': '8xuf4dev' } })
                 .then(response => {
                     if(response?.data?.success === true){
-                       
-                   // console.log("order with order id", response?.data?.data?.order_details?.guid);
+  
                     setOrderId(response?.data?.data?.order?.id)
                     setOrderCurrency(response?.data?.data?.order?.currency)
                     setOrderAmount(response?.data?.data?.order?.amount)
-                    setOrderGuid(response?.data?.data?.order_details?.guid);
+                    setOrderGuid(response?.data?.data?.orderDetails?.guid);
                      setShowPayment(true);
-                    //  window.location.href = "http://localhost:3001/thankyou";
+                     setIsOrderCreated(false);
+                    //  window.location.href = "http://localhost:3002/thankyou";
                     }
                    
                     // Handle response
@@ -237,10 +249,13 @@ function CheckOut() {
 
 
     };
+    // const handlePaymentChange = (event) => {
+    //     setPaymentMethod(event.target.value);
+    //    // console.log('Selected Payment Method:', event.target.value);
+    //   };
     const handlePaymentChange = (event) => {
         setPaymentMethod(event.target.value);
-       // console.log('Selected Payment Method:', event.target.value);
-      };
+    };
 
     function showSuccessToast() {
         toast.success("Order Placed Successfully", {
@@ -249,7 +264,6 @@ function CheckOut() {
     }
     const onClickPlaceOrder = () => {
         //  setShowPayment(true);
-       // console.log("formData", formData);
         handleSubmit()
         
     }
@@ -333,7 +347,7 @@ function CheckOut() {
                                 )}
                             </SlideToggle >
                         </div>
-                        <div className="checkout-discount">
+                        {/* <div className="checkout-discount">
                             <SlideToggle duration={200} collapsed >
                                 {({ onToggle, setCollapsibleElement }) => (
                                     <div className="m-b-3">
@@ -358,7 +372,7 @@ function CheckOut() {
                                     </div>
                                 )}
                             </SlideToggle >
-                        </div>
+                        </div> */}
                         <div className="row">
                             <div className="col-lg-7">
 
@@ -370,7 +384,7 @@ function CheckOut() {
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <div className="form-group">
-                                                        <label>First name <abbr className="required" title="required">*</abbr>
+                                                        <label>First name <span className="required" title="required">*</span>
                                                         </label>
                                                         <input type="text" name="firstName" onChange={handleChange} className="form-control" required />
                                                                     {validationErrors.firstName && (
@@ -383,7 +397,7 @@ function CheckOut() {
 
                                                 <div className="col-md-6">
                                                     <div className="form-group">
-                                                        <label>Last name <abbr className="required" title="required">*</abbr></label>
+                                                        <label>Last name <span className="required" title="required">*</span></label>
                                                         <input type="text" name="lastName" onChange={handleChange} className="form-control" required />
                                                         {validationErrors.lastName && (
                                                                     <small className="text-danger">
@@ -405,7 +419,7 @@ function CheckOut() {
                                             </div>
 
                                             {/* <div className="select-custom">
-                                                    <label>Country / Region <abbr className="required" title="required">*</abbr></label>
+                                                    <label>Country / Region <span className="required" title="required">*</span></label>
                                                     <select name="orderby" className="form-control">
                                                         <option value="" defaultValue="selected">Vanuatu
                                             </option>
@@ -418,7 +432,7 @@ function CheckOut() {
                                                 </div> */}
 
                                             <div className="form-group mb-1 pb-2">
-                                                <label>Street address <abbr className="required" title="required">*</abbr></label>
+                                                <label>Street address <span className="required" title="required">*</span></label>
                                                 <input type="text" name="shipping_street" onChange={handleChange} className="form-control"
                                                     placeholder="House number and street name" required />
                                                       {validationErrors.shipping_street && (
@@ -439,7 +453,7 @@ function CheckOut() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Town / City <abbr className="required" title="required">*</abbr></label>
+                                                <label>Town / City <span className="required" title="required">*</span></label>
                                                 <input type="text" name="shipping_city" onChange={handleChange} className="form-control" required />
                                                 {validationErrors.shipping_city && (
                                                                     <small className="text-danger">
@@ -448,7 +462,7 @@ function CheckOut() {
                                                                     )}
                                             </div>
                                             <div className="form-group">
-                                                <label>State  <abbr className="required" title="required">*</abbr></label>
+                                                <label>State  <span className="required" title="required">*</span></label>
                                                 <input type="text" name="shipping_state" onChange={handleChange} className="form-control" required />
                                                 {validationErrors.shipping_state && (
                                                                     <small className="text-danger">
@@ -457,7 +471,7 @@ function CheckOut() {
                                                                     )}
                                             </div>
                                             <div className="form-group">
-                                                <label>Country <abbr className="required" title="required">*</abbr></label>
+                                                <label>Country <span className="required" title="required">*</span></label>
                                                 <input type="text" name="shipping_country" onChange={handleChange} className="form-control" required />
                                                 {validationErrors.shipping_country && (
                                                                     <small className="text-danger">
@@ -467,7 +481,7 @@ function CheckOut() {
                                             </div>
 
                                             {/* <div className="select-custom">
-                                                    <label>State / County <abbr className="required" title="required">*</abbr></label>
+                                                    <label>State / County <span className="required" title="required">*</span></label>
                                                     <select name="orderby" className="form-control">
                                                         <option value="" defaultValue="selected">NY</option>
                                                         <option value="1">Brunei</option>
@@ -479,7 +493,7 @@ function CheckOut() {
                                                 </div> */}
 
                                             <div className="form-group">
-                                                <label>Postcode / Zip <abbr className="required" title="required">*</abbr></label>
+                                                <label>Postcode / Zip <span className="required" title="required">*</span></label>
                                                 <input type="text" name="shipping_postalCode" onChange={handleChange} className="form-control" required />
                                                 {validationErrors.shipping_postalCode && (
                                                                     <small className="text-danger">
@@ -489,7 +503,7 @@ function CheckOut() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Phone <abbr className="required" title="required">*</abbr></label>
+                                                <label>Phone <span className="required" title="required">*</span></label>
                                                 <input type="tel" name="phoneNumber" onChange={handleChange} className="form-control" required />
                                                 {validationErrors.phoneNumber && (
                                                                     <small className="text-danger">
@@ -499,7 +513,7 @@ function CheckOut() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Email address <abbr className="required" title="required">*</abbr></label>
+                                                <label>Email address <span className="required" title="required">*</span></label>
                                                 <input type="email" name="email" onChange={handleChange} className="form-control" required />
                                                 {validationErrors.email && (
                                                                     <small className="text-danger">
@@ -515,7 +529,7 @@ function CheckOut() {
                                                             <label className="custom-control-label" htmlFor="create-account">Create an account?</label>
                                                         </div>
                                                         <div className="form-group" ref={setCollapsibleElement} style={{ overflow: 'hidden' }}>
-                                                            <label className="mt-14">Create account password <abbr className="required" title="required">*</abbr></label>
+                                                            <label className="mt-14">Create account password <span className="required" title="required">*</span></label>
                                                             <input type="password" placeholder="Password" className="form-control"
                                                                 required />
                                                         </div>
@@ -539,8 +553,8 @@ function CheckOut() {
                                                               
 
                                                                 <div className="form-group mb-1 pb-2">
-                                                                    <label>Street address <abbr className="required"
-                                                                        title="required">*</abbr></label>
+                                                                    <label>Street address <span className="required"
+                                                                        title="required">*</span></label>
                                                                     <input type="text" name="billing_stree" onChange={handleChange} className="form-control"
                                                                         placeholder="House number and street name" required />
                                                                 </div>
@@ -551,18 +565,18 @@ function CheckOut() {
                                                                 </div>
 
                                                                 <div className="form-group">
-                                                                    <label>Town / City <abbr className="required"
-                                                                        title="required">*</abbr></label>
+                                                                    <label>Town / City <span className="required"
+                                                                        title="required">*</span></label>
                                                                     <input type="text" name="billing_city" onChange={handleChange} className="form-control" required />
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>State <abbr className="required"
-                                                                        title="required">*</abbr></label>
+                                                                    <label>State <span className="required"
+                                                                        title="required">*</span></label>
                                                                     <input type="text" name="billing_state" onChange={handleChange} className="form-control" required />
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>Country <abbr className="required"
-                                                                        title="required">*</abbr></label>
+                                                                    <label>Country <span className="required"
+                                                                        title="required">*</span></label>
                                                                     <input type="text" name="billing_country" onChange={handleChange} className="form-control" required />
                                                                 </div>
 
@@ -570,8 +584,8 @@ function CheckOut() {
                                                             
 
                                                                 <div className="form-group">
-                                                                    <label>Postcode / ZIP <abbr className="required"
-                                                                        title="required">*</abbr></label>
+                                                                    <label>Postcode / ZIP <span className="required"
+                                                                        title="required">*</span></label>
                                                                     <input type="text" name="billing_postalCode" onChange={handleChange} className="form-control" required />
                                                                 </div>
                                                             </div>
@@ -607,13 +621,13 @@ function CheckOut() {
                                                     <tr key={"checks" + index}>
                                                         <td className="product-col">
                                                             <h2 className="product-title">
-                                                                {item.name + '×' + item.qty}
+                                                                {item.name + '×' + (item.qty || 1)}
                                                                 {/* {item.name } */}
                                                             </h2>
                                                         </td>
 
                                                         <td className="price-col">
-                                                            <span> &#x20B9;{item.price * item.qty}</span>
+                                                            <span> &#x20B9;{item.price * (item.qty || 1)}</span>
                                                         </td>
                                                     </tr>
                                                 ))
@@ -666,30 +680,20 @@ function CheckOut() {
                                         <h4 className="">Payment methods</h4>
                                         <div className="info-box with-icon p-0">
                                             <ul className='m-0'>
-                                                <li>
-                                                    <label>
-                                                        <input
+                                                            {paymentMethods && paymentMethods.map((item, index) => (
+                                                            <li key={index}>
+                                                            <label>
+                                                            <input
                                                             type="radio"
                                                             name="paymentGateway"
-                                                            value="Cash On Delivery"
-                                                            checked={paymentMethod === 'Cash On Delivery'}
+                                                            value={item}
+                                                            checked={paymentMethod === item}
                                                             onChange={handlePaymentChange}
-                                                        />
-                                                        {"  "}Cash On Delivery
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input
-                                                            type="radio"
-                                                            name="paymentGateway"
-                                                            value="Razorpay"
-                                                            checked={paymentMethod === 'Razorpay'}
-                                                            onChange={handlePaymentChange}
-                                                        />
-                                                        {"  "}Razor Pay
-                                                    </label>
-                                                </li>
+                                                            />
+                                                            {"  "}{item}
+                                                            </label>
+                                                            </li>
+                                                            ))}
                                                 </ul> 
                                                
                                         </div>
@@ -697,7 +701,12 @@ function CheckOut() {
                                    { showPayment && 
                                    (  <Payment orderGuid={orderGuid} order_amount={subtotal} order_id={orderId} currency={orderCurrency} name={"Naren"} email={"naren@yopmail.com"} contact={452423453} />)}
                                     <button type="submit" onClick={() => { onClickPlaceOrder() }} value="Place Order" name="form-control" className="btn btn-dark btn-place-order">
-                                        PLACE ORDER
+                                        PLACE ORDER 
+
+                                       {isOrderCreated && <ClipLoader size={22} className='ml-2' color="#FFFFF" />}
+                                        {/* <div className="bounce-loader">
+                                         <div className="bounce1"></div>
+                                         </div> */}
                                     </button>
 
                                 </div>

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-
+import { useDispatch } from 'react-redux';
 // Import Actions
 import { actions as WishlistAction } from "../../../store/wishlist";
 import { actions as CartAction } from "../../../store/cart";
@@ -26,8 +26,15 @@ import Chair from '../../../assets/images/products/mobiles/chairs.jpg'
 // Import Custom Component
 import ALink from '../../common/ALink';
 import ProductCountdown from '../product-countdown';
+import { useEffect } from 'react';
+import { getCartDetails, setCartDetails } from '../../../store/cart/cartDetailsSlice';
+import { useState } from 'react';
+import AddToCartPopup from '../modals/add-to-cart-popup';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 function ProductTwo ( props ) {
+    const dispatch = useDispatch();
     // const router = useRouter();
     const { adClass = "", link = "default", product } = props;
 
@@ -43,7 +50,7 @@ function ProductTwo ( props ) {
     }
 
     function getImageSource(productName) {
-        console.log("product name ->",productName.split(" ")[0]);
+        
         // Define a mapping of product names to imported image variables
         const imageMap = {
             "macbook": macbook,
@@ -88,11 +95,42 @@ function ProductTwo ( props ) {
             // router.push( '/pages/wishlist' );
         }
     }
+     const [updatedCartItems , setUpdatedCartItems]= useState([]);
+    const cartData = useSelector(getCartDetails);
 
-    function onAddCartClick ( e ) {
-        e.preventDefault();
-        props.addToCart( product );
+    useEffect(() => {
+        setUpdatedCartItems(cartData?.cartData?.data)
+    }, [cartData])
+
+    const onAddCartClick= ( productDetails ) =>{
+        // productDetails.qty = 1;
+        showToastWithImage()
+       
+        
+        if(updatedCartItems && updatedCartItems.length > 0){
+            let productArray=[...updatedCartItems , productDetails]
+            dispatch(setCartDetails({data:productArray}))
+        }else{
+            let productArray=[ productDetails]
+            dispatch(setCartDetails({data:productArray}))
+        }
+      
     }
+    function showToastWithImage() {
+        const toastContent = () => (
+          <div>
+           
+            <AddToCartPopup props={product}/>
+    
+          </div>
+        );
+      
+        toast(toastContent);
+      }
+      
+      const onClickProduct=()=>{
+        
+      }
 
     function onQuickViewClick ( e ) {
         e.preventDefault();
@@ -102,13 +140,16 @@ function ProductTwo ( props ) {
     return (
         <div className={ `product-default media-with-lazy left-details mb-2 product-list ${ adClass }` }>
             <figure>
-                <ALink href={ `/product/${ link }/${ product.slug }` }>
+                {/* <ALink href={ `/product/${ link }/${ product.slug }` }> */}
+                <ALink href={`/product_detail/${product.name}/${product.guid}`} state={product}  onClick={()=>{
+                   onClickProduct()
+                }}>
                     <div className="lazy-overlay"></div>
 
                     <LazyLoadImage
                         alt="product"
                         // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROGswtbi-CqtO_5ecgfl_aVaCERXPu1ESJjA&s"
-                        src={(product && product.imageUrls && product.imageUrls[1]) || getImageSource(product.name.split(" ")[0]) || macbook}
+                        src={(product && product.imageUrls && product.imageUrls[0]) || getImageSource(product.name.split(" ")[0]) || macbook}
                         threshold={ 500 }
                         effect="black and white"
                         width="100%"
@@ -137,6 +178,8 @@ function ProductTwo ( props ) {
                     <ProductCountdown />
                 }
             </figure>
+
+
 
             <div className="product-details">
                 <div className="category-wrap">
@@ -185,15 +228,15 @@ function ProductTwo ( props ) {
 
                 <div className="product-action">
                     {
-                        product?.variants?.length > 0 ?
-                            <ALink href={ `/product/default/${ product.slug }` } className="btn-icon btn-add-cart"><i
-                                className="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></ALink>
-                            : <a href="#" className="btn-icon btn-add-cart product-type-simple" title="Add To Cart" onClick={ onAddCartClick }><i
-                                className="icon-shopping-cart"></i><span>ADD TO CART</span></a>
+                        // product?.variants?.length > 0 ?
+                            // <ALink href={ `/product/default/${ product.slug }` } className="btn-icon btn-add-cart"><i
+                            //     className="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></ALink>
+                         <Link className="btn-icon btn-add-cart product-type-simple" title="Add To Cart" onClick={() => onAddCartClick(product)}><i
+                                className="icon-shopping-cart"></i><span>ADD TO CART</span></Link>
                     }
-                    <a href="#" className={ `btn-icon-wish ${ isInWishlist() ? 'added-wishlist' : '' }` } onClick={ onWishlistClick } title={ `${ isInWishlist() === true ? 'Go to Wishlist' : 'Add to Wishlist' }` }><i className="icon-heart"></i></a>
+                    {/* <a href="#" className={ `btn-icon-wish ${ isInWishlist() ? 'added-wishlist' : '' }` } onClick={ onWishlistClick } title={ `${ isInWishlist() === true ? 'Go to Wishlist' : 'Add to Wishlist' }` }><i className="icon-heart"></i></a>
                     <a href="#" className="btn-quickview" title="Quick View" onClick={ onQuickViewClick }><i
-                        className="fas fa-external-link-alt"></i></a>
+                        className="fas fa-external-link-alt"></i></a> */}
                 </div>
             </div>
         </div>

@@ -143,6 +143,8 @@ function ProductOne ( props ) {
         }
       
     }
+
+    
  
     function onQuickViewClick ( e ) {
         e.preventDefault();
@@ -163,7 +165,7 @@ function ProductOne ( props ) {
  
                     <LazyLoadImage
                         alt="product"
-                        src={(product && product.imageUrls && product.imageUrls[1]) || getImageSource(product.name.split(" ")[0]) || macbook}
+                        src={(product && product.imageUrls && product.imageUrls[1]) || (product && product.imageUrls && product.imageUrls[0]) || getImageSource(product.name.split(" ")[0]) || macbook}
                         
                         threshold={ 500 }
                         effect="black and white"
@@ -243,10 +245,11 @@ function ProductOne ( props ) {
  
                 <div className="product-action">
                     {
-                        product?.variants?.length > 0 ?
-                            <ALink href={ `/product/default/${product.slug}` } className="btn-icon btn-add-cart"><i
-                                className="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></ALink>
-                            : <Link className="btn-icon btn-dark btn-add-cart product-type-simple" title="Add To Cart" onClick={() => onAddCartClick(product)}><i
+                        // product?.variants?.length > 0 ?
+                        //     <ALink href={ `/product/default/${product.slug}` } className="btn-icon btn-add-cart"><i
+                        //         className="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></ALink>
+                        //     :
+                             <Link className="btn-icon btn-dark btn-add-cart product-type-simple" title="Add To Cart" onClick={() => onAddCartClick(product)}><i
                                 className="icon-shopping-cart"></i><span>ADD TO CART</span></Link>
                     }
                     <a href="#" className={ `btn-icon-wish ${isInWishlist() ? 'added-wishlist' : ''}` } onClick={ onWishlistClick } title={ `${isInWishlist() === true ? 'Go to Wishlist' : 'Add to Wishlist'}` }><i className="icon-heart"></i></a>

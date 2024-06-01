@@ -31,11 +31,15 @@ const Home =() =>{
         <meta name="description" content="Welcome to our website where we offer the best products and services." />
         <meta name="keywords" content="best products, top services, quality, home" />
       </Helmet>
-            {/* <main className={ `home skeleton-body skel-shop-products ${loading ? '' : 'loaded'}` } > */}
-                <HomeSection />
+            <div style={{backgroundColor:''}} >
+
+            <HomeSection />
                 <FeaturedCollection/>
                 <TrendyCollection/>
                 <BannerSection/>
+            </div>
+            {/* <main className={ `home skeleton-body skel-shop-products ${loading ? '' : 'loaded'}` } > */}
+               
                 {/* <Popularsection product={ topRated } /> */}
 
                 {/* <BannerSection /> */}

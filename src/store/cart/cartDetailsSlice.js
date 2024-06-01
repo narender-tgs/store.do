@@ -16,10 +16,11 @@ const cartDetailsSlice = createSlice({
       state.cartData = action.payload;
      
     },
+    
   },
 });
 
 export const { setCartDetails } = cartDetailsSlice.actions;
-export const getCartDetails = (state) => state.user;
+export const getCartDetails = (state) => state.cartDetails;
 
 export default cartDetailsSlice.reducer;

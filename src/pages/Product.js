@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { parsePath, useHistory, useLocation } from 'react-router-dom';
 
 import ALink from '../components/common/ALink';
 import ShopBanner from '../components/partials/shop/shop-banner';
@@ -10,9 +10,9 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 import { getStoreDetails } from '../store/cart/storeData/storeDetailsSlice';
-const Product = ()=> {
+const Product = () => {
     const storeDatas = useSelector(getStoreDetails)
-    console.log("props for the sale-->", storeDatas);
+
     // const {saleData} = props;
     // const history = useHistory();
     const location = useLocation();
@@ -24,62 +24,112 @@ const Product = ()=> {
     const { data, loading, error } = productsState;
     const [perPage, setPerPage] = useState(12);
     const [sortBy, setSortBy] = useState('default');
-    const [products , setProducts] = useState([]);
-    const [selectedPriceRange, setSelectedPriceRange] = useState({min:"", max:""});
+    const [products, setProducts] = useState([]);
+    const [selectedPriceRange, setSelectedPriceRange] = useState({ min: "", max: "" });
     const [categoryGuids, setCategoryGuids] = useState([]);
     const [subCategoryGuids, setSubCategoryGuids] = useState([]);
-    const [categoryObj , setCategoryObj] = useState();
-    // const query = new URLSearchParams(location.search);
-    // useEffect(() => {
-    //     axios.get('http://localhost:3003/v1/product' , { headers: { 'service_ref': '8xuf4dev'}})
-    //         .then(response => {
-    //             // Access the response data
-    //             const responseData = response.data;
-    //             console.log("response Data for products-->", responseData);
-    //             setProducts(responseData.data.products)
-    //             // Process the response data here
-    //         })
-    //         .catch(error => {
-    //             // Handle any errors
-    //         });
-        
-    // }, [])
+    const [categoryObj, setCategoryObj] = useState();
+    const [render, setRe_Render] = useState();
+
+    // const dataReceived = location;
+    const pathParts = location.pathname.split('/'); // Split the pathname
+    const productObj = pathParts[pathParts.length - 1];
+
+    const checkRender = location.state;
     useEffect(() => {
+        if (checkRender === 'renderAgain') {
+            setRe_Render(true);
+        }
+    }, [checkRender])
 
-        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}` , { headers: { 'service_ref': '8xuf4dev'}}).then((response)=>{
-        
-        console.log("response for store do" , response);
-        
-      })
-    }, [])
-    
+
+    const addVariants = (variantsOptions) => {
+        const newVariantsArr = variantsOptions.map((item) => {
+            return {
+                option_name: item.name,
+                option_value: item.options[0].name,
+                variant_sf_id: item.options[0].variant_sf_id
+            }
+        })
+        return newVariantsArr;
+    }
+
     useEffect(() => {
-        // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}` , { headers: { 'service_ref': '8xuf4dev'}})
-        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}` , { headers: { 'service_ref': '8xuf4dev'}})
+        if (pathParts.length === 4 && pathParts[3].startsWith('ban-')) {
 
-            .then(response => {
+            axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}`, { headers: { 'service_ref': '8xuf4dev' } })
+                // axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products`, { headers: { 'service_ref': '8xuf4dev' } })
 
-                // Access the response data
-                const responseData = response.data;
-                if(sortBy === "price_asc"){
-                    const priceLowToHigh = responseData.data.products.sort((a,b)=>{
-                        return a.price - b.price;
-                    })
-                   // console.log("price low to high", priceLowToHigh);
-                    setProducts(priceLowToHigh)
-                }else if(sortBy === "price_desc"){
-                    const priceHighToLow = responseData.data.products.sort((a,b)=>{
-                        return b.price - a.price;
-                    })
-                   // console.log("priceHigh to low", priceHighToLow);
-                    setProducts(priceHighToLow)
-                }
-            })
-            .catch(error => {
-                // Handle any errors
-            });
-        
-    }, [selectedPriceRange , sortBy])
+                .then(response => {
+                    const products_variant = response.data.data.products.map(element => {
+                        return {
+                            ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                        }
+                    });
+                    // Access the response data
+                    const responseData = products_variant;
+                    if (sortBy === "price_asc") {
+                        const priceLowToHigh = responseData.sort((a, b) => {
+                            return a.price - b.price;
+                        })
+                        // console.log("price low to high", priceLowToHigh);
+                        setProducts(priceLowToHigh)
+                    } else if (sortBy === "price_desc") {
+                        const priceHighToLow = responseData.sort((a, b) => {
+                            return b.price - a.price;
+                        })
+                        // console.log("priceHigh to low", priceHighToLow);
+                        setProducts(priceHighToLow)
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                });
+        } else if (pathParts.length === 2 && pathParts[1] === 'product') {
+
+            axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}`, { headers: { 'service_ref': '8xuf4dev' } })
+
+                .then(response => {
+                    // const tempProductsArr = response.data.data.products;
+                    const products_variant = response.data.data.products.map(element => {
+                        return {
+                            ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                        }
+                    });
+
+                    // return {
+                    //     option_name: pro.itemName,
+                    //     option_value: pro.name,
+                    //     variant_sf_id: pro._id,
+
+                    // }
+                    //  e.preventDefault();
+                    // const productWithVariants = {
+                    //     ...productDetails,
+                    //     variants: products_variant
+                    // };
+                    // Access the response data
+                    const responseData = products_variant;
+                    if (sortBy === "price_asc") {
+                        const priceLowToHigh = responseData.sort((a, b) => {
+                            return a.price - b.price;
+                        })
+                        // console.log("price low to high", priceLowToHigh);
+                        setProducts(priceLowToHigh)
+                    } else if (sortBy === "price_desc") {
+                        const priceHighToLow = responseData.sort((a, b) => {
+                            return b.price - a.price;
+                        })
+                        // console.log("priceHigh to low", priceHighToLow);
+                        setProducts(priceHighToLow)
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                });
+        }
+
+    }, [selectedPriceRange, sortBy, render])
 
     // useEffect(() => {
     //     axios.get(`http://localhost:3003/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}` , { headers: { 'service_ref': '8xuf4dev'}})
@@ -92,30 +142,57 @@ const Product = ()=> {
     //         .catch(error => {
     //             // Handle any errors
     //         });
-        
+
     // }, [selectedPriceRange])
     useEffect(() => {
-        //arrayCat([%22cat-6279f0b4-cd9e-42db-8b2d-e5cbb5f34fc4%22])
-        //arraySubCat[%22sub-cat-a01df79e-4d5f-4160-bf7c-b8be855a446d%22%2C%22sub-cat-a01df79e-4d5f-4160-bf7c-b8be855a446d%22]
-        //search(Apple%20Ma)
-        const categoryGuidsParam = JSON.stringify(categoryGuids); // Convert to JSON string
-        const subCategoryGuidsParam = JSON.stringify(subCategoryGuids); // Convert to JSON string
-        // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
-        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+        if (pathParts.length === 4 && pathParts[3].startsWith('ban-')) {
+            const categoryGuidsParam = JSON.stringify(categoryGuids); // Convert to JSON string
+            const subCategoryGuidsParam = JSON.stringify(subCategoryGuids); // Convert to JSON string
+            // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+            axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}`, { headers: { 'service_ref': '8xuf4dev' } })
+                // axios.get(`http://localhost:3000/v1/product/${productObj}/banner/products`, { headers: { 'service_ref': '8xuf4dev' } })
 
-            .then(response => {
-                // Access the response data
-                const responseData = response.data;
-                setProducts(responseData.data.products)
-                // Process the response data here
-            })
-            .catch(error => {
-                // Handle any errors
-            });
-        
-    }, [selectedPriceRange ,categoryGuids , subCategoryGuids])
-    
-   
+                .then(response => {
+                    const products_variant = response.data.data.products.map(element => {
+                        return {
+                            ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                        }
+                    });
+                    // Access the response daeta
+                    const responseData = products_variant;
+                    setProducts(responseData)
+                    // Process the response data here
+                })
+                .catch(error => {
+                    // Handle any errors
+                });
+
+        } else if (pathParts.length === 2 && pathParts[1] === 'product') {
+            const categoryGuidsParam = JSON.stringify(categoryGuids); // Convert to JSON string
+            const subCategoryGuidsParam = JSON.stringify(subCategoryGuids); // Convert to JSON string
+            // axios.get(`http://localhost:3000/v1/product?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}` , { headers: { 'service_ref': '8xuf4dev'}})
+            axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&categoryGuids=${encodeURIComponent(categoryGuidsParam)}&subcategoryGuids=${encodeURIComponent(subCategoryGuidsParam)}`, { headers: { 'service_ref': '8xuf4dev' } })
+
+                .then(response => {
+                    const products_variant = response.data.data.products.map(element => {
+                        return {
+                            ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                        }
+                    });
+                    // Access the response daeta
+                    const responseData = products_variant;
+                    setProducts(responseData)
+                    // Process the response data here
+                })
+                .catch(error => {
+                    // Handle any errors
+                });
+        }
+
+
+    }, [selectedPriceRange, categoryGuids, subCategoryGuids, render])
+
+
     const totalPage = data ? parseInt(data.products.total / perPage) + (data.products.total % perPage ? 1 : 0) : 1;
     const gridClass = {
         '3cols': 'col-6 col-sm-4',
@@ -148,19 +225,19 @@ const Product = ()=> {
         //         to: perPage * page
         //     }
         // });
-    }, [ perPage, sortBy]);
+    }, [perPage, sortBy]);
 
-    function getProductPriceRange(data){
+    function getProductPriceRange(data) {
 
-        setSelectedPriceRange(data );
+        setSelectedPriceRange(data);
     }
-    function getCategoryProducts(category){
-        console.log("category that are selected", category);
+    function getCategoryProducts(category) {
+        // console.log("category that are selected", category);
         setCategoryObj(category)
         if (category.catGuid) {
             // It's a main category
             if (!categoryGuids.includes(category.catGuid)) {
-                setCategoryGuids([ category.catGuid]);
+                setCategoryGuids([category.catGuid]);
             }
             setSubCategoryGuids([]); // Reset subcategory because we're at top level
         } else if (category.subCategory && category.subCategory.parentCatGuid) {
@@ -174,19 +251,19 @@ const Product = ()=> {
         }
     }
 
-    // function console(e) {
-    //     // let url = history.location.pathname.replace('[grid]', grid);
-    //     // let arr = ['page=1'];
-    //     // query.forEach((value, key) => {
-    //     //     if (key !== 'page' && key !== 'grid') arr.push(`${key}=${value}`);
-    //     // });
-    //     // url = `${url}?${arr.join('&')}`;
-    //     // history.push(url);
-    //     setPerPage(e.target.value);
-    // }
+    function consoles(e) {
+        // let url = history.location.pathname.replace('[grid]', grid);
+        // let arr = ['page=1'];
+        // query.forEach((value, key) => {
+        //     if (key !== 'page' && key !== 'grid') arr.push(`${key}=${value}`);
+        // });
+        // url = `${url}?${arr.join('&')}`;
+        // history.push(url);
+        setPerPage(e.target.value);
+    }
 
     function onSortByChange(e) {
-        console.log("e target value -->", e.target.value);
+        // console.log("e target value -->", e.target.value);
         // let url = history.location.pathname.replace('[grid]', grid);
         // let arr = [`sortBy=${e.target.value}`, 'page=1'];
         // query.forEach((value, key) => {
@@ -214,11 +291,11 @@ const Product = ()=> {
 
     return (
         <main className="main">
-             <Helmet>
-        <title>Products - Store.Do</title>
-        <meta name="description" content="Explore our wide range of products tailored to suit your needs." />
-        <meta name="keywords" content="electronics, apparel, gadgets, books, online shopping" />
-      </Helmet>
+            <Helmet>
+                <title>Products - Store.Do</title>
+                <meta name="description" content="Explore our wide range of products tailored to suit your needs." />
+                <meta name="keywords" content="electronics, apparel, gadgets, books, online shopping" />
+            </Helmet>
             <ShopBanner />
 
             <nav aria-label="breadcrumb" className="breadcrumb-nav">
@@ -227,40 +304,40 @@ const Product = ()=> {
                         <li className="breadcrumb-item"><ALink href="/"><i className="icon-home"></i></ALink></li>
                         {
                             <>
-                            <li className="breadcrumb-item">
-                                <ALink href={`/shop/${grid}`} scroll={false}>Home</ALink>
-                            </li>
-                            <li className="breadcrumb-item">
-                                <ALink href={`/shop/${grid}`} scroll={false}>Products</ALink>
-                            </li>
-                        
-                            {categoryObj?.subCategory && categoryObj?.subCategory?.parentCatName ? (
-                                <>
-                                    {/* Parent Category */}
-                                    <li className="breadcrumb-item">
-                                        <ALink href={`/shop/${grid}?category=${categoryObj.subCategory.parentCatGuid}`} scroll={false}>
-                                            {categoryObj?.subCategory?.parentCatName}
-                                        </ALink>
-                                    </li>
-                                    {/* Subcategory */}
-                                    <li className="breadcrumb-item active">
-                                        <ALink href={`/shop/${grid}?category=${categoryObj.subCategory.subCatGuid}`} scroll={false}>
-                                            {categoryObj?.catName}
-                                        </ALink>
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    {/* Main Category (no subcategory) */}
-                                    <li className="breadcrumb-item active">
-                                        <ALink href={`/shop/${grid}?category=${categoryObj?.catGuid}`} scroll={false}>
-                                            {categoryObj?.catName}
-                                        </ALink>
-                                    </li>
-                                </>
-                            )}
-                        </>
-                        
+                                <li className="breadcrumb-item">
+                                    <ALink href={`/shop/${grid}`} scroll={false}>Home</ALink>
+                                </li>
+                                <li className="breadcrumb-item">
+                                    <ALink href={`/shop/${grid}`} scroll={false}>Products</ALink>
+                                </li>
+
+                                {categoryObj?.subCategory && categoryObj?.subCategory?.parentCatName ? (
+                                    <>
+                                        {/* Parent Category */}
+                                        <li className="breadcrumb-item">
+                                            <ALink href={`/shop/${grid}?category=${categoryObj.subCategory.parentCatGuid}`} scroll={false}>
+                                                {categoryObj?.subCategory?.parentCatName}
+                                            </ALink>
+                                        </li>
+                                        {/* Subcategory */}
+                                        <li className="breadcrumb-item active">
+                                            <ALink href={`/shop/${grid}?category=${categoryObj.subCategory.subCatGuid}`} scroll={false}>
+                                                {categoryObj?.catName}
+                                            </ALink>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Main Category (no subcategory) */}
+                                        <li className="breadcrumb-item active">
+                                            <ALink href={`/shop/${grid}?category=${categoryObj?.catGuid}`} scroll={false}>
+                                                {categoryObj?.catName}
+                                            </ALink>
+                                        </li>
+                                    </>
+                                )}
+                            </>
+
                         }
                     </ol>
                 </div>
@@ -269,7 +346,7 @@ const Product = ()=> {
             <div className="container">
                 <div className="row main-content">
                     {
-                        showsidebar ? <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts}/> : <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts} style={{ display: 'none' }} />
+                        showsidebar ? <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts} /> : <ShopSidebarOne onChangePrice={getProductPriceRange} onChangeCategory={getCategoryProducts} style={{ display: 'none' }} />
                     }
                     {/* <div className={`${showsidebar ? 'col-lg-9' : 'col-12'}`}> */}
                     <div className={'col-lg-9'}>
@@ -313,23 +390,26 @@ const Product = ()=> {
                             </div>
 
                             <div className="toolbox-right">
-                                <div className="toolbox-item toolbox-show">
+                                {/* <div className='bounce-loader'>
+                                    <div className='bounce3'></div>
+                                </div> */}
+                                {/* <div className="toolbox-item toolbox-show">
                                     <label>Show:</label>
 
-                                    {/* <div className="select-custom">
+                                    <div className="select-custom">
                                         <select name="count" className="form-control" value={perPage} onChange={(e) => onPerPageChange(e)}>
                                             <option value="12">12</option>
                                             <option value="24">24</option>
                                             <option value="36">36</option>
                                         </select>
-                                    </div> */}
-                                </div>
+                                    </div>
+                                </div> */}
 
                                 <div className="toolbox-item layout-modes">
                                     <ALink href={{ pathname: location.pathname }} className="layout-btn btn-grid active mr-2" title="Grid">
                                         <i className="icon-mode-grid"></i>
                                     </ALink>
-                                    <ALink href={{ pathname: '/pages/product/list' }} className="layout-btn btn-list" title="List">
+                                    <ALink href={{ pathname: '/product/list' }} className="layout-btn btn-list" title="List">
                                         <i className="icon-mode-list"></i>
                                     </ALink>
                                 </div>
@@ -338,16 +418,16 @@ const Product = ()=> {
 
                         <ProductsGrid products={products} loading={loading} perPage={perPage} gridClass={gridClass[grid]} addClass={addclass ? 'sm-padding row-sm' : ''} />
 
-                        {loading || (products && products.length) ?
+                        {/* {loading || (products && products.length) ?
                             <nav className="toolbox toolbox-pagination">
                                 <div className="toolbox-item toolbox-show">
                                     <label>Show:</label>
 
                                     <div className="select-custom">
-                                        <select name="count" className="form-control" value={perPage} onChange={e => console(e)}>
-                                            <option value="12">12</option>
-                                            <option value="24">24</option>
-                                            <option value="36">36</option>
+                                        <select name="count" className="form-control" value={perPage} onChange={e => consoles(e)}>
+                                            <option value="3">3</option>
+                                            <option value="6">6</option>
+                                            <option value="10">10</option>
                                         </select>
                                     </div>
                                 </div>
@@ -356,7 +436,9 @@ const Product = ()=> {
 
                             </nav>
                             : ''
-                        }
+                        } */}
+
+                       
                     </div>
 
                 </div>

@@ -6,7 +6,7 @@ import Qty from '../../components/partials/product/qty';
 import { actions as CartAction } from "../../store/cart";
 import { getCartTotal } from '../../utils';
 import { useSelector , useDispatch } from 'react-redux';
-import { getCartDetails, setCartDetails  } from '../../store/cart/cartDetailsSlice';
+import { getCartDetails, setCartDetails , removeFromCart } from '../../store/cart/cartDetailsSlice';
 
 function Cart ( props ) {
      const dispatch = useDispatch();
@@ -16,9 +16,17 @@ function Cart ( props ) {
     useEffect( () => {
         setCartList( cartData?.cartData?.data );
     }, [ cartData ] )
+    function removeFromCart ( item, index ) {
+    
+        // Create a new array excluding the item at the specified index
+        const updatedCartList = cartList.filter((_, i) => i !== index);
+        // Update the state with the new array
+        
+        setCartList(updatedCartList);
+        dispatch(setCartDetails({data:updatedCartList}));
 
-    function removeFromCart ( item, id ) {
-        props.removeFromCart( item );
+        // props.removeFromCart( item );
+        
     }
  
 
@@ -73,6 +81,7 @@ function Cart ( props ) {
                                             <tr>
                                                 <th className="thumbnail-col"></th>
                                                 <th className="product-col">Product</th>
+                                                <th className="product-col">Specifications</th>
                                                 <th className="price-col">Price</th>
                                                 <th className="qty-col">Quantity</th>
                                                 <th className="text-right">Subtotal</th>
@@ -101,6 +110,16 @@ function Cart ( props ) {
                                                                 <ALink href={ `/product/default/${item.slug}` }>{ item.name }</ALink>
                                                             </h5>
                                                         </td>
+                                                        <td className="">
+                                                            <h5 className="product-title">
+                                                                {item.variants && item.variants.map((vars , index)=>(
+                                                                    <li key={index}>
+                                                                       <span>{vars.option_name} : {vars.option_value}</span> 
+                                                                    </li>
+                                                                ))}
+                                                            </h5>
+                                                        </td>
+
 
                                                         <td>
                                                         &#x20B9;{ item.price.toFixed( 2 ) }
@@ -110,38 +129,14 @@ function Cart ( props ) {
                                                             <Qty value={ item.qty } max={ item.stock } onChangeQty={ qty => onChangeQty( index, qty ,qty*item.price ) } />
                                                         </td>
                                                         
-                                                        <td className="text-right"><span className="subtotal-price">&#x20B9;{ ( item.price * item.qty ).toFixed( 2 ) }</span></td>
+                                                        <td className="text-right"><span className="subtotal-price">&#x20B9;{ ( item.price * (item.qty || 1)) }</span></td>
                                                     </tr>
                                                 ) )
                                             }
                                         </tbody>
 
 
-                                        {/* <tfoot>
-                                            <tr>
-                                                <td colSpan="5" className="clearfix">
-                                                    <div className="float-left">
-                                                        <div className="cart-discount">
-                                                            <form action="#">
-                                                                <div className="input-group">
-                                                                    <input type="text" className="form-control form-control-sm"
-                                                                        placeholder="Coupon Code" required />
-                                                                    <div className="input-group-append">
-                                                                        <button className="btn btn-sm" type="submit">Apply Coupon</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div> */}
-
-                                                    {/* <div className="float-right">
-                                                        <button type="submit" className="btn btn-shop btn-update-cart" onClick={ updateCart }>
-                                                            Update Cart
-                                                        </button>
-                                                    </div> */}
-                                                {/* </td>
-                                            </tr>
-                                        </tfoot> */}
+                                       
                                     </table>
                                 </div>
                             </div>
@@ -226,7 +221,7 @@ function Cart ( props ) {
                                     </table> */}
 
                                     <div className="checkout-methods">
-                                        <ALink href="/pages/checkout" onClick={()=>{onClickProceedToCheckout()}} className="btn btn-block btn-dark">Proceed to Checkout
+                                        <ALink href="/pages/checkout" onClick={()=>{onClickProceedToCheckout()}} className="btn btn-block btn-dark">Proceed to Cart
                                         <i className="fa fa-arrow-right"></i></ALink>
                                     </div>
                                 </div>

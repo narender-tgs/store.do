@@ -7,14 +7,17 @@ import OwlCarousel from '../features/owl-carousel';
 import LoginModal from "../features/modals/login-modal";
 import store_logo from '../../assets/images/storeDo_logo.png'
 
+import { useSelector } from "react-redux";
 // Import Settings
 import { infoBoxSlider } from "../../utils/data/slider";
 import { getStoreDetails } from "../../store/cart/storeData/storeDetailsSlice";
-import { useSelector } from "react-redux";
+
 export default function Header ( { adClass = '' } ) {
-    console.log("stores logo url",localStorage.getItem('storeLogoUrl'));
-    const logoUrl = useSelector(getStoreDetails);
-    console.log('logo url ' , logoUrl);
+    // console.log("stores logo url",localStorage.getItem('storeLogoUrl'));
+    const storeDetails = useSelector(getStoreDetails);
+    const logoUrl = storeDetails.storeDetails?.store_logo_url;
+    const headerBG = storeDetails.storeDetails?.headerBackground;
+    // console.log('logo url ' , logoUrl);
     function openMobileMenu ( e ) {
         e.preventDefault();
         document.querySelector( "body" ).classList.toggle( "mmenu-active" );
@@ -48,7 +51,7 @@ export default function Header ( { adClass = '' } ) {
                         </div> */}
                     </div>
 
-                    <div className="header-right d-none d-lg-flex">
+                    {/* <div className="header-right d-none d-lg-flex">
                         <p className="top-message text-uppercase mr-2">Default Welcome Msg</p>
                         <div className="header-dropdown dropdown-expanded">
                             <a className="#">Links</a>
@@ -59,23 +62,23 @@ export default function Header ( { adClass = '' } ) {
                                     <li><ALink href="/pages/wishlist">My Wishlist</ALink></li>
                                     <li><ALink href="/pages/blog">Blog</ALink></li>
 
-                                    {/* <LoginModal /> */}
+                                     <LoginModal /> 
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
             <div className="header-middle sticky-header">
                 <div className="container">
                     <div className="header-left">
-                        <button className="mobile-menu-toggler mr-2" type="button" onClick={ openMobileMenu }>
+                        {/* <button className="mobile-menu-toggler mr-2" type="button" onClick={ openMobileMenu }>
                             <i className="fa fa-bars"></i>
-                        </button>
+                        </button> */}
                 
                         <ALink href="/" className="logo">
-                            <img src={logoUrl?.storeDetails?.store_logo_url || localStorage.getItem('storeLogoUrl')} className="mt-1" height="50px" width="200px" alt="Porto Logo" />
+                            <img src={logoUrl} className="mt-1" height="50px" width="200px" alt="Porto Logo" />
                             {/* <img src="https://techilaglobalservices5-dev-ed.develop.file.force.com/sfc/dist/version/download/?oid=00DGB000002GOwh&ids=068GB00000lwnUy&d=%2Fa%2FGB000000clev%2FvCm_4oUHB4KQ_0ZaoFGaNbMAZw1bIrlYJHQCq6LCGYM&asPdf=false" className="mt-1" height="50px" width="200px" alt="Porto Logo" /> */}
                         </ALink>
                 
@@ -94,9 +97,9 @@ export default function Header ( { adClass = '' } ) {
                 </div>
             </div>
 
-            <div className="header-bottom">
+            <div className="header-bottom" >
                 <OwlCarousel adClass="info-boxes-slider bg-primary" options={ infoBoxSlider }>
-                    <div className="info-box info-box-icon-left">
+                    <div className="info-box info-box-icon-left" style={{backgroundColor:headerBG}}>
                         <i className="icon-shipping text-white"></i>
 
                         <div className="info-box-content">
@@ -104,7 +107,7 @@ export default function Header ( { adClass = '' } ) {
                         </div>
                     </div>
 
-                    <div className="info-box info-box-icon-left">
+                    <div className="info-box info-box-icon-left" style={{backgroundColor:headerBG}}>
                         <i className="icon-money text-white"></i>
 
                         <div className="info-box-content">
@@ -112,7 +115,7 @@ export default function Header ( { adClass = '' } ) {
                         </div>
                     </div>
 
-                    <div className="info-box info-box-icon-left">
+                    <div className="info-box info-box-icon-left" style={{backgroundColor:headerBG}}>
                         <i className="icon-support text-white"></i>
 
                         <div className="info-box-content">

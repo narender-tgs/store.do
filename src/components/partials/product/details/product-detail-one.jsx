@@ -7,7 +7,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // Import Actions
 import { actions as WishlistAction } from "../../../../store/wishlist";
 import { actions as CartAction } from "../../../../store/cart";
-
+import cycle1 from '../../../../assets/images/cycle1.jpg'
 // Import Custom Component
 import ProductNav from '../product-nav';
 import Qty from '../qty';
@@ -15,8 +15,70 @@ import ALink from '../../../common/ALink';
 import ProductCountdown from '../../../features/product-countdown';
 
 function ProductDetailOne ( props ) {
+    const productList = [
+        {
+          srcs: cycle1,
+          name: "Ultra HD Smart TV",
+          categories: ["Electronics", "Home Entertainment"],
+          price: [6786,3453],
+          slug: "ultra-hd-smart-tv",
+          ratings: 4.8,
+          is_hot: true,
+          variants:['Blue','Black']
+        },
+        {
+          srcs: "",
+          name: "Eco-Friendly Yoga Mat",
+          categories: ["Fitness", "Yoga"],
+          price: [34,98],
+          slug: "eco-friendly-yoga-mat",
+          ratings: 4.6,
+          is_hot: false,
+          variants:['Red','Pink']
+        },
+        {
+          srcs: "",
+          name: "Bluetooth Wireless Headphones",
+          categories: ["Electronics", "Audio"],
+          price: [345,456],
+          slug: "bluetooth-wireless-headphones",
+          ratings: 4.7,
+          is_hot: true,
+          variants:['Magenta','violet']
+        },
+        {
+          srcs: "",
+          name: "Organic Green Tea Leaves",
+          categories: ["Groceries", "Beverages"],
+          price: [56,343],
+          slug: "organic-green-tea-leaves",
+          ratings: 4.5,
+          is_hot: false,
+          variants:['Pitch Black', 'Brown']
+        },
+        {
+          srcs: "",
+          name: "Gourmet Kitchen Knife Set",
+          categories: ["Kitchen", "Tools"],
+          price: [678,234],
+          slug: "gourmet-kitchen-knife-set",
+          ratings: 4.9,
+          is_hot: false,
+          variants:['Red','Black']
+        },
+        {
+          srcs: cycle1,
+          name: "Portable Camping Tent",
+          categories: ["Outdoor", "Camping"],
+          price: [789,343],
+          slug: "portable-camping-tent",
+          ratings: 4.4,
+          is_hot: true,
+          variants:['White','Grey']
+        }
+      ];
     const router = useRouter();
-    const { product, adClass = "col-lg-7 col-md-6", prev, next, isNav = true, parent = ".product-single-default", isSticky = false } = props;
+    const { product, adClass = "col-lg-7 col-md-6", prev, next, isNav = true, parent = ".product-single-default", isSticky = false } = productList;
     const [ attrs, setAttrs ] = useState( { sizes: [], colors: [] } );
     const [ variant, setVariant ] = useState( null );
     const [ size, setSize ] = useState( null );
@@ -223,7 +285,7 @@ function ProductDetailOne ( props ) {
                     </ul>
 
                     {
-                        product.variants.length > 0 ?
+                        product ?
                             <div className="product-filters-container">
                                 {
                                     attrs.colors.length > 0 ?
@@ -360,7 +422,7 @@ function ProductDetailOne ( props ) {
 
                     <div className="product-action">
                         {
-                            product.variants.length ?
+                            product ?
                                 <SlideToggle collapsed={ true }>
                                     { ( { onToggle, setCollapsibleElement, toggleState } ) => (
                                         <>
@@ -415,7 +477,7 @@ function ProductDetailOne ( props ) {
 
 const mapStateToProps = ( state ) => {
     return {
-        wishlist: state.wishlist.list ? state.wishlist.list : []
+        wishlist: state.wishlist?.list ? state.wishlist?.list : []
     }
 }
 

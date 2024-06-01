@@ -6,8 +6,13 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ALink from '../ALink';
 import axios from 'axios';
 import lappy from '../../../assets/images/products/Laptops/macbook Pro max.jpg'
+import { useSelector } from 'react-redux';
+import { getStoreDetails } from '../../../store/cart/storeData/storeDetailsSlice';
 
 function SearchForm ( props ) {
+    const storeDatas = useSelector(getStoreDetails)
+    // console.log("storeDatas for searching " , storeDatas);
+
     // const router = useRouter();
     const [ cat, setCat ] = useState( "" );
     const [ search, setSearch ] = useState( "" );
@@ -28,6 +33,16 @@ function SearchForm ( props ) {
     //     setSearch( "" );
     //     setCat( "" );
     // }, [ router.query.slug ] )
+    const addVariants = (variantsOptions) => {
+        const newVariantsArr = variantsOptions.map((item) => {
+            return {
+                option_name: item.name,
+                option_value: item.options[0].name,
+                variant_sf_id: item.options[0].variant_sf_id
+            }
+        })
+        return newVariantsArr;
+    }
 
     useEffect( () => {
         if ( search.length > 2 ) {
@@ -42,12 +57,18 @@ function SearchForm ( props ) {
     }, [ search, cat ] )
     
      useEffect(() => {
-        axios.get(`http://localhost:3000/v1/product?search=${search}` , { headers: { 'service_ref': '8xuf4dev'}})
+
+        axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid}?search=${search}` , { headers: { 'service_ref': '8xuf4dev'}})
             .then(response => {
+                const products_variant = response.data.data.products.map(element => {
+                    return {
+                        ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
+                    }
+                });
                 // Access the response data
-                const responseData = response.data;
+                const responseData = products_variant;
                // console.log("response Data for products-->", responseData);
-                setProducts(responseData.data.products)
+                setProducts(responseData);
                 // Process the response data here
             })
             .catch(error => {
@@ -152,7 +173,7 @@ function SearchForm ( props ) {
 
                     <div className="live-search-list bg-white">
                         { products && products.length > 0 && products.map( ( product, index ) => (
-                            <ALink href='/product_detail' state={product} className="autocomplete-suggestion" key={ `search-result-${index}` }>
+                            <ALink href={`/product_detail/${product.name}/${product.guid}`} state={product} className="autocomplete-suggestion" key={ `search-result-${index}` }>
                                 <LazyLoadImage src={product && product?.imageUrls?.length > 0 && product?.imageUrls[0]} width={ 40 } height={ 40 } alt="product" />
                                 <div className="search-name" dangerouslySetInnerHTML={ removeXSSAttacks( matchEmphasize( product.name ) ) }></div>
                                 <span className="search-price">

@@ -1,8 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useSelector , useDispatch } from 'react-redux';
+import { getStoreDetails, setStoreDetails } from '../store/cart/storeData/storeDetailsSlice';
+import { setCartDetails } from '../store/cart/cartDetailsSlice';
+import { resolveHref } from 'next/dist/next-server/lib/router/router';
 
 const Payment = ({order_amount , order_id ,name , email , contact , currency , orderGuid }) => {
-   // console.log("order id generated->", orderGuid);
+    const dispatch = useDispatch();
+    const storeDetails = useSelector(getStoreDetails);
+   console.log("order is present" , storeDetails);
     const [rzpInstance, setRzpInstance] = useState(null);
     useEffect(() => {
         if (rzpInstance) {
@@ -21,7 +27,7 @@ const Payment = ({order_amount , order_id ,name , email , contact , currency , o
                 "currency": currency,
                 "name": "Store.do",
                 "description": "Test Transaction",
-                "image": "https://example.com/your_logo",
+                "image": storeDetails?.storeDetails?.store_logo_url,
                 // "order_id": order_id,
                 "order_id": order_id,
                 // "handler": function (response) {
@@ -58,11 +64,13 @@ const Payment = ({order_amount , order_id ,name , email , contact , currency , o
 
                 if(response?.error){
                     let orderBody = {order: {
-                        "paymentStatus": "Failed"
+                            "paymentStatus": "Failed",
+                            "paymentSignature":"",
+                            "paymentId":""
                     }}
-                     axios.post(`http://localhost:3000/v1/order/${orderGuid}` ,orderBody ,{ headers: { 'service_ref': '8xuf4dev' } } ).then(response =>{
+                     axios.post(`http://localhost:3000/v1/order/${orderGuid}/update/payment` ,orderBody ,{ headers: { 'service_ref': '8xuf4dev' } } ).then(response =>{
                         if(response.data.success === true){
-                            alert('order updated successfully');
+                            // alert('order updated successfully');
                         }
                      })
                 }
@@ -78,25 +86,34 @@ const Payment = ({order_amount , order_id ,name , email , contact , currency , o
         };
     }, []);
     function paymentResponseHandler(response) {
+        const resOrderId = response.razorpay_order_id;
         // Logging the payment details in the console
-        console.log("response for razor pay " , response);
+        // console.log("response for razor pay " , response);
         console.log('Payment ID:', response.razorpay_payment_id);
         console.log('Order ID:', response.razorpay_order_id);
         console.log('Signature:', response.razorpay_signature);
         
 
-        if(response?.razorpay_order_id){
-            let orderBody = {order: {
-                "paymentStatus": "Completed"
-            }}
-             axios.post(`http://localhost:3000/v1/order/${orderGuid}` ,orderBody ,{ headers: { 'service_ref': '8xuf4dev' } } ).then(response =>{
-                if(response.data.success === true){
+        
+    
+           if(resOrderId){
+                let orderBody = {order: {
+                    
+                    "paymentStatus": "Completed",
+                    "paymentSignature":response.razorpay_signature,
+                    "paymentId": response.razorpay_payment_id
+                }}
+                //'http://localhost:3000/v1/order/ord-b3e65b2f-0c94-48af-8208-55b49e08929c
+                axios.post(`http://localhost:3000/v1/order/${orderGuid}/update/payment` ,orderBody ,{ headers: { 'service_ref': '8xuf4dev' } } ).then(response =>{
+                    if(response.data.success === true){
+                        window.location.href = "http://localhost:3002/thankyou";
+                    
                     // alert('order updated successfully');
-                     window.location.href = "http://localhost:3001/thankyou";
 
                 }
              })
         }
+         
         // Here you can add your own logic, e.g., updating the UI or sending details to your server
         // updatePaymentStatus(response);
     }

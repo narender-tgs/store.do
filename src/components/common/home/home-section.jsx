@@ -14,22 +14,39 @@ import home_cycle from '../../../assets/images/home_cycle.png'
 import customBanner from '../../../assets/images/banners/superSale.jpg'
 // Import Keyframes
 import { fadeInUpShorter, fadeInLeftShorter, fadeInRightShorter } from '../../../utils/data/keyframes'
-
+import { useEffect } from 'react';
+import axios from 'axios';
+import { getStoreDetails } from '../../../store/cart/storeData/storeDetailsSlice';
+import { useSelector } from 'react-redux';
+import bannerSection from './banner-section';
 function HomeSection () {
+    const storeDetails = useSelector(getStoreDetails);
+    const topBanner = storeDetails?.storeDetails?.banners && storeDetails?.storeDetails?.banners.filter((bann)=>bann.bannerPosition?.includes('Top'));
+    
+    const bannerTopGuid = topBanner && topBanner[0]?.guid;
+    const bannerTopUrl =topBanner && topBanner[0]?.url;
+    // const allBanner = JSON.parse(localStorage.getItem('productBannerIds'));
+    // const bannerUrl =  allBanner && allBanner[0]?.url;
+    // const firstBanner = allBanner && allBanner[0]?.guid
     return (
         <section className="intro-section">
             <div className="container">
                 <OwlCarousel adClass="home-slider show-nav-hover dot-inside" options={ HomeSlider }>
+
+                    
                     <div className="home-slide home-slide-1 banner d-flex flex-wrap">
                         <Reveal keyframes={ fadeInLeftShorter } delay={ 200 } duration={ 1000 } className="col-lg-4 d-flex justify-content-center">
                             <div className="d-flex flex-column justify-content-center">
                                 <h4 className="text-light text-uppercase m-b-1">Extra</h4>
                                 <h2 className="text-uppercase m-b-1">20% off</h2>
-                                <h4 className="font-weight-bold text-uppercase heading-border m-b-3">BIKES</h4>
-                                <h3 className="font5 m-b-5">Summer Sale</h3>
+                                <h4 className="font-weight-bold text-uppercase heading-border m-b-3">Electonics</h4>
+                                <h3 className="font5 m-b-5">SuperSale Sale</h3>
 
                                 <div>
-                                    <ALink href="/pages/product/sale" className="btn btn-dark btn-lg">Shop all sale</ALink>
+                                    {/* <ALink href={`/product/Sale/${firstBanner}`} state={firstBanner} className="btn btn-dark btn-lg">Shop all sale</ALink> */}
+                                    {/* <ALink href={`/product/Sale/`} className="btn btn-dark btn-lg">Shop all sale</ALink> */}
+                    <ALink href={`/product/Sale/${bannerTopGuid}`} state={bannerTopGuid} className="btn btn-dark btn-lg">Shop all sale</ALink>
+
                                 </div>
                             </div>
                         </Reveal>
@@ -46,7 +63,8 @@ function HomeSection () {
                                             width="100%"
                                             height="auto"
                                         /> */}
-                                        <img src={customBanner} style={{width:'70%', height:'100%'}} alt='asdf'></img>
+                                        {/* <img src={bannerUrl} className='ml-5' style={{width:'70%', height:'100%'}} alt=''></img> */}
+                                        <img src={bannerTopUrl} className='ml-5' style={{width:'70%', height:'100%'}} alt=''></img>
 
                                     </figure>
                                     {/* <img src={slide1} alt="Description"></img> */}
@@ -65,6 +83,8 @@ function HomeSection () {
                         </div>
                     </div>
 
+
+
                     <div className="home-slide home-slide-2 banner d-flex flex-wrap">
                         <div className="col-lg-5 d-flex justify-content-center">
                             <Reveal keyframes={ fadeInRightShorter } delay={ 200 } duration={ 1000 } className="d-flex flex-column justify-content-center">
@@ -75,7 +95,9 @@ function HomeSection () {
                                     <h3 className="font5 p-b-4 m-b-5">Summer Sale</h3>
 
                                     <div>
-                                        <ALink href="/pages/product/Sale" className="btn btn-dark btn-lg">Shop all sale</ALink>
+                                        {/* <ALink href="/pages/product/Sale" className="btn btn-dark btn-lg">Shop all salesss</ALink> */}
+                    <ALink href={`/product/Sale/${bannerTopGuid}`} state={bannerTopGuid} className="btn btn-dark btn-lg">Shop all sale</ALink>
+
                                     </div>
                                 </>
                             </Reveal>
@@ -83,17 +105,17 @@ function HomeSection () {
 
                         <div className="col-lg-7 order-lg-first text-lg-right">
                             <Reveal keyframes={ fadeInRightShorter } delay={ 500 } duration={ 1000 }>
-                                <figure className="m-b-5">
+                                {/* <figure className="m-b-5">
                                     <LazyLoadImage
                                         alt="Home Slide"
-                                        src={slide2}
+                                        src={bannerTopUrl}
                                         threshold={ 500 }
                                         effect="black and white"
                                         width="100%"
                                         height="auto"
                                         className="ml-auto"
                                     />
-                                </figure>
+                                </figure> */}
                             </Reveal>
                         </div>
                     </div>

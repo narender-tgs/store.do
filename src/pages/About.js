@@ -6,10 +6,11 @@ import { Helmet } from 'react-helmet';
 import { countTo } from '../utils';
 import ALink from '../components/common/ALink';
 import OwlCarousel from '../components/features/owl-carousel';
-
+import { useSelector } from 'react-redux';
+import { getStoreDetails } from '../store/cart/storeData/storeDetailsSlice';
 
 const About = () => {
-    console.log("about us");
+    
   useEffect( () => {
     countTo();
 }, [] )

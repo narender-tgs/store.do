@@ -4,8 +4,14 @@ import ALink from "../ALink";
 // Import Utils
 import { mainMenu } from "../../../utils/data/menu";
 import { useLocation } from 'react-router-dom';
-
+import { useSelector } from "react-redux";
+import { getStoreDetails } from "../../../store/cart/storeData/storeDetailsSlice";
 function MainMenu ( { router } ) {
+   const storeDetails = useSelector(getStoreDetails);
+   
+   const fontType = storeDetails?.storeDetails?.fontType;
+   const fontSize = storeDetails?.storeDetails?.fontSize;
+   
     const location = useLocation();
     function isOtherPage () {
         return mainMenu.other.find( variation => variation.url === location.pathname );
@@ -14,18 +20,18 @@ function MainMenu ( { router } ) {
     return (
         <>
             <nav className="main-nav w-100">
-                <ul className="menu sf-js-enabled sf-arrows">
+                <ul className="menu sf-js-enabled sf-arrows" style={{fontFamily:fontType}}>
                     <li className={ location.pathname === '/' ? 'active' : '' }>
-                        <ALink href="/">Home</ALink>
+                        <ALink style={{fontSize:fontSize +'px'}} href="/">Home</ALink>
                     </li>
                     <li className={ location.pathname === '/product' ? 'active' : '' }>
-                        <ALink href="/product">Products</ALink>
+                        <ALink style={{fontSize:fontSize +'px'}} href="/product" state="renderAgain" >Products</ALink>
                     </li>
                     <li className={ location.pathname === '/about' ? 'active' : '' }>
-                        <ALink href="/about">About</ALink>
+                        <ALink style={{fontSize:fontSize +'px'}} href="/about">About</ALink>
                     </li>
                     <li className={ location.pathname === '/contact' ? 'active' : '' }>
-                        <ALink href="/contact_us">Contact Us</ALink>
+                        <ALink style={{fontSize:fontSize +'px'}} href="/contact_us">Contact Us</ALink>
                     </li>
                     {/* <li className={ pathname?.startsWith( '/shop' ) ? 'active' : '' }>
                         <ALink href="/shop" className="sf-with-ul">Shop</ALink>
