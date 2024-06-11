@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { useRouter } from "next/router";
+// import { connect } from "react-redux";
+// import { useRouter } from "next/router";
 
 // Import Actions
 import { actions as CartAction } from "../../../store/cart";
@@ -17,7 +17,7 @@ import cycle2 from "../../../assets/images/cycle2.jpg";
 import { getCartTotal } from "../../../utils";
 
 import { Link } from "react-router-dom";
-import { current } from "@reduxjs/toolkit";
+// import { current } from "@reduxjs/toolkit";
 
 function CartMenu(props) {
   const dispatch = useDispatch();

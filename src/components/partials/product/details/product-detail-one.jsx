@@ -1,5 +1,5 @@
 import SlideToggle from "react-slide-toggle";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { connect } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -40,7 +40,7 @@ const ProductDetailOne = () => {
   //   qty:1,
   //   short_description:"An ultra-soft cleansing brush that uses nylon bristles to gently sweep away impurities and stimulate lymphatic flow for a smooth, radiant complexion."
   // };
-  const router = useRouter();
+  // const router = useRouter();
   // const { product, adClass = "col-lg-7 col-md-6", prev, next, isNav = true, parent = ".product-single-default", isSticky = false } = productObj;
   const [attrs, setAttrs] = useState({ sizes: [], colors: [] });
   const [variant, setVariant] = useState(null);

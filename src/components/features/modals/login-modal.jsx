@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
 // Import Custom Component
 import ALink from "../../common/ALink";
@@ -23,7 +23,7 @@ export default function LoginModal() {
   const storeDatas = useSelector(getStoreDetails);
   const fontType = storeDatas?.storeDetails?.fontType;
   const fontSize = storeDatas?.storeDetails?.fontSize;
-  const router = useRouter();
+  // const router = useRouter();
   const [open, setOpen] = useState(false);
 
   function closeModal(e) {

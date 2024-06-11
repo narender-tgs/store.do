@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { connect } from "react-redux";
+// import { useRouter } from "next/router";
+// import { connect } from "react-redux";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";

@@ -10,7 +10,6 @@
     "axios": "^1.6.8",
     "google-map-react": "^2.1.10",
     "js-cookie": "^3.0.1",
-    "next": "^10.0.8",
     "prettier": "^3.3.1",
     "rc-tree": "^5.2.1",
     "react": "^18.2.0",

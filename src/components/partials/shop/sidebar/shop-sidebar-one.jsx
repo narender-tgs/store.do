@@ -2,7 +2,7 @@ import SlideToggle from "react-slide-toggle";
 import InputRange from "react-input-range";
 import StickyBox from "react-sticky-box";
 import Tree from "rc-tree";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { turedProductSlider } from "../../../../utils/data/slider";
@@ -39,7 +39,7 @@ function ShopSidebarOne(props) {
   const [allCategories, setAllCategories] = useState();
   const onChangePrice = props.onChangePrice;
   const onChangeCategory = props.onChangeCategory;
-  const router = useRouter();
+  // const router = useRouter();
   const { adClass } = props;
   const [productsState, setProductsState] = useState({
     data: null,
