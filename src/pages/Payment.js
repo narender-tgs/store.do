@@ -5,8 +5,8 @@ import {
   getStoreDetails,
   setStoreDetails,
 } from "../store/cart/storeData/storeDetailsSlice";
-import { setCartDetails } from "../store/cart/cartDetailsSlice";
-import { resolveHref } from "next/dist/next-server/lib/router/router";
+// import { setCartDetails } from "../store/cart/cartDetailsSlice";
+// import { resolveHref } from "next/dist/next-server/lib/router/router";
 
 const Payment = ({
   order_amount,
