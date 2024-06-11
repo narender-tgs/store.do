@@ -143,8 +143,10 @@
 
 // import LightBox from "react-image-lightbox";
 import { useState, useEffect } from "react";
-import { Magnifier } from "react-image-magnifiers";
+// import { Magnifier } from "react-image-magnifiers";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css'; // Import the CSS file for styling
 
 //Import Custom Component
 import OwlCarousel from "../../../features/owl-carousel";
@@ -269,7 +271,7 @@ export default function ProductMediaOne(props) {
               {product?.imageUrls !== null
                 ? product?.imageUrls.map((item, index) => (
                     <div className="product-item" key={`product-item-${index}`}>
-                      <Magnifier
+                      {/* <Magnifier
                         style={{ paddingTop: "100%", position: "relative" }}
                         imageSrc={product.imageUrls[index]}
                         imageAlt="product"
@@ -277,7 +279,15 @@ export default function ProductMediaOne(props) {
                         cursorStyleActive="crosshair"
                         dragToMove={false}
                         className="product-single-image"
-                      />
+                      /> */}
+                              <Zoom>
+                            <img
+                            src={product.imageUrls[index]}
+                            alt="product"
+                            style={{ paddingTop: "0%", position: "relative" ,width:'65%'}}
+                            className="product-single-image"
+                            />
+                            </Zoom>
                     </div>
                   ))
                 : ""}
@@ -303,7 +313,7 @@ export default function ProductMediaOne(props) {
                       <LazyLoadImage
                         src={product.imageUrls[index]}
                         alt="Thumbnail"
-                        width="80%"
+                        width="100%"
                         height="auto"
                         className="d-block"
                       />
