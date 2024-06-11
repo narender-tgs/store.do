@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import LightBox from "react-image-lightbox";
+// import LightBox from "react-image-lightbox";
 import { Magnifier } from "react-image-magnifiers";
 
 function ProductMediaFive(props) {
@@ -93,7 +93,7 @@ function ProductMediaFive(props) {
         </div>
       )}
 
-      {openLB && (
+      {/* {openLB && (
         <LightBox
           mainSrc={
             process.env.NEXT_PUBLIC_ASSET_URI +
@@ -116,7 +116,7 @@ function ProductMediaFive(props) {
           onMoveNextRequest={moveNextPhoto}
           onMovePrevRequest={movePrevPhoto}
         />
-      )}
+      )} */}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import LightBox from "react-image-lightbox";
+// import LightBox from "react-image-lightbox";
 import { Magnifier } from "react-image-magnifiers";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 

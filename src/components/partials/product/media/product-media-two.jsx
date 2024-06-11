@@ -1,4 +1,4 @@
-import LightBox from "react-image-lightbox";
+// import LightBox from "react-image-lightbox";
 import { useState, useEffect } from "react";
 
 // Import Custom Component

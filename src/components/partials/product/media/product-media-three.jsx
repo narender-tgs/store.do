@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import LightBox from "react-image-lightbox";
+// import LightBox from "react-image-lightbox";
 import { Magnifier } from "react-image-magnifiers";
 
 function GridThumbnail(props) {
