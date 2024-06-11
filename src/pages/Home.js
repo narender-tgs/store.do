@@ -15,42 +15,47 @@ import BannerSection from "../components/common/home/banner-section";
 // import Popularsection from "../home/popular-section";
 // import TrendyCollection from "../home/product-collection";
 
-const Home =() =>{
-    // const { data, loading, error } = useQuery( GET_HOME_DATA, { variables: { productsCount: 6 } } );
-    // const featured = data && data.specialProducts.featured;
-    // const topRated = data && data.specialProducts.topRated;
+const Home = () => {
+  // const { data, loading, error } = useQuery( GET_HOME_DATA, { variables: { productsCount: 6 } } );
+  // const featured = data && data.specialProducts.featured;
+  // const topRated = data && data.specialProducts.topRated;
 
-    // if ( error ) {
-    //     return <div>{ error.message }</div>
-    // }
+  // if ( error ) {
+  //     return <div>{ error.message }</div>
+  // }
 
-    return (
-        <>
-        <Helmet>
+  return (
+    <>
+      <Helmet>
         <title>Home Page - Store.Do</title>
-        <meta name="description" content="Welcome to our website where we offer the best products and services." />
-        <meta name="keywords" content="best products, top services, quality, home" />
+        <meta
+          name="description"
+          content="Welcome to our website where we offer the best products and services."
+        />
+        <meta
+          name="keywords"
+          content="best products, top services, quality, home"
+        />
       </Helmet>
-            <div style={{backgroundColor:''}} >
+      <div style={{ backgroundColor: "" }}>
+        <HomeSection />
+        <FeaturedCollection />
+        <TrendyCollection />
+        <BannerSection />
+      </div>
+      {/* <main className={ `home skeleton-body skel-shop-products ${loading ? '' : 'loaded'}` } > */}
 
-            <HomeSection />
-                <FeaturedCollection/>
-                <TrendyCollection/>
-                <BannerSection/>
-            </div>
-            {/* <main className={ `home skeleton-body skel-shop-products ${loading ? '' : 'loaded'}` } > */}
-               
-                {/* <Popularsection product={ topRated } /> */}
+      {/* <Popularsection product={ topRated } /> */}
 
-                {/* <BannerSection /> */}
+      {/* <BannerSection /> */}
 
-                {/* <TrendyCollection product={ featured } /> */}
-            {/* </main> */}
+      {/* <TrendyCollection product={ featured } /> */}
+      {/* </main> */}
 
-            {/* <NewsletterModal /> */}
-        </>
-    )
-}
+      {/* <NewsletterModal /> */}
+    </>
+  );
+};
 
 // export default withApollo( { ssr: typeof window === 'undefined' } )( Home );
-export default Home ;
+export default Home;

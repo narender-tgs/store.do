@@ -1,7 +1,10 @@
-
-@mixin mq($mq-breakpoint, $mq-width: 'min-width', $mq-breakpoints: $breakpoints) {
-  @if $mq-width == 'max' {
-    $mq-width: 'max-width';
+@mixin mq(
+  $mq-breakpoint,
+  $mq-width: "min-width",
+  $mq-breakpoints: $breakpoints
+) {
+  @if $mq-width == "max" {
+    $mq-width: "max-width";
     $mq-breakpoints: $max-breakpoints;
   }
 
@@ -10,7 +13,7 @@
     $mq-breakpoint: map-get($mq-breakpoints, $mq-breakpoint);
   }
 
-  @media(#{$mq-width}: #{$mq-breakpoint}) {
+  @media (#{$mq-width}: #{$mq-breakpoint}) {
     @content;
   }
 }

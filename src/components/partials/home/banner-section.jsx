@@ -33,7 +33,7 @@
 //                         </h2>
 
 //                         <ALink href="/shop" className="btn btn-dark btn-lg align-middle m-b-3 d-none d-sm-inline-block">
-//                             Shop All Sale              
+//                             Shop All Sale
 //                             </ALink>
 
 //                         <h3 className="heading-border">BIKES</h3>

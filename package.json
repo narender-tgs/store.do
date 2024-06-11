@@ -11,6 +11,7 @@
     "google-map-react": "^2.1.10",
     "js-cookie": "^3.0.1",
     "next": "^10.0.8",
+    "prettier": "^3.3.1",
     "rc-tree": "^5.2.1",
     "react": "^18.2.0",
     "react-awesome-reveal": "^3.8.1",
@@ -44,7 +45,8 @@
     "start": "SET PORT=3002 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [

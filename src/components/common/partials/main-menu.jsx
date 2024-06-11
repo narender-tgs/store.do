@@ -3,37 +3,57 @@ import ALink from "../ALink";
 
 // Import Utils
 import { mainMenu } from "../../../utils/data/menu";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getStoreDetails } from "../../../store/cart/storeData/storeDetailsSlice";
-function MainMenu ( { router } ) {
-   const storeDetails = useSelector(getStoreDetails);
-   
-   const fontType = storeDetails?.storeDetails?.fontType;
-   const fontSize = storeDetails?.storeDetails?.fontSize;
-   
-    const location = useLocation();
-    function isOtherPage () {
-        return mainMenu.other.find( variation => variation.url === location.pathname );
-    }
+function MainMenu({ router }) {
+  const storeDetails = useSelector(getStoreDetails);
 
-    return (
-        <>
-            <nav className="main-nav w-100">
-                <ul className="menu sf-js-enabled sf-arrows" style={{fontFamily:fontType}}>
-                    <li className={ location.pathname === '/' ? 'active' : '' }>
-                        <ALink style={{fontSize:fontSize +'px'}} href="/">Home</ALink>
-                    </li>
-                    <li className={ location.pathname === '/product' ? 'active' : '' }>
-                        <ALink style={{fontSize:fontSize +'px'}} href="/product" state="renderAgain" >Products</ALink>
-                    </li>
-                    <li className={ location.pathname === '/about' ? 'active' : '' }>
-                        <ALink style={{fontSize:fontSize +'px'}} href="/about">About</ALink>
-                    </li>
-                    <li className={ location.pathname === '/contact' ? 'active' : '' }>
-                        <ALink style={{fontSize:fontSize +'px'}} href="/contact_us">Contact Us</ALink>
-                    </li>
-                    {/* <li className={ pathname?.startsWith( '/shop' ) ? 'active' : '' }>
+  const fontType = storeDetails?.storeDetails?.fontType;
+  const fontSize = storeDetails?.storeDetails?.fontSize;
+
+  const location = useLocation();
+  function isOtherPage() {
+    return mainMenu.other.find(
+      (variation) => variation.url === location.pathname,
+    );
+  }
+
+  return (
+    <>
+      <nav className="main-nav w-100">
+        <ul
+          className="menu sf-js-enabled sf-arrows"
+          style={{ fontFamily: fontType }}
+        >
+          <li className={location.pathname === "/" ? "active" : ""}>
+            <ALink style={{ fontSize: fontSize + "px" }} href="/">
+              Home
+            </ALink>
+          </li>
+          <li className={location.pathname === "/product" ? "active" : ""}>
+            <ALink
+              style={{ fontSize: fontSize + "px" }}
+              href="/product"
+              state="renderAgain"
+            >
+              Products
+            </ALink>
+          </li>
+          <li className={location.pathname === "/about" ? "active" : ""}>
+            <ALink style={{ fontSize: fontSize + "px" }} href="/about">
+              About
+            </ALink>
+          </li>
+          <li className={location.pathname === "/contact" ? "active" : ""}>
+            <ALink style={{ fontSize: fontSize + "px" }} href="/contact_us">
+              Contact Us
+            </ALink>
+          </li>
+          {/* <li className={location.pathname === "/login" ? "active" : ""}>
+          </li> */}
+          
+          {/* <li className={ pathname?.startsWith( '/shop' ) ? 'active' : '' }>
                         <ALink href="/shop" className="sf-with-ul">Shop</ALink>
                         <div className="megamenu megamenu-fixed-width megamenu-3cols">
                             <div className="row">
@@ -137,7 +157,7 @@ function MainMenu ( { router } ) {
                     <li className={ pathname === '/pages/blog' ? 'active' : '' }>
                         <ALink href="/pages/blog">Blog</ALink>
                     </li> */}
-                    {/* <li className={ isOtherPage() ? 'active' : '' }>
+          {/* <li className={ isOtherPage() ? 'active' : '' }>
                         <ALink href="#" className="sf-with-ul">Pages</ALink>
                         <ul>
                             {
@@ -149,13 +169,13 @@ function MainMenu ( { router } ) {
                             }
                         </ul>
                     </li> */}
-                    {/* <li>
+          {/* <li>
                         <a href="https://1.envato.market/DdLk5" target="_blank">Buy Porto!</a>
                     </li> */}
-                </ul>
-            </nav>
-        </>
-    );
+        </ul>
+      </nav>
+    </>
+  );
 }
 
-export default MainMenu ;
+export default MainMenu;

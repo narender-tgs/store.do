@@ -11,152 +11,152 @@
 
 // # Variables
 @include set-default(
-	(
-		banner: (
-			layer: (
-				top: 7%,
-				left: 6%,
-				right: 6%,
-				bottom: 5%
-			)
-		)
-	)
+  (
+    banner: (
+      layer: (
+        top: 7%,
+        left: 6%,
+        right: 6%,
+        bottom: 5%,
+      ),
+    ),
+  )
 );
 
 // 1. Banner
 
 // 1.1) Banner Base
 .banner {
-	position: relative;
-	font-size: 1.6rem;
+  position: relative;
+  font-size: 1.6rem;
 
-	figure {
-		margin: 0;
-	}
+  figure {
+    margin: 0;
+  }
 
-	img {
-		width: 100%;
-		object-fit: cover;
-	}
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
 
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		line-height: 1;
-	}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1;
+  }
 
-	.container:not(.banner-content)  {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 3;
-	}
+  .container:not(.banner-content) {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+  }
 }
 
 .ibanner {
-	font-size: 10px;
+  font-size: 10px;
 }
 
 aside .banner {
-	font-size: 1.6rem;
+  font-size: 1.6rem;
 }
 
 .banner-layer {
-	position: absolute;
-	@include css(left, banner, layer, left);
-	@include css(right, banner, layer, right);
-	z-index: 3;
+  position: absolute;
+  @include css(left, banner, layer, left);
+  @include css(right, banner, layer, right);
+  z-index: 3;
 }
 
 .banner-content {
-	position: relative;
+  position: relative;
 }
 
 // 1.2) Banner Layer Positions
 .banner-layer-top {
-	@include css(top, banner, layer, top);
+  @include css(top, banner, layer, top);
 }
 
 .banner-layer-bottom {
-	@include css(bottom, banner, layer, bottom);
+  @include css(bottom, banner, layer, bottom);
 }
 
 .banner-layer-space {
-	left: 0;
-	right: 0;
-	padding: 1em 1.5625em;
+  left: 0;
+  right: 0;
+  padding: 1em 1.5625em;
 }
 
 .banner-layer-left {
-	right: auto;
+  right: auto;
 }
 
 .banner-layer-right {
-	left: auto;
+  left: auto;
 }
 
 .banner-layer-center {
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .banner-layer-middle {
-	top: 50%;
-	transform: translateY(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .bg-img {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .banner-h-100 {
-    height: 100vh;
+  height: 100vh;
 }
 
 // 3. Responsive
 
 @include mq(xl, max) {
-	.banner {
-		font-size: 1.4rem;
-	}
+  .banner {
+    font-size: 1.4rem;
+  }
 
-	.ibanner {
-		font-size: 1rem;
-	}
+  .ibanner {
+    font-size: 1rem;
+  }
 }
 
 @include mq(md, max) {
-	.banner-md-vw-small {
-		font-size: 1.8vw;
-	}
+  .banner-md-vw-small {
+    font-size: 1.8vw;
+  }
 
-	.banner-md-vw {
-		font-size: 2.3vw;
-	}
+  .banner-md-vw {
+    font-size: 2.3vw;
+  }
 
-	.banner-md-vw-large {
-		font-size: 3vw;
-	}
+  .banner-md-vw-large {
+    font-size: 3vw;
+  }
 }
 
 @include mq(sm, max) {
-	.banner-md-vw-small {
-		font-size: 2.3vw;
-	}
+  .banner-md-vw-small {
+    font-size: 2.3vw;
+  }
 
-	.banner-sm-vw {
-		font-size: 1.2rem;
-	}
+  .banner-sm-vw {
+    font-size: 1.2rem;
+  }
 
-	.banner-sm-vw-large {
-		font-size: 4vw;
-	}
+  .banner-sm-vw-large {
+    font-size: 4vw;
+  }
 }

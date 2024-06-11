@@ -1,9 +1,15 @@
 // Button mixins - variants
-@mixin button-variant($color, $background, $border, $color-hover: $color,
-  $hover-background: lighten($background, 8%), $hover-border: lighten($border, 8%),
-  $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
-
-  border-color:  $border;
+@mixin button-variant(
+  $color,
+  $background,
+  $border,
+  $color-hover: $color,
+  $hover-background: lighten($background, 8%),
+  $hover-border: lighten($border, 8%),
+  $active-background: darken($background, 10%),
+  $active-border: darken($border, 12.5%)
+) {
+  border-color: $border;
   background-color: $background;
   color: $color;
   box-shadow: none;
@@ -11,7 +17,7 @@
   &:hover,
   &:focus,
   &.focus {
-    border-color:  $hover-border;
+    border-color: $hover-border;
     background-color: $hover-background;
     color: $color-hover;
     box-shadow: none;
@@ -33,7 +39,13 @@
   }
 }
 
-@mixin button-outline-variant($color, $color-hover: $color, $active-background: $color, $border-color: $color, $active-border: $color) {
+@mixin button-outline-variant(
+  $color,
+  $color-hover: $color,
+  $active-background: $color,
+  $border-color: $color,
+  $active-border: $color
+) {
   border-color: $border-color;
   background-color: transparent;
   background-image: none;

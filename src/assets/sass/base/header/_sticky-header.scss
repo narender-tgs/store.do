@@ -1,207 +1,207 @@
 // Sticky Header
 
 @include set-default(
-	(
-		header: (
-			logo: (
-				sticky: (
-					max-width: 89px,
-					transform: false,
-					transform-origin: false,
-				)
-			),
-			middle: (
-				sticky: (
-					padding-top: false,
-					padding-bottom: false,
-					height: 60px
-				)
-			)
-		)
-	)
+  (
+    header: (
+      logo: (
+        sticky: (
+          max-width: 89px,
+          transform: false,
+          transform-origin: false,
+        ),
+      ),
+      middle: (
+        sticky: (
+          padding-top: false,
+          padding-bottom: false,
+          height: 60px,
+        ),
+      ),
+    ),
+  )
 );
 
 .sticky-header {
-	transition:  left .25s;
-	
-	&.fixed {
-		display: flex;
-		position: fixed;
-		right: 0;
-		top: 0;
-		left: 0;
-		width: 100%;
-		padding: 0;
-		background: #fff;
-		box-shadow: 0 1px 0 0 rgba(0,0,0,0.06);
-		z-index: 1000;
-		-webkit-animation-duration: .4s;
-		animation-duration: .4s;
-		animation-name: fixedHeader;
+  transition: left 0.25s;
 
-		.logo {
-			@include css( max-width, header, logo, sticky, max-width );
+  &.fixed {
+    display: flex;
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    background: #fff;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.06);
+    z-index: 1000;
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    animation-name: fixedHeader;
 
-			img {
-				@include css( transform, header, logo, sticky, transform );
-				@include css( transform-origin, header, logo, sticky, transform-origin );
-			}
-		}
-	}
+    .logo {
+      @include css(max-width, header, logo, sticky, max-width);
 
-	&.header-middle.fixed {
-		@include css( height, header, middle, sticky, height );
-		@include css( padding-top, header, middle, sticky, padding-top );
-		@include css( padding-bottom, header, middle, sticky, padding-bottom );
-	}
+      img {
+        @include css(transform, header, logo, sticky, transform);
+        @include css(transform-origin, header, logo, sticky, transform-origin);
+      }
+    }
+  }
 
-	&.deprecated-sticky {
-		&:not(.fixed) {
-			.logo,
-			.cart-dropdown {
-				display: none;
-			}
-		}
+  &.header-middle.fixed {
+    @include css(height, header, middle, sticky, height);
+    @include css(padding-top, header, middle, sticky, padding-top);
+    @include css(padding-bottom, header, middle, sticky, padding-bottom);
+  }
 
-		&.fixed .main-nav {
-			width: auto;
-		}
-	}
+  &.deprecated-sticky {
+    &:not(.fixed) {
+      .logo,
+      .cart-dropdown {
+        display: none;
+      }
+    }
 
-	.main &:not(.fixed) {
-		> .container {
-			padding-left: 0;
-			padding-right: 0;
-		}
-	}
+    &.fixed .main-nav {
+      width: auto;
+    }
+  }
 
-	.main &.fixed {
-		min-height: 38px;
-		padding-top: 15px;
-		padding-bottom: 15px;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
-		overflow: hidden;
-		z-index: 997;
+  .main &:not(.fixed) {
+    > .container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 
-		.container {
-			margin: 0 auto;
-		}
-	}
+  .main &.fixed {
+    min-height: 38px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 997;
 
-	.main &.toolbox.fixed {
-		padding: 1.5rem;
-		padding-right: 1.5rem !important;
-		background-color: #f4f4f4;
-		margin-bottom: 0!important;
+    .container {
+      margin: 0 auto;
+    }
+  }
 
-		.toolbox-left {
-			margin-right: 3rem;
-		}
-	}
+  .main &.toolbox.fixed {
+    padding: 1.5rem;
+    padding-right: 1.5rem !important;
+    background-color: #f4f4f4;
+    margin-bottom: 0 !important;
 
-	.sidebar-opened &.fixed:not(.sticky-header),
-	.mmenu-active &.fixed  {
-		left: 260px;
-		transition: left .25s;
-	}
+    .toolbox-left {
+      margin-right: 3rem;
+    }
+  }
+
+  .sidebar-opened &.fixed:not(.sticky-header),
+  .mmenu-active &.fixed {
+    left: 260px;
+    transition: left 0.25s;
+  }
 }
 
 @keyframes fixedHeader {
-	0% {
-	  margin-top: -60px;
-	}
-  
-	100% {
-	  margin-top: 0;
-	}
-}  
+  0% {
+    margin-top: -60px;
+  }
+
+  100% {
+    margin-top: 0;
+  }
+}
 
 .sticky-cart {
-	.tooltiptext {
-		bottom: -55px;
+  .tooltiptext {
+    bottom: -55px;
 
-		&::after {
-			top: -26%;
-			transform: rotate(-180deg);
-		}
-	}
+    &::after {
+      top: -26%;
+      transform: rotate(-180deg);
+    }
+  }
 }
 
 .sticky-navbar {
-	display: flex;
-	position: fixed;
-	left: 0;
-	right: 0;
-	top: 100%;
-	width: 100%;
-	background-color: #fff;
-	border-top: 1px solid #e7e7e7;
-	opacity: 0;
-	visibility: hidden;
-	transition: all .25s;
-	z-index: 997;
-	
-	.sidebar-opened &,
-	.mmenu-active & {
-		left: 260px;
-		transition: all .25s;
-	}
+  display: flex;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-top: 1px solid #e7e7e7;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s;
+  z-index: 997;
 
-	&.fixed {
-		opacity: 1;
-		visibility: visible;
-		transform: translateY(-100%);
-	}
+  .sidebar-opened &,
+  .mmenu-active & {
+    left: 260px;
+    transition: all 0.25s;
+  }
 
-	.sticky-info {
-		flex: 0 0 20%;
-		max-width: 20%;
-		padding: 1rem 0;
+  &.fixed {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-100%);
+  }
 
-		&:not(:last-child) {
-			border-right: 1px solid #e7e7e7;
-		}
+  .sticky-info {
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding: 1rem 0;
 
-		a {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			color: #222529;
-			font-family: $second-font-family;
-			font-size: 9px;
-			font-weight: 600;
-			text-transform: uppercase;
-		}
+    &:not(:last-child) {
+      border-right: 1px solid #e7e7e7;
+    }
 
-		i {
-			font-size: 27px;
-			font-weight: 400;
+    a {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #222529;
+      font-family: $second-font-family;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
 
-			span {
-				font-style: normal;
-				right: -7px;
-				top: 2px;
-			}
-		}
-	}
+    i {
+      font-size: 27px;
+      font-weight: 400;
+
+      span {
+        font-style: normal;
+        right: -7px;
+        top: 2px;
+      }
+    }
+  }
 }
 
 @include mq(sm) {
-	.sticky-navbar {
-		display: none;
-	}
+  .sticky-navbar {
+    display: none;
+  }
 }
 
 @include mq(lg, max) {
-	.sticky-header {
-		.sidebar-opened &.fixed {
-			left: 260px;
-			transition: left .25s;
-		}
-	}
+  .sticky-header {
+    .sidebar-opened &.fixed {
+      left: 260px;
+      transition: left 0.25s;
+    }
+  }
 
-	.main .sticky-header.toolbox.fixed .toolbox-left {
-		margin-right: 0;
-	}
+  .main .sticky-header.toolbox.fixed .toolbox-left {
+    margin-right: 0;
+  }
 }

@@ -1,22 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const cartDetailsSlice = createSlice({
-  name:"cartDetails",
+  name: "cartDetails",
   initialState: {
     // Your initial state here
-   cartData:''
+    cartData: "",
   },
 
   reducers: {
     setCartDetails: (state, action) => {
       // state.user = action.payload;
-     
 
       // Update the state with data from the login response
       state.cartData = action.payload;
-     
     },
-    
   },
 });
 

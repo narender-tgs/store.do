@@ -1,149 +1,174 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
 
 import ALink from "../../components/common/ALink";
-import Qty from '../../components/partials/product/qty';
+import Qty from "../../components/partials/product/qty";
 import { actions as CartAction } from "../../store/cart";
-import { getCartTotal } from '../../utils';
-import { useSelector , useDispatch } from 'react-redux';
-import { getCartDetails, setCartDetails , removeFromCart } from '../../store/cart/cartDetailsSlice';
+import { getCartTotal } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getCartDetails,
+  setCartDetails,
+  removeFromCart,
+} from "../../store/cart/cartDetailsSlice";
 
-function Cart ( props ) {
-     const dispatch = useDispatch();
-    const cartData = useSelector(getCartDetails)
-    const [ cartList, setCartList ] = useState( [] );
+function Cart(props) {
+  const dispatch = useDispatch();
+  const cartData = useSelector(getCartDetails);
+  const [cartList, setCartList] = useState([]);
 
-    useEffect( () => {
-        setCartList( cartData?.cartData?.data );
-    }, [ cartData ] )
-    function removeFromCart ( item, index ) {
-    
-        // Create a new array excluding the item at the specified index
-        const updatedCartList = cartList.filter((_, i) => i !== index);
-        // Update the state with the new array
-        
-        setCartList(updatedCartList);
-        dispatch(setCartDetails({data:updatedCartList}));
+  useEffect(() => {
+    setCartList(cartData?.cartData?.data);
+  }, [cartData]);
+  function removeFromCart(item, index) {
+    // Create a new array excluding the item at the specified index
+    const updatedCartList = cartList.filter((_, i) => i !== index);
+    // Update the state with the new array
 
-        // props.removeFromCart( item );
-        
-    }
- 
+    setCartList(updatedCartList);
+    dispatch(setCartDetails({ data: updatedCartList }));
 
-    function onChangeQty ( id, qty  ) {
-        // let newPrice = prices * qty;
-        setCartList( cartList.map( ( item, index ) => {
-            return index === id ? { ...item, qty: qty  } : item
-        } ) );
-    }
-    
-    // function updateCart () {
-    //     dispatch(setCartDetails({data:cartList}))
-    //     props.updateCart( cartList );
-    // }
-    const onClickProceedToCheckout=()=>{
-        dispatch(setCartDetails({data:cartList}))
-    }
+    // props.removeFromCart( item );
+  }
 
-    return (
-        <main className="main">
-            <div className="container">
-                <ul className="checkout-progress-bar d-flex justify-content-center flex-wrap">
-                    <li className="active">
-                        <ALink href="/pages/cart">Shopping Cart</ALink>
-                    </li>
-                    <li>
-                        <ALink >Checkout</ALink>
-                    </li>
-                    <li className="disabled">
-                        <ALink href="#">Order Complete</ALink>
-                    </li>
-                </ul>
+  function onChangeQty(id, qty) {
+    // let newPrice = prices * qty;
+    setCartList(
+      cartList.map((item, index) => {
+        return index === id ? { ...item, qty: qty } : item;
+      }),
+    );
+  }
 
-                {!cartList ||
-                    (cartList.length === 0)?
-                        <div className="cart-table-container">
-                            <div className="table table-cart">
-                                <div className="cart-empty-page text-center">
-                                    <i className="icon-bag-2"></i>
-                                    <p>No products added to the cart</p>
-                                    <ALink href="/shop" className="btn btn-dark btn-add-cart product-type-simple btn-shop font1">
-                                        return to shop</ALink>
-                                </div>
-                            </div>
-                        </div>
-                        :
-                        <div className="row">
-                            <div className="col-lg-8">
-                                <div className="cart-table-container">
-                                    <table className="table table-cart">
-                                        <thead>
-                                            <tr>
-                                                <th className="thumbnail-col"></th>
-                                                <th className="product-col">Product</th>
-                                                <th className="product-col">Specifications</th>
-                                                <th className="price-col">Price</th>
-                                                <th className="qty-col">Quantity</th>
-                                                <th className="text-right">Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {cartList &&
-                                                cartList.map( ( item, index ) => (
-                                                    <tr key={ "cart-item" + index } className="product-row">
-                                                        <td>
-                                                            <figure className="product-image-container">
-                                                                <ALink>
-                                                                    <img 
-                                        // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROGswtbi-CqtO_5ecgfl_aVaCERXPu1ESJjA&s"
-                                        src={item?.imageUrls?.length >0 && item?.imageUrls[0]}
+  // function updateCart () {
+  //     dispatch(setCartDetails({data:cartList}))
+  //     props.updateCart( cartList );
+  // }
+  const onClickProceedToCheckout = () => {
+    dispatch(setCartDetails({ data: cartList }));
+  };
 
-                                                                    alt="product" />
-                                                                </ALink>
+  return (
+    <main className="main">
+      <div className="container">
+        <ul className="checkout-progress-bar d-flex justify-content-center flex-wrap">
+          <li className="active">
+            <ALink href="/pages/cart">Shopping Cart</ALink>
+          </li>
+          <li>
+            <ALink>Checkout</ALink>
+          </li>
+          <li className="disabled">
+            <ALink href="#">Order Complete</ALink>
+          </li>
+        </ul>
 
-                                                                <a href="#" className="btn-remove icon-cancel" title="Remove Product" onClick={ ( e ) => { e.preventDefault(); removeFromCart( item, index ); } }></a>
-                                                            </figure>
-                                                        </td>
+        {!cartList || cartList.length === 0 ? (
+          <div className="cart-table-container">
+            <div className="table table-cart">
+              <div className="cart-empty-page text-center">
+                <i className="icon-bag-2"></i>
+                <p>No products added to the cart</p>
+                <ALink
+                  href="/shop"
+                  className="btn btn-dark btn-add-cart product-type-simple btn-shop font1"
+                >
+                  return to shop
+                </ALink>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="row">
+            <div className="col-lg-8">
+              <div className="cart-table-container">
+                <table className="table table-cart">
+                  <thead>
+                    <tr>
+                      <th className="thumbnail-col"></th>
+                      <th className="product-col">Product</th>
+                      <th className="product-col">Specifications</th>
+                      <th className="price-col">Price</th>
+                      <th className="qty-col">Quantity</th>
+                      <th className="text-right">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cartList &&
+                      cartList.map((item, index) => (
+                        <tr key={"cart-item" + index} className="product-row">
+                          <td>
+                            <figure className="product-image-container">
+                              <ALink>
+                                <img
+                                  // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROGswtbi-CqtO_5ecgfl_aVaCERXPu1ESJjA&s"
+                                  src={
+                                    item?.imageUrls?.length > 0 &&
+                                    item?.imageUrls[0]
+                                  }
+                                  alt="product"
+                                />
+                              </ALink>
 
-                                                        <td className="product-col">
-                                                            <h5 className="product-title">
-                                                                <ALink href={ `/product/default/${item.slug}` }>{ item.name }</ALink>
-                                                            </h5>
-                                                        </td>
-                                                        <td className="">
-                                                            <h5 className="product-title">
-                                                                {item.variants && item.variants.map((vars , index)=>(
-                                                                    <li key={index}>
-                                                                       <span>{vars.option_name} : {vars.option_value}</span> 
-                                                                    </li>
-                                                                ))}
-                                                            </h5>
-                                                        </td>
+                              <a
+                                href="#"
+                                className="btn-remove icon-cancel"
+                                title="Remove Product"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  removeFromCart(item, index);
+                                }}
+                              ></a>
+                            </figure>
+                          </td>
 
+                          <td className="product-col">
+                            <h5 className="product-title">
+                              <ALink href={`/product/default/${item.slug}`}>
+                                {item.name}
+                              </ALink>
+                            </h5>
+                          </td>
+                          <td className="">
+                            <h5 className="product-title">
+                              {item.variants &&
+                                item.variants.map((vars, index) => (
+                                  <li key={index}>
+                                    <span>
+                                      {vars.option_name} : {vars.option_value}
+                                    </span>
+                                  </li>
+                                ))}
+                            </h5>
+                          </td>
 
-                                                        <td>
-                                                        &#x20B9;{ item.price.toFixed( 2 ) }
-                                                        </td>
+                          <td>&#x20B9;{item.price.toFixed(2)}</td>
 
-                                                        <td> 
-                                                            <Qty value={ item.qty } max={ item.stock } onChangeQty={ qty => onChangeQty( index, qty ,qty*item.price ) } />
-                                                        </td>
-                                                        
-                                                        <td className="text-right"><span className="subtotal-price">&#x20B9;{ ( item.price * (item.qty || 1)) }</span></td>
-                                                    </tr>
-                                                ) )
-                                            }
-                                        </tbody>
+                          <td>
+                            <Qty
+                              value={item.qty}
+                              max={item.stock}
+                              onChangeQty={(qty) =>
+                                onChangeQty(index, qty, qty * item.price)
+                              }
+                            />
+                          </td>
 
+                          <td className="text-right">
+                            <span className="subtotal-price">
+                              &#x20B9;{item.price * (item.qty || 1)}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-                                       
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-4">
-                                <div className="cart-summary">
-                                    {/* <h3>CART TOTALS</h3>
+            <div className="col-lg-4">
+              <div className="cart-summary">
+                {/* <h3>CART TOTALS</h3>
 
                                     <table className="table table-totals">
                                         <tbody>
@@ -220,19 +245,27 @@ function Cart ( props ) {
                                         </tfoot>
                                     </table> */}
 
-                                    <div className="checkout-methods">
-                                        <ALink href="/pages/checkout" onClick={()=>{onClickProceedToCheckout()}} className="btn btn-block btn-dark">Proceed to Cart
-                                        <i className="fa fa-arrow-right"></i></ALink>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                }
+                <div className="checkout-methods">
+                  <ALink
+                    href="/pages/checkout"
+                    onClick={() => {
+                      onClickProceedToCheckout();
+                    }}
+                    className="btn btn-block btn-dark"
+                  >
+                    Proceed to Cart
+                    <i className="fa fa-arrow-right"></i>
+                  </ALink>
+                </div>
+              </div>
             </div>
+          </div>
+        )}
+      </div>
 
-            <div className="mb-6"></div>
-        </main>
-    )
+      <div className="mb-6"></div>
+    </main>
+  );
 }
 
 // const mapStateToProps = ( state ) => {
@@ -241,4 +274,4 @@ function Cart ( props ) {
 //     }
 // }
 
-export default Cart ;
+export default Cart;

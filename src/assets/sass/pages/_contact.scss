@@ -1,103 +1,102 @@
 #map {
-	height: 500px;
-	margin-bottom: 5rem;
-	background-color: #e5e3df;
+  height: 500px;
+  margin-bottom: 5rem;
+  background-color: #e5e3df;
 
-	address {
-		margin: 0;
-		padding: .625rem .875rem;
-		font-size: 1.3rem;
-		font-style: normal;
-		font-weight: 400;
-		line-height: 1.5;
-	}
+  address {
+    margin: 0;
+    padding: 0.625rem 0.875rem;
+    font-size: 1.3rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+  }
 
-	a {
-		display: inline-block;
-		margin-top: .8rem;
-		font-size: 1.2rem;
-		text-transform: uppercase;
-	}
+  a {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
 }
 
 .contact-us-container {
-	padding-bottom: 6px;
-	
-	h2 {
-		font-size: 2.4rem;
-		letter-spacing: -.0425em;	
-	}
+  padding-bottom: 6px;
 
-	p {
-		letter-spacing: -.025em;
-		line-height: 2;
-	}
-	
-	label {
-		color: $body-text;
-		font-size: 1.4rem;
-		font-weight: 500;
-	}
+  h2 {
+    font-size: 2.4rem;
+    letter-spacing: -0.0425em;
+  }
 
-	input {
-		border-color: #ebebeb;
-	}
+  p {
+    letter-spacing: -0.025em;
+    line-height: 2;
+  }
 
-	.form-group {
-		margin-bottom: 1.8rem;
-	}
+  label {
+    color: $body-text;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
 
-	.form-footer {
-		margin-top: -2px;
-	}
+  input {
+    border-color: #ebebeb;
+  }
 
-	.btn {
-		font-family: $font-family;
+  .form-group {
+    margin-bottom: 1.8rem;
+  }
 
-	}
+  .form-footer {
+    margin-top: -2px;
+  }
 
-	.contact-info {
-		border-bottom: 1px solid #eee;
-	}
+  .btn {
+    font-family: $font-family;
+  }
 
-	.required {
-		color: #ff7272;
-	}
+  .contact-info {
+    border-bottom: 1px solid #eee;
+  }
+
+  .required {
+    color: #ff7272;
+  }
 }
 
 .contact-info {
-	padding-top: .5rem;
+  padding-top: 0.5rem;
 
-	> div {
-		margin-bottom: 2.9rem;
-	}
+  > div {
+    margin-bottom: 2.9rem;
+  }
 
-	.col-12 {
-		margin-bottom: 4.7rem;
-	}
+  .col-12 {
+    margin-bottom: 4.7rem;
+  }
 
-	.feature-box {
-		.sicon-location-pin {
-			margin-top: -2px;
-		}
-		
-		i {
-			margin-bottom: 1.8rem;
-			font-size: 4.5rem;
-		}
+  .feature-box {
+    .sicon-location-pin {
+      margin-top: -2px;
+    }
 
-		h3 {
-		    margin-bottom: .4rem;
-			font-size: 2rem;
-			letter-spacing: -.025em;
-			text-transform: none;
-			font-weight: 700;
-		}
+    i {
+      margin-bottom: 1.8rem;
+      font-size: 4.5rem;
+    }
 
-		h5 {
-			color: $body-text;
-			font-weight: 400;
-			letter-spacing: -.025em;
-		}
-	}
+    h3 {
+      margin-bottom: 0.4rem;
+      font-size: 2rem;
+      letter-spacing: -0.025em;
+      text-transform: none;
+      font-weight: 700;
+    }
+
+    h5 {
+      color: $body-text;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+    }
+  }
 }
