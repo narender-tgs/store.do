@@ -137,7 +137,7 @@ export default function ProductMediaFour(props) {
         )}
       </StickyBox>
 
-      {openLB && (
+      {/* {openLB && (
         <LightBox
           mainSrc={
             process.env.NEXT_PUBLIC_ASSET_URI +
@@ -160,7 +160,7 @@ export default function ProductMediaFour(props) {
           onMoveNextRequest={moveNextPhoto}
           onMovePrevRequest={movePrevPhoto}
         />
-      )}
+      )} */}
     </div>
   );
 }

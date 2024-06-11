@@ -141,7 +141,7 @@
 //     )
 // }
 
-import LightBox from "react-image-lightbox";
+// import LightBox from "react-image-lightbox";
 import { useState, useEffect } from "react";
 import { Magnifier } from "react-image-magnifiers";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -313,7 +313,7 @@ export default function ProductMediaOne(props) {
               : ""}
           </OwlCarousel>
 
-          {product?.imageUrls !== null
+          {/* {product?.imageUrls !== null
             ? openLB && (
                 <LightBox
                   mainSrc={product.imageUrls[0]}
@@ -324,7 +324,7 @@ export default function ProductMediaOne(props) {
                   onMovePrevRequest={movePrevPhoto}
                 />
               )
-            : ""}
+            : ""} */}
         </>
       }
     </div>

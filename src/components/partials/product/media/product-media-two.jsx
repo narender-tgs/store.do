@@ -115,7 +115,7 @@ export default function ProductMediaOne(props) {
               <i className="icon-plus"></i>
             </span>
 
-            {openLB && (
+            {/* {openLB && (
               <LightBox
                 mainSrc={
                   process.env.NEXT_PUBLIC_ASSET_URI +
@@ -138,7 +138,7 @@ export default function ProductMediaOne(props) {
                 onMoveNextRequest={moveNextPhoto}
                 onMovePrevRequest={movePrevPhoto}
               />
-            )}
+            )} */}
           </div>
         </>
       )}

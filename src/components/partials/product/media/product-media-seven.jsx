@@ -157,7 +157,7 @@ export default function ProductMediaSeven(props) {
               ))}
           </div>
 
-          {openLB && (
+          {/* {openLB && (
             <LightBox
               mainSrc={
                 process.env.NEXT_PUBLIC_ASSET_URI +
@@ -180,7 +180,7 @@ export default function ProductMediaSeven(props) {
               onMoveNextRequest={moveNextPhoto}
               onMovePrevRequest={movePrevPhoto}
             />
-          )}
+          )} */}
         </>
       )}
     </div>

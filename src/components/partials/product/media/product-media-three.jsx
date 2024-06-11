@@ -95,7 +95,7 @@ function GridThumbnail(props) {
           </>
         )}
 
-        {openLB && (
+        {/* {openLB && (
           <LightBox
             mainSrc={
               process.env.NEXT_PUBLIC_ASSET_URI +
@@ -118,7 +118,7 @@ function GridThumbnail(props) {
             onMoveNextRequest={moveNextPhoto}
             onMovePrevRequest={movePrevPhoto}
           />
-        )}
+        )} */}
       </div>
     </>
   );

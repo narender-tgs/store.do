@@ -1,4 +1,4 @@
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
 import { useEffect } from "react";
 import SlideToggle from "react-slide-toggle";
 import ALink from "../../components/common/ALink";

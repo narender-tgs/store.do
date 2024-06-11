@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "rc-tree/assets/index.css";
 import "react-input-range/lib/css/index.css";
-import "react-image-lightbox/style.css";
+// import "react-image-lightbox/style.css";
 import "react-toastify/dist/ReactToastify.min.css";
 
 // Import Custom Coponent
