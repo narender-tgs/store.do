@@ -23,6 +23,14 @@ export default function Header({ adClass = "" }) {
     document.querySelector("body").classList.toggle("mmenu-active");
     e.currentTarget.classList.toggle("active");
   }
+  function handlewishListAuth(){
+    if(localStorage.getItem('loginToken') && localStorage.getItem('loginToken') !== 'undefined'){
+      window.location.href = window.location.origin + '/pages/wishlist';
+    }else{
+      
+      window.location.href = window.location.origin + '/pages/login';
+    }
+  }
 
   return (
     <header className={`header ${adClass}`}>
@@ -51,8 +59,8 @@ export default function Header({ adClass = "" }) {
                         </div> */}
           </div>
 
-          {/* <div className="header-right d-none d-lg-flex">
-                        <p className="top-message text-uppercase mr-2">Default Welcome Msg</p>
+          <div className="header-right d-none d-lg-flex">
+                        {/* <p className="top-message text-uppercase mr-2">Default Welcome Msg</p> */}
                         <div className="header-dropdown dropdown-expanded">
                             <a className="#">Links</a>
                             <div className="header-menu">
@@ -60,13 +68,13 @@ export default function Header({ adClass = "" }) {
                                     <li><ALink href="/pages/account">My Account</ALink></li>
                                     <li><ALink href="/pages/cart">Cart</ALink></li>
                                     <li><ALink href="/pages/wishlist">My Wishlist</ALink></li>
-                                    <li><ALink href="/pages/blog">Blog</ALink></li>
+                                    {/* <li><ALink href="/pages/blog">Blog</ALink></li> */}
 
                                      <LoginModal /> 
                                 </ul>
                             </div>
                         </div>
-                    </div> */}
+                    </div>
         </div>
       </div>
 
@@ -93,8 +101,8 @@ export default function Header({ adClass = "" }) {
 
           <div className="header-right">
             <SearchForm />
-
-            {/* <ALink href="/pages/wishlist" className="header-icon" title="wishlist"><i className="icon-wishlist-2 line-height-1 mr-3"></i></ALink> */}
+            
+            <ALink  className="header-icon" title="wishlist"><i onClick={handlewishListAuth} className="icon-wishlist-2 line-height-1 mr-3"></i></ALink>
 
             <CartMenu />
           </div>

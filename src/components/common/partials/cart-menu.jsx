@@ -141,7 +141,7 @@ function CartMenu(props) {
                   <div className="product" key={"cartItems" + index}>
                     <div className="product-details">
                       <h2 className="product-title">
-                        {cart.index > -1 ? (
+                        {cart?.index > -1 ? (
                           !cart.variants[cart.index].color ? (
                             <ALink href={`/product/default/${cart.slug}`}>
                               {cart.name +
@@ -164,21 +164,21 @@ function CartMenu(props) {
                             </ALink>
                           )
                         ) : (
-                          <ALink href={`/product/default/${cart.slug}`}>
-                            {cart.name}
+                          <ALink href={`/product/default/${cart?.slug}`}>
+                            {cart?.name}
                           </ALink>
                         )}
                       </h2>
 
                       <span className="cart-product-info">
-                        <span className="cart-product-qty">{cart.qty}</span> ×
-                        &#x20B9;{cart.price}
+                        <span className="cart-product-qty">{cart?.qty}</span> ×
+                        &#x20B9;{cart?.price}
                       </span>
                     </div>
 
                     <figure className="product-image-container">
                       <ALink
-                        href={`/product/default/${cart.slug}`}
+                        href={`/product/default/${cart?.slug}`}
                         className="product-image"
                       >
                         <img
@@ -193,7 +193,7 @@ function CartMenu(props) {
                           alt="product"
                         />
                       </ALink>
-                      {/* <a href="#" className="btn-remove icon-cancel" title="Remove Product" onClick={e => { removeFromCart(e, cart, index); }}></a> */}
+                      <a href="#" className="btn-remove icon-cancel" title="Remove Product" onClick={e => { removeFromCart(e, cart, index); }}></a>
                     </figure>
                   </div>
                 ))}

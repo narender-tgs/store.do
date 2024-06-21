@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { useRouter } from "next/router";
+
 // import { connect } from "react-redux";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useDispatch } from "react-redux";
@@ -54,6 +55,7 @@ function ProductOne(props) {
   // dispatch(setCartDetails({data:cartItems}))
   // const router = useRouter();
   const { adClass = "", link = "default", product } = props;
+
 
   function getImageSource(productName) {
     // console.log("product name ->",productName.split(" ")[0]);
@@ -163,7 +165,7 @@ function ProductOne(props) {
     <div className={`product-default media-with-lazy ${adClass}`}>
       <figure>
         <ALink
-          href={`/product_detail/${product.name}/${product.guid}`}
+          href={`/product_detail/${product.guid}`}
           state={product}
           onClick={() => {
             onClickProduct();
@@ -275,7 +277,7 @@ function ProductOne(props) {
             //         className="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></ALink>
             //     :
             updatedCartItems?.some(
-              (obj, index) => obj.guid === product.guid,
+              (obj, index) => obj?.guid === product?.guid,
             ) ? (
               <Link
                 to="/pages/cart"

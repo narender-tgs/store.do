@@ -1,80 +1,65 @@
 import SlideToggle from "react-slide-toggle";
-// import { useRouter } from "next/router";
 import { connect } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-// import macbook_img from '../../assets/images/products/Laptops/macbook Pro max.jpg'
+
 import macbook_img from "../../../../assets/images/products/Laptops/macbook Pro max.jpg";
 import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-// import { getca , setCartDetails} from '../../../store/cart/cartDetailsSlice';
-// import { getCartDetails , setCartDetails } from '../../store/cart/cartDetailsSlice';
 import {
   getCartDetails,
   setCartDetails,
 } from "../../../../store/cart/cartDetailsSlice";
 import { ToastContainer, toast } from "react-toastify";
-
 import ALink from "../../../common/ALink";
 import Qty from "../../../common/Qty";
 import AddToCartPopup from "../../../features/modals/add-to-cart-popup";
-// import ProductCountdown from '../../../features/product-countdown';
-// import ProductCountdown from '../../components/features/product-countdown';
+import { getWishListItems, setWishListItems } from "../../../../store/wishlist/wishlist";
 
-const ProductDetailOne = () => {
-  const location = useLocation();
-  const dataReceived = location;
-  const productObj = dataReceived?.state;
-  console.log("product obj", productObj);
-
-  // //   srcs: cycle1,
-  //   name: "Apple Macbook Pro 15",
-  //   categories: ["Electronics", "Home Entertainment"],
-  //   price: [678644,3453],
-  //   slug: "ultra-hd-smart-tv",
-  //   ratings: 4.8,
-  //   is_hot: true,
-  //   variants:[],
-  //   qty:1,
-  //   short_description:"An ultra-soft cleansing brush that uses nylon bristles to gently sweep away impurities and stimulate lymphatic flow for a smooth, radiant complexion."
-  // };
-  // const router = useRouter();
-  // const { product, adClass = "col-lg-7 col-md-6", prev, next, isNav = true, parent = ".product-single-default", isSticky = false } = productObj;
+const ProductDetailOne = (props) => {
   const [attrs, setAttrs] = useState({ sizes: [], colors: [] });
   const [variant, setVariant] = useState(null);
   const [size, setSize] = useState(null);
   const [color, setColor] = useState(null);
   const [qty, setQty] = useState(1);
-  const [productData, setProductData] = useState(productObj);
   const [updatedCartItems, setUpdatedCartItems] = useState([]);
+  const [updatedWishListItems, setUpdatedWishListItems] = useState([]);
   const cartData = useSelector(getCartDetails);
+  const wishListData = useSelector(getWishListItems);
   const [myArray, setMyArray] = useState([]);
-  const [preSeletedVarition, setPreSelectedVariation] = useState([]);
+  const [optionCombinations, setOptionCombinations] = useState([]);
+  const [productData, setProductData] = useState();
 
   useEffect(() => {
-    setPreSelectedVariation(productData.variants);
-  }, []);
-
+    setProductData(props.product)
+  }, [props.product])
+  
   useEffect(() => {
     setUpdatedCartItems(cartData?.cartData?.data);
   }, [cartData]);
-  // useEffect(() => {
-  //     toast( <CartPopup/> );
-  // }, [])
 
   useEffect(() => {
-    if (productData?.options && productData.options.length > 0) {
-      const initialSelections = productData.options
+    setUpdatedWishListItems(wishListData?.wishListData?.data);
+  }, [wishListData]);
+
+  useEffect(() => {
+    setOptionCombinations(productData && productData?.options && productData?.options.length > 0 && productData?.options[0]?.options)
+  }, [props.product])
+
+
+  useEffect(() => {
+    if (productData?.available_options && productData.available_options.length > 0) {
+      const initialSelections = productData.available_options
         .map((option, index) => {
-          const firstOption = option?.options?.[0];
+          const firstOption = option?.optionValue?.[0];
           if (firstOption) {
             return {
-              itemName: option.name,
-              name: firstOption.name,
+              itemName: option.option,
+              name: firstOption,
               itemIndex: index,
-              _id: firstOption.variant_sf_id,
+              _id: firstOption?.variant_sf_id,
             };
           }
           return null;
@@ -141,39 +126,76 @@ const ProductDetailOne = () => {
   //     }
   // }, [variant])
 
-  // function isInWishlist() {
-  //     return product && props.wishlist.findIndex(item => item.slug === product.slug) > -1;
-  // }
+  function isInWishlist() {
+    // return productData && props.wishlist.findIndex(item => item.slug === product.slug) > -1;
+    // return productData ;
+  }
 
-  // function onWishlistClick(e) {
-  //     e.preventDefault();
-  //     if (!isInWishlist()) {
-  //         let target = e.currentTarget;
-  //         target.classList.add("load-more-overlay");
-  //         target.classList.add("loading");
+  function findMatchingItem(initialArray, newArray) {
+    console.log('intial array , new array', initialArray, newArray);
+    // Step 1: Create a string from the initial array
+    const searchString = initialArray.map(item => item.name).join(',');
 
-  //         setTimeout(() => {
-  //             target.classList.remove('load-more-overlay');
-  //             target.classList.remove('loading');
-  //             props.addToWishList(product);
-  //         }, 1000);
-  //     } else {
-  //         router.push('/pages/wishlist');
-  //     }
-  // }
+    // Step 2: Split the search string into parts
+    const searchParts = searchString.split(',');
+
+    // Step 3: Find the item in the new array where all parts of the search string are included in the name field
+    const foundItem = newArray?.find(item => {
+      return searchParts.every(part => item.name.includes(part));
+    });
+
+    return foundItem;
+  }
+
+  function onWishlistClick(e) {
+    e.preventDefault();
+    dispatch(setWishListItems({ data: [productData] }))
+    if (updatedWishListItems && updatedWishListItems.length > 0) {
+      let productArray = [...updatedWishListItems, productData];
+      dispatch(setWishListItems({ data: productArray }));
+    } else {
+      let productArray = [productData];
+      dispatch(setWishListItems({ data: productArray }));
+    }
+    // if (!isInWishlist()) {
+    //     let target = e.currentTarget;
+    //     target.classList.add("load-more-overlay");
+    //     target.classList.add("loading");
+
+    //     setTimeout(() => {
+    //         target.classList.remove('load-more-overlay');
+    //         target.classList.remove('loading');
+    //         props.addToWishList(product);
+    //     }, 1000);
+    // } else {
+    //     router.push('/pages/wishlist');
+    // }
+  }
 
   const onAddCartClick = (productDetails) => {
     productDetails.qty = 1;
     if (myArray && myArray.length > 0) {
-      const products_variant = myArray.map((pro) => {
-        return {
-          option_name: pro.itemName,
-          option_value: pro.name,
-          variant_sf_id: pro._id,
+      console.log('my array added product ', myArray);
+      const selectedItem = findMatchingItem(myArray, optionCombinations);
+      console.log('result', selectedItem, optionCombinations); // Output: undefined (since 'Blue,XL' i
 
-          // variation:[ {RAM , guid} , {Storage , guid}]
-        };
-      });
+      const products_variant = {
+        option_value: selectedItem.name,
+        variant_sf_id: selectedItem.variant_sf_id,
+        Price: selectedItem.Price
+      }
+
+      // const products_variant = myArray.map((pro) => {
+      //   return {
+      //     // option_name: pro.itemName,
+      //     option_value: pro.name,
+      //     variant_sf_id: pro._id,
+      //     Price: pro.price
+
+      //     // variation:[ {RAM , guid} , {Storage , guid}]
+      //   };
+      // });
+
       //  e.preventDefault();
       const productWithVariants = {
         ...productDetails,
@@ -312,7 +334,7 @@ const ProductDetailOne = () => {
 
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>Product - {productData?.name}</title>
         <meta
           name={productData?.description}
@@ -322,7 +344,7 @@ const ProductDetailOne = () => {
           name="keywords"
           content="electronics, apparel, gadgets, books, online shopping"
         />
-      </Helmet>
+      </Helmet> */}
 
       {
         <div className={`product-single-details col-lg-7 col-md-6`}>
@@ -421,17 +443,17 @@ const ProductDetailOne = () => {
                                             : ''
                                     } */}
 
-              {productData?.options.map((item, index) =>
-                detectColor(item.name) ? (
+              {productData?.available_options?.map((item, index) =>
+                detectColor(item.option) ? (
                   <div className="product-single-filter d-flex align-items-center">
-                    <label>{item.name}</label>
+                    <label>{item.option}</label>
                     <ul className="config-size-list config-color-list config-filter-list">
-                      {item?.options?.map((item1, index2) => (
+                      {item?.optionValue?.map((item1, index2) => (
                         // <li key={`filter-color-${index}`} className={`${item.name === color ? 'active' : ''} ${isDisabled('color', item.name) ? 'disabled' : ''}`}>
                         <li
                           key={`filter-color-${index}`}
                           className={
-                            findVariation(item1.name, index) ? "active" : ""
+                            findVariation(item1, index) ? "active" : ""
                           }
                         >
                           {
@@ -440,21 +462,21 @@ const ProductDetailOne = () => {
                               className="filter-color border-2"
                               onMouseEnter={(e) =>
                                 handleVariationHover(
-                                  item.name,
-                                  item1.name,
+                                  item.option,
+                                  item1,
                                   e,
                                   index,
-                                  item1.variant_sf_id,
+                                  item1?.variant_sf_id,
                                 )
                               }
-                              style={{ backgroundColor: item1.name }}
+                              style={{ backgroundColor: item1 }}
                               onClick={(e) =>
                                 selectColor(
-                                  item.name,
-                                  item1.name,
+                                  item.option,
+                                  item1,
                                   e,
                                   index,
-                                  item1.variant_sf_id,
+                                  item1?.variant_sf_id,
                                 )
                               }
                             ></a>
@@ -465,14 +487,14 @@ const ProductDetailOne = () => {
                   </div>
                 ) : (
                   <div className="product-single-filter d-flex align-items-center">
-                    <label>{item.name}</label>
+                    <label>{item.option}</label>
                     <ul className="config-size-list d-inline-block">
-                      {item?.options?.map((item1, index1) => (
+                      {item?.optionValue?.map((item1, index1) => (
                         // <li key={`filter-size-${index1}`} className={`${myArray.some(obj => obj.itemName === item1.name) ? 'active' : ''} ${isDisabled(item, item1.name , index) ? 'disabled' : ''}`}>
                         <li
                           key={`filter-size-${index1}`}
                           className={
-                            findVariation(item1.name, index) ? "active" : ""
+                            findVariation(item1, index) ? "active" : ""
                           }
                         >
                           {
@@ -481,15 +503,15 @@ const ProductDetailOne = () => {
                               className="d-flex align-items-center justify-content-center"
                               onClick={(e) =>
                                 selectVariation(
-                                  item.name,
-                                  item1.name,
+                                  item.option,
+                                  item1,
                                   e,
                                   index,
-                                  item1.variant_sf_id,
+                                  item1?.variant_sf_id,
                                 )
                               }
                             >
-                              {item1.name}
+                              {item1}
                             </a>
                           }
                         </li>
@@ -565,12 +587,14 @@ const ProductDetailOne = () => {
             >
               Add to Cart
             </button>
+            <a href="#" className={`btn-icon-wish add-wishlist ${isInWishlist() ? 'added-wishlist' : ''}`} onClick={onWishlistClick} title={`${isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist'}`}><i
+              className="icon-wishlist-2"></i><span>{isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist'}</span></a>
           </div>
 
-          {/* <hr className="divider mb-0 mt-0" /> */}
+          <hr className="divider mb-0 mt-0" />
 
-          {/* <div className="product-single-share mb-3">
-                            <label className="sr-only">Share:</label>
+          <div className="product-single-share mb-3">
+            {/* <label className="sr-only">Share:</label>
 
                             <div className="social-icons mr-2">
                                 <ALink href="#" className="social-icon social-facebook icon-facebook"
@@ -581,11 +605,11 @@ const ProductDetailOne = () => {
                                     title="Linkedin"></ALink>
                                 <ALink href="#" className="social-icon social-mail icon-mail-alt"
                                     title="Mail"></ALink>
-                            </div>
+                            </div> */}
+            {/* <a href="#" className={ `btn-icon-wish add-wishlist ${ isInWishlist() ? 'added-wishlist' : '' }` } onClick={ onWishlistClick } title={ `${ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }` }><i
+                            className="icon-wishlist-2"></i><span>{ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }</span></a> */}
 
-                         <a href="#" className={ `btn-icon-wish add-wishlist ${ isInWishlist() ? 'added-wishlist' : '' }` } onClick={ onWishlistClick } title={ `${ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }` }><i
-                            className="icon-wishlist-2"></i><span>{ isInWishlist() ? 'Go to Wishlist' : 'Add to Wishlist' }</span></a>
-                        </div> */}
+          </div>
         </div>
       }
     </>

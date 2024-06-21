@@ -168,7 +168,7 @@ function SearchForm(props) {
         <i className="icon-magnifier"></i>
       </a> */}
       <div className="row">
-          <LoginModal/>
+          {/* <LoginModal/> */}
 
       <form action="#" method="get" onSubmit={(e) => onSubmitSearchForm(e)}>
         <div className="header-search-wrapper">

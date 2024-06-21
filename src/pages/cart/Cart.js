@@ -131,14 +131,22 @@ function Cart(props) {
                           </td>
                           <td className="">
                             <h5 className="product-title">
-                              {item.variants &&
-                                item.variants.map((vars, index) => (
+                              {item?.variants &&
+                              
+                                
+                                    <span>
+                                      {item.variants.option_value}
+                                    </span>
+                                
+                                }
+                              {/* {item?.variants && item?.variants.length > 0 &&
+                                item?.variants.map((vars, index) => (
                                   <li key={index}>
                                     <span>
-                                      {vars.option_name} : {vars.option_value}
+                                      {vars.option_value}
                                     </span>
                                   </li>
-                                ))}
+                                ))} */}
                             </h5>
                           </td>
 

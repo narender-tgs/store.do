@@ -1,7 +1,40 @@
+import { useState } from "react"
 import ALink from "../components/common/ALink"
 import LoginModal from "../components/features/modals/login-modal"
+import axios from "axios";
 
 export default function Login () {
+    const [FormData , setFormData ] = useState(
+        {"email":'' , "password":''}
+    );
+
+    function handleUserLogin(event){
+        const {id, value} = event.target;
+        setFormData({
+            ...FormData,[id]:value
+        })
+
+
+    }
+    function handleLogin(e){
+        e.preventDefault();
+        const userCreds = {customer:{
+            ...FormData
+        }}
+        console.log('form data for user login' , userCreds );
+        axios.post(`http://localhost:3000/v1/customer/login` , userCreds ,{header:{'service_ref':'8xuf4dev'}} ).then((response)=>{
+            if(response.data.success === true){
+                console.log('login response' , response);
+                const loginToken = response.data.data.token;
+        
+                
+                      localStorage.setItem("loginToken",loginToken);
+            }
+        })
+
+    }
+
+
     return (
         <main className="main">
             <div className="page-header">
@@ -33,16 +66,16 @@ export default function Login () {
                                     <h2 className="title">Login</h2>
                                 </div>
 
-                                <form action="#">
+                                <form onSubmit={handleLogin}>
                                     <label htmlFor="login-email">
                                         Username or email address <span className="required">*</span>
                                     </label>
-                                    <input type="email" className="form-input form-wide" id="login-email" required />
+                                    <input type="email" className="form-input form-wide" value={FormData.email} onChange={handleUserLogin} id="email" required />
 
                                     <label htmlFor="login-password">
                                         Password <span className="required">*</span>
                                     </label>
-                                    <input type="password" className="form-input form-wide" id="login-password" required />
+                                    <input type="password" className="form-input form-wide" value={FormData.password} onChange={handleUserLogin} id="password" required />
 
                                     <div className="form-footer">
                                         <div className="custom-control custom-checkbox mb-0">
@@ -58,6 +91,13 @@ export default function Login () {
                                     <button type="submit" className="btn btn-dark btn-md w-100">
                                         LOGIN
 									</button>
+                                    <span>Dont have  an account ?</span><a
+                    href="/pages/register"
+                    className="btn btn-regist text-dark bg-transparent text-transform-none p-0"
+                    // onClick={closeModal}
+                  >
+                    Register Now!
+                  </a>
                                 </form>
                             </div>
                             {/* <div className="col-md-6">
@@ -88,7 +128,7 @@ export default function Login () {
                     </div>
                 </div>
             </div>
-            <LoginModal/>
+            {/* <LoginModal/> */}
         </main>
     )
 }

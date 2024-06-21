@@ -50,6 +50,11 @@ function MainMenu({ router }) {
               Contact Us
             </ALink>
           </li>
+          {/* <li className={location.pathname === "/account" ? "active" : ""}>
+            <ALink style={{ fontSize: fontSize + "px" }} href="pages/account">
+              Account 
+            </ALink>
+          </li> */}
           {/* <li className={location.pathname === "/login" ? "active" : ""}>
           </li> */}
           

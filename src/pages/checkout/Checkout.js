@@ -33,6 +33,7 @@ function CheckOut() {
   useEffect(() => {
     let totalPrice = 0;
     if (cartList && cartList.length > 0) {
+      console.log('cart list items to show' , cartList);
       setStoreGuid(cartList[0]?.store_guid);
       cartList.forEach((element) => {
         totalPrice = totalPrice + element.price * element.qty;
@@ -45,6 +46,7 @@ function CheckOut() {
 
   const [formData, setFormData] = useState({
     firstName: "",
+    
     lastName: "",
     email: "",
     phoneNumber: "",
@@ -174,21 +176,54 @@ function CheckOut() {
       // showSuccessToast()
     }
 
-    const products_list = cartList.map((pro) => {
-      return {
-        product_guid: pro.guid,
-        quantity: pro.qty,
-        price: pro.price,
-        variants: pro.variants,
-        // variation:[ {RAM , guid} , {Storage , guid}]
-      };
-    });
+    // const products_list = cartList.map((pro) => {
+    //   return {
+    //     product_guid: pro.guid,
+    //     quantity: pro.qty,
+    //     price: pro.price,
+    //     variants: pro.variants,
+    //     // variation:[ {RAM , guid} , {Storage , guid}]
+    //   };
+    // });
+    
+  //   const products_list = cartList.map(item => ({
+  //     product_guid: item.guid,
+  //     quantity: item.qty,
+  //     price: item.variants.Price || item.price,
+  //     variants: {
+  //         variant_sf_id: item.variants.variant_sf_id,
+  //         option_value: item.variants.option_value
+  //     }
+  // }));
+ const products_list = cartList.map(item => {
+    if (item.variants === null) {
+        return {
+            option_value: item.name,
+            option_price: item.price,
+            variant_sf_id: item.sf_id,
+            
+        };
+    } else {
+        return {
+            product_guid: item.guid,
+            quantity: item.qty,
+            price: item.variants.Price || '',
+            variants: {
+                variant_sf_id: item.variants.variant_sf_id,
+                option_value: item.variants.option_value,
+                option_price: item.variants.Price || ''
+            }
+        };
+    }
+});
+
 
     // Here you can access formData and proceed with your logic
 
     let orderData = {
       order: {
         store_guid: storeGuid,
+        customer_guid:localStorage.getItem('loginToken') || '',
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -231,6 +266,9 @@ function CheckOut() {
           setShowPayment(true);
           setIsOrderCreated(false);
           //  window.location.href = "http://localhost:3002/thankyou";
+          if(paymentMethod === 'Cash On Delivery'){
+            window.location.href = window.location.origin + '/thankyou'
+          }
         }
 
         // Handle response

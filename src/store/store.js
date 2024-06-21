@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
+import wishlist from "./wishlist/wishlist";
 // import assessmentReducer from './assessmentSlice'
 // import userReducer from './userSlice'
 import cartReducer from "./cart/cartDetailsSlice";
@@ -19,6 +20,8 @@ const store = configureStore({
     // assessment: assessmentReducer,
     storeDetails: storeDetailsReducer,
     cartDetails: persistedReducer,
+    wishListDetails:wishlist,
+
     // storeDetails : persistedReducer1
 
     // Add other reducers if needed

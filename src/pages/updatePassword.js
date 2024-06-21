@@ -4,14 +4,12 @@ import LoginModal from "../components/features/modals/login-modal"
 import axios from "axios"
 import { Link } from "react-router-dom";
 
-export default function Register () {
+export default function UpdatePassword () {
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
+        token: '',
         password: '',
         confirmPassword: '',
-        otp:1234
+       
     });
     // const userCredsBody= { customer:{
     //     "firstName":"Pratik",
@@ -43,12 +41,12 @@ export default function Register () {
          const userCredsBody= { customer:{
             ...formData
          }}
-             axios.post(`http://localhost:3000/v1/customer` , userCredsBody , {header:{
+             axios.post(`http://localhost:3000/v1/customer/resetPassword` , userCredsBody , {header:{
             'service_ref':"8xuf4dev"
         }}  ).then((response)=>{
               console.log('response for user creation' , response);
               if(response.success === true){
-                window.location.href = window.location.origin + '/pages/login';
+                window.location.href = window.location.origin ;
               }
         })
         // Handle form submission, e.g., send form data to an API
@@ -117,25 +115,11 @@ export default function Register () {
                             <div className="col-md-12" style={{padding:"0 20%"}}>
                                 <div className="heading mb-1">
                                     {/* <h2 className="title" style={{display:"flex", justifyContent:"space-around"}}>Register</h2> */}
-                                    <h2 className="title">Register</h2>
+                                    <h2 className="title">Change Password</h2>
                                 </div>
 
                                 <form onSubmit={handleSubmit} action="#">
-                                    <label htmlFor="register-fname">
-                                        First Name <span className="required">*</span>
-                                    </label>
-                                    <input type="name"  value={formData.firstName} className="form-input form-wide" onChange={handleRegisterVales} id="firstName" required />
-
-                                    <label htmlFor="register-lname">
-                                        Last Name <span className="required">*</span>
-                                    </label>
-                                    <input type="name"  value={formData.lastName} className="form-input form-wide" onChange={handleRegisterVales} id="lastName" required />
-
-                                    <label htmlFor="register-email">
-                                        Email address <span className="required">*</span>
-                                    </label>
-                                    <input type="email" value={formData.email} className="form-input form-wide" onChange={handleRegisterVales} id="email" required />
-
+                                   
 
                                     <label htmlFor="register-password">
                                         Password <span className="required">*</span>
@@ -146,14 +130,11 @@ export default function Register () {
                                         Confirm Password <span className="required">*</span>
                                     </label>
                                     <input type="password"   value={formData.confirmPassword} className="form-input form-wide" onChange={handleRegisterVales} id="confirmPassword" required />
-                                    <label htmlFor="register-password">
-                                        OTP <span className="required">*</span>
-                                    </label>
-                                    <input type="number" value={formData.otp} className="form-input form-wide" onChange={handleRegisterVales} id="otp" required />
+                                   
 
                                     <div className="form-footer mb-2">
                                         <button type="submit" className="btn btn-dark btn-md w-100 mr-0">
-                                            Register
+                                            Set Password
                                     </button>
                                     </div>
                                 </form>

@@ -1,6 +1,29 @@
+import { useState } from "react";
 import ALink from "../components/common/ALink"
+import axios from "axios";
 
 export default function ForgotPassword () {
+    const [email , setEmail]  = useState();
+    function handlePasswordUpdate(event){
+         console.log(event.target.value);
+         setEmail(event.target.value);
+    }
+    function handleEnteredEmail(){
+        if(email){
+            const resetEmail = { customer :{
+                'email' : email
+            }}
+            axios.post(`http://localhost:3000/v1/customer/resetPasswordToken` , resetEmail , {header:{'service_ref':"8xuf4dev"}}).then((response)=>{
+                if(response.success === true){
+                    console.log(response);
+                }
+            })
+        }else{
+            window.alert('please enter email or username');
+        }
+       
+
+    }
     return (
         <main className="main">
             <div className="page-header">
@@ -34,14 +57,14 @@ export default function ForgotPassword () {
 									</p>
                                     <div className="form-group mb-0">
                                         <label htmlFor="reset-email" className="font-weight-normal">Username or email</label>
-                                        <input type="email" className="form-control" id="reset-email" name="reset-email"
+                                        <input type="email" onBlur={handlePasswordUpdate} className="form-control" id="reset-email" name="reset-email"
                                             required />
                                     </div>
 
                                     <div className="form-footer mb-0">
-                                        <ALink href="/pages/login">Click here to login</ALink>
+                                        {/* <ALink href="/pages/login">Click here to login</ALink> */}
 
-                                        <button type="submit"
+                                        <button onClick={handleEnteredEmail}
                                             className="btn btn-md btn-primary form-footer-right font-weight-normal text-transform-none mr-0">
                                             Reset Password
 										</button>

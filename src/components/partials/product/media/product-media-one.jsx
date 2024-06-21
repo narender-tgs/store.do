@@ -158,6 +158,8 @@ import {
 } from "../../../../utils/data/slider";
 
 export default function ProductMediaOne(props) {
+  console.log('props in media',props);
+
   const {
     adClass = "col-lg-5 col-md-6",
     product,

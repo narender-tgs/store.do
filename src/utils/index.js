@@ -2,7 +2,7 @@ export function getCartTotal(items) {
   let total = 0;
   if (items) {
     for (let i = 0; i < items.length; i++) {
-      total += parseInt(items[i].price, 10);
+      total += parseInt(items[i]?.price, 10);
     }
   }
 

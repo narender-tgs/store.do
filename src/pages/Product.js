@@ -51,16 +51,16 @@ const Product = () => {
     }
   }, [checkRender]);
 
-  const addVariants = (variantsOptions) => {
-    const newVariantsArr = variantsOptions.map((item) => {
-      return {
-        option_name: item.name,
-        option_value: item.options[0].name,
-        variant_sf_id: item.options[0].variant_sf_id,
-      };
-    });
-    return newVariantsArr;
-  };
+  // const addVariants = (variantsOptions) => {
+  //   const newVariantsArr = variantsOptions.map((item) => {
+  //     return {
+  //       option_name: item.name,
+  //       option_value: item.options[0].name,
+  //       variant_sf_id: item.options[0].variant_sf_id,
+  //     };
+  //   });
+  //   return newVariantsArr;
+  // };
 
   useEffect(() => {
     if (pathParts.length === 4 && pathParts[3].startsWith("ban-")) {
@@ -76,19 +76,19 @@ const Product = () => {
 
           setTotalPage(Math.ceil(totalProducts / perPage));
 
-          const products_variant = response.data.data.products.map(
-            (element) => {
-              return {
-                ...element,
-                variants:
-                  element?.options &&
-                  element?.options.length > 0 &&
-                  addVariants(element.options),
-              };
-            },
-          );
+          // const products_variant = response.data.data.products.map(
+          //   (element) => {
+          //     return {
+          //       ...element,
+          //       variants:
+          //         element?.options &&
+          //         element?.options.length > 0 &&
+          //         addVariants(element.options),
+          //     };
+          //   },
+          // );
           // Access the response data
-          const responseData = products_variant;
+          const responseData = response.data.data.products;
           if (sortBy === "price_asc") {
             const priceLowToHigh = responseData.sort((a, b) => {
               return a.price - b.price;
@@ -119,19 +119,19 @@ const Product = () => {
           setTotalPage(Math.ceil(totalProducts / perPage));
 
           // const tempProductsArr = response.data.data.products;
-          const products_variant = response.data.data.products.map(
-            (element) => {
-              return {
-                ...element,
-                variants:
-                  element?.options &&
-                  element?.options.length > 0 &&
-                  addVariants(element.options),
-              };
-            },
-          );
+          // const products_variant = response.data.data.products.map(
+          //   (element) => {
+          //     return {
+          //       ...element,
+          //       variants:
+          //         element?.options &&
+          //         element?.options.length > 0 &&
+          //         addVariants(element.options),
+          //     };
+          //   },
+          // );
 
-          const responseData = products_variant;
+          const responseData = response.data.data.products;
           if (sortBy === "price_asc") {
             const priceLowToHigh = responseData.sort((a, b) => {
               return a.price - b.price;
@@ -182,19 +182,19 @@ const Product = () => {
 
           setTotalPage(Math.ceil(totalProducts / perPage));
 
-          const products_variant = response.data.data.products.map(
-            (element) => {
-              return {
-                ...element,
-                variants:
-                  element?.options &&
-                  element?.options.length > 0 &&
-                  addVariants(element.options),
-              };
-            },
-          );
+          // const products_variant = response.data.data.products.map(
+          //   (element) => {
+          //     return {
+          //       ...element,
+          //       variants:
+          //         element?.options &&
+          //         element?.options.length > 0 &&
+          //         addVariants(element.options),
+          //     };
+          //   },
+          // );
           // Access the response daeta
-          const responseData = products_variant;
+          const responseData = response.data.data.products;
           setProducts(responseData);
           // Process the response data here
         })
@@ -215,19 +215,19 @@ const Product = () => {
           const totalProducts = response?.data?.data?.pagination?.total;
           setTotalPage(Math.ceil(totalProducts / perPage));
 
-          const products_variant = response.data.data.products.map(
-            (element) => {
-              return {
-                ...element,
-                variants:
-                  element?.options &&
-                  element?.options.length > 0 &&
-                  addVariants(element.options),
-              };
-            },
-          );
+          // const products_variant = response.data.data.products.map(
+          //   (element) => {
+          //     return {
+          //       ...element,
+          //       variants:
+          //         element?.options &&
+          //         element?.options.length > 0 &&
+          //         addVariants(element.options),
+          //     };
+          //   },
+          // );
           // Access the response daeta
-          const responseData = products_variant;
+          const responseData = response.data.data.products;
           setProducts(responseData);
           // Process the response data here
         })
@@ -266,20 +266,6 @@ const Product = () => {
 
     let page = 1;
 
-    // getProducts({
-    //     variables: {
-    //         search: query.get('search'),
-    //         colors: query.get('colors') ? query.get('colors').split(',') : [],
-    //         sizes: query.get('sizes') ? query.get('sizes').split(',') : [],
-    //         min_price: parseInt(query.get('min_price')),
-    //         max_price: parseInt(query.get('max_price')),
-    //         category: query.get('category'),
-    //         tag: query.get('tag'),
-    //         sortBy: sortBy,
-    //         from: perPage * (page - 1),
-    //         to: perPage * page
-    //     }
-    // });
   }, [perPage, sortBy]);
 
   function getProductPriceRange(data) {
@@ -306,24 +292,7 @@ const Product = () => {
   }
   const handlePageChange = (newPage) => {
     setPageNumber(newPage);
-    // setCurrentPage(newPage);
-    // console.log('new page clicked' , newPage);
-    // axios.get(`http://localhost:3000/v1/product/store/${storeDatas?.storeDetails?.store_guid || localStorage.getItem('storeGuid')}?minPrice=${selectedPriceRange.min}&maxPrice=${selectedPriceRange.max}&page=${newPage}&limit=${perPage}`, { headers: { 'service_ref': '8xuf4dev' } })
-
-    // .then(response => {
-    //     console.log('response for all products' , response);
-    //     // const tempProductsArr = response.data.data.products;
-    //     const products_variant = response.data.data.products.map(element => {
-    //         return {
-    //             ...element, variants: element?.options && element?.options.length > 0 && addVariants(element.options)
-    //         }
-    //     });
-    //     console.log('products variants are here' , products_variant);
-    //     setTotalPage(response?.data?.data?.pagination?.totalPage)
-    //     setProducts(products_variant)
-    // })
-
-    // Add any other logic needed when the page changes, like fetching new data
+   
   };
 
   function consoles(e) {
@@ -400,7 +369,7 @@ const Product = () => {
                 </li>
 
                 {categoryObj?.subCategory &&
-                categoryObj?.subCategory?.parentCatName ? (
+                  categoryObj?.subCategory?.parentCatName ? (
                   <>
                     {/* Parent Category */}
                     <li className="breadcrumb-item">

@@ -14,6 +14,10 @@ import ForgotPassword from "../pages/forgot-password.js";
 import Login from "../pages/login.js";
 import LoginModal from "../components/features/modals/login-modal.jsx";
 import Register from "../pages/register.js";
+import UpdatePassword from "../pages/updatePassword.js";
+
+import Account from "../pages/account.js";
+import WishList from "../pages/wishlist.js";
 const routes = [
   { path: "/", exact: true, component: <Home /> },
   { path: "/product", component: <Product /> },
@@ -23,11 +27,16 @@ const routes = [
   { path: "pages/checkout", component: <Checkout /> },
   { path: "pages/login", component: <Login /> },
   { path: "pages/register", component: <Register /> },
+  { path: "pages/updatePassword", component: <UpdatePassword /> },
+  { path: "pages/account", component: <Account /> },
+  { path: "pages/wishlist", component: <WishList /> },
   {
-    path: "/product_detail/:productName/:productId",
+    path: "/product_detail/:productId",
     component: <ProductDetails />,
   },
   { path: "/thankyou", component: <Thankyou /> },
+  
+
   { path: "/pages/cart", component: <Cart /> },
   { path: "/product/list", component: <ProductList /> },
   { path: "/pages/product/Sale", component: <NewSale /> },
